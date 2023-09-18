@@ -46,7 +46,31 @@ class CourseSeeder extends Seeder
                 'program_type' => ProgramType::MASTERS
 
             ],
-            //add other programs
+            [
+                'name' => 'Doctor in Information Technlogy',
+                'slug' => 'PS', 
+                'is_active' => true,
+                'program_slug' => 'DIT',
+                'program_type' => ProgramType::MASTERS
+
+            ],
+            [
+                'name' => 'Doctor in Computer Science',
+                'slug' => 'PS', 
+                'is_active' => true,
+                'program_slug' => 'DCS',
+                'program_type' => ProgramType::MASTERS
+
+            ],
+            [
+                'name' => 'Doctor in Information Systems',
+                'slug' => 'PS', 
+                'is_active' => true,
+                'program_slug' => 'DIS',
+                'program_type' => ProgramType::MASTERS
+
+            ],
+            //add other programs manually
         ];
 
         foreach ($courses as $course){
