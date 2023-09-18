@@ -12,7 +12,6 @@
     </div>
     <div class="row justify-content-center">
       <div v-for="(card, index) in cards" :key="index" class="col-md-2">
-        <Link :href="card.link">
         <div class="card">
           <div class="card-body">
             <div class="row">
@@ -37,7 +36,6 @@
             </div>
           </div>
         </div>
-        </Link>
       </div>
     </div>
     <!-- {{ $page.props }} -->
@@ -160,24 +158,21 @@ const cards = ref([
     value: pendingUsers,
     change: '2.4%',
     isPositiveChange: true,
-    link: '/admin/users'
   },
   {
-    title: 'For Title',
+    title: 'For Title Defense',
     value: countSubmissionsByStatus.value.title_defense,
     change: '0.8%',
     isPositiveChange: false,
-    link: '/asdf'
   },
   {
-    title: 'For Outline',
+    title: 'For Outline Defense',
     value: countSubmissionsByStatus.value.outline_defense,
     change: '0.8%',
     isPositiveChange: false,
-    link: '/asd'
   },
   {
-    title: 'For Final',
+    title: 'For Final Defense',
     value: countSubmissionsByStatus.value.final_defense,
     change: '0.8%',
     isPositiveChange: false,
@@ -188,7 +183,6 @@ const cards = ref([
     value: countSubmissionsByStatus.value.quality_checking,
     change: '0.8%',
     isPositiveChange: false,
-    link: '/asd'
   },
 ]);
 
