@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ProgramType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Program;
@@ -15,45 +16,49 @@ class CourseSeeder extends Seeder
     {
         $courses = [
             [
-                'name' => 'Information Technology',
-                'program_slug' => 'CCE', // Associate with the program by slug
+                'name' => 'Masters in Information Technology',
+                'slug' => 'PS', // Associate with the program by slug
                 'is_active' => true,
-                'slug' => 'BSIT',
+                'program_slug' => 'MIT',
+                'program_type' => ProgramType::MASTERS
             ],
             [
-                'name' => 'Computer Science',
-                'program_slug' => 'CEE', 
+                'name' => 'Masters in Computer Science',
+                'slug' => 'PS', 
                 'is_active' => true,
-                'slug' => 'BSCS',
+                'program_slug' => 'MSCS',
+                'program_type' => ProgramType::MASTERS
+
             ],
             [
-                'name' => 'Nursing',
-                'program_slug' => 'CHE', 
+                'name' => 'Masters in Civil Engineering',
+                'slug' => 'PS', 
                 'is_active' => true,
-                'slug' => 'BSN',
+                'program_slug' => 'MSCE',
+                'program_type' => ProgramType::MASTERS
+
             ],
             [
-                'name' => 'Chemistry',
-                'program_slug' => 'CASE', 
+                'name' => 'Masters in Chemecal Engineering',
+                'slug' => 'PS', 
                 'is_active' => true,
-                'slug' => 'BSCH',
+                'program_slug' => 'MSCHE',
+                'program_type' => ProgramType::MASTERS
+
             ],
-            [
-                'name' => 'Civil Engineering',
-                'program_slug' => 'CEE', 
-                'is_active' => true,
-                'slug' => 'BSCE',
-            ],
+            //add other programs
         ];
 
         foreach ($courses as $course){
-            $program = Program::where('slug', $course['program_slug'])->first();
+            $program = Program::where('slug', $course['slug'])->first();
             
             if ($program) {
                 $program->courses()->create([
                     'name' => $course['name'],
                     'slug' =>  $course['slug'],
-                    'is_active' => $course['is_active']
+                    'is_active' => $course['is_active'],
+                    'program_slug' => $course['program_slug'],
+                    'program_type' => $course['program_type']
                 ]);
             }
         }

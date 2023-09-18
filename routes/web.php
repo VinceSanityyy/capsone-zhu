@@ -3,6 +3,7 @@
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Inertia\Inertia;
 
 /*
@@ -21,5 +22,15 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['accepted','auth']], function () {
+
+    Route::prefix('admin')->group(function(){
+      Route::get('/users', [DashboardController::class, 'showUsers'])->name('users.index');
+      Route::get('/users/user/{user}/show', [UserController::class, 'show'])->name('users.show');
+      Route::put('/users/{user}/approve', [UserController::class, 'approveUser']);
+      Route::put('/users/{user}/deactivate', [UserController::class, 'deactivateUser']);
+    });
+    
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    // Route::get('/users/filter', [DashboardController::class, 'filterUsers']);
 });

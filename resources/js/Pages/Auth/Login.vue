@@ -51,7 +51,7 @@ export default {
                                                 <Link style="color: #af2532" href="/register">Don't have an account?</Link>
                                             </small>
                                         </div>
-                                        <div>
+                                        <!-- <div>
                                             <label class="form-check">
                                                 <input class="form-check-input" type="checkbox" value="remember-me"
                                                     name="remember-me" checked="" v-model="form.remember" />
@@ -59,7 +59,7 @@ export default {
                                                     Remember me next time
                                                 </span>
                                             </label>
-                                        </div>
+                                        </div> -->
                                         <div class="text-center mt-3">
 
                                             <button :disabled="form.processing" type="submit" style="background: #af2532; color: #fff" 

@@ -44,4 +44,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Course::class);
     }
+
+    public function form()
+    {
+        //this should be hasMany in the future since user can add the forms for the next school yr.
+        return $this->hasOne(StudentForm::class, 'user_id');
+    }
+
+    public function researchPaper()
+    {
+        return $this->hasOne(ResearchPaper::class);
+    }
+
 }

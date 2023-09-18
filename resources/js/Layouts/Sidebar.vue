@@ -3,7 +3,8 @@
     <nav id="sidebar" class="sidebar js-sidebar">
         <div class="sidebar-content js-simplebar">
             <a class="sidebar-brand" href="index.html">
-                <span class="align-middle">AdminPanel</span>
+                <img src="https://crms.umin.edu.ph/images/logo.jpg" alt="" width="200" height="50" class="border">
+                <!-- <span class="align-middle">AdminPanel</span> -->
             </a>
 
             <ul class="sidebar-nav">
@@ -11,14 +12,14 @@
                     <li class="sidebar-header">
                         Admin Menu
                     </li>
-                    <li class="sidebar-item active">
+                    <li class="sidebar-item">
                         <Link class="sidebar-link" href="/dashboard">
                             <i class="bi bi-bar-chart-line"></i><span
                                 class="align-middle">Dashboard</span>
                         </Link>
                     </li>
                     <li class="sidebar-item">
-                        <Link class="sidebar-link " href="pages-profile.html">
+                        <Link class="sidebar-link " href="/admin/users">
                             <i class="bi bi-people"></i><span class="align-middle">User
                                 Management</span>
                         </Link>
@@ -35,7 +36,7 @@
                     <li class="sidebar-header">
                         Student Menu
                     </li>
-                    <li class="sidebar-item active">
+                    <li class="sidebar-item">
                         <Link class="sidebar-link" href="/dashboard">
                             <i class="bi bi-bar-chart-line"></i><span
                                 class="align-middle">Student Dashboard</span>
@@ -55,7 +56,7 @@
                         Faculty Menu
                     </li>
 
-                    <li class="sidebar-item active">
+                    <li class="sidebar-item">
                         <Link class="sidebar-link" href="/dashboard">
                             <i class="bi bi-bar-chart-line"></i><span
                                 class="align-middle">Faculty Dashboard</span>

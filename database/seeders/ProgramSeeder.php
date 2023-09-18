@@ -15,28 +15,8 @@ class ProgramSeeder extends Seeder
     {
         $programs = [
             [
-                'name' => 'College of Computing Education',
-                'slug' => 'CCE',
-                'is_active' => true
-            ],
-            [
-                'name' => 'College of Engineering Education',
-                'slug' => 'CEE',
-                'is_active' => true
-            ],   
-            [
-                'name' => 'College of Accounting Education',
-                'slug' => 'CAE',
-                'is_active' => true
-            ],
-            [
-                'name' => 'College of Hospitality Education',
-                'slug' => 'CHE',
-                'is_active' => true
-            ],
-            [
-                'name' => 'College of Arts and Sciences Education',
-                'slug' => 'CASE',
+                'name' => 'Professional Schools',
+                'slug' => 'PS',
                 'is_active' => true
             ],
         ];

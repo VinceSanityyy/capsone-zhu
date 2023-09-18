@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
-
+use Illuminate\Support\Facades\Storage;
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
@@ -19,7 +19,9 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        // dd($input);
+ 
+       
+   
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -28,22 +30,47 @@ class CreateNewUser implements CreatesNewUsers
                 'email',
                 'max:255',
                 Rule::unique(User::class),
-                'course_id' => 'required',
-                'year_level' => 'required',
-                'school_year' => 'required',
-                'subject_code' => 'required'
             ],
+            'course_id' => 'required',
+            // 'year_level' => 'required',
+            'school_year' => 'required',
+            'subject_code' => 'required',
+            'phone_number' => 'required',
+            'id_number' => 'required',
+            'terms' => 'accepted',
             'password' => $this->passwordRules(),
+            'enrollment_form' => 'required|file|max:2048',
         ])->validate();
 
-        return User::create([
+        $user =  User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'course_id' => $input['course_id'],
-            'year_level' => $input['year_level'],
+            // 'year_level' => $input['year_level'],
             'school_year' => $input['school_year'],
-            'subject_code' => $input['subject_code']
+            'subject_code' => $input['subject_code'],
+            'id_number' => $input['id_number'],
+            'phone_number' => $input['phone_number'],
         ])->assignRole('student');
+
+
+         if ($input['enrollment_form']->isValid()) {
+            // Generate a unique filename
+            $filename = uniqid('enrollment_form_') . '.' . $input['enrollment_form']->getClientOriginalExtension();
+        
+            // Store the uploaded file in the 'users' directory with the user's ID as a subdirectory
+            $path = $input['enrollment_form']->storeAs("public/enrollment_forms/users/{$user->id}", $filename);
+        
+            // Create a new Form record and associate it with the user
+            $form = $user->form()->create(['file_path' => $path]);
+        
+            // Get the full URL of the uploaded enrollment form
+            $form->file_path = Storage::disk('public')->url($form->file_path);
+            $form->save(); // Save the updated form with the full URL
+        }
+
+        return $user;
     }
+
 }

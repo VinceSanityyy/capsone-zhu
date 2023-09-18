@@ -1,0 +1,17 @@
+.um-button{
+    color:white;
+    background: #af2532; 
+}
+
+.um-button:hover {
+    color:white;
+    background-color: #af2532;
+  }
+
+.um-bg-color{
+    background-color: #af2532;
+}
+
+.um-color{
+    color: #af2532;
+}

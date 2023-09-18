@@ -1,5 +1,6 @@
 import '../adminKit/dist/js/app.js'
 import '../adminKit/dist/css/app.css'
+import '../css/app.css'
 
 import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/vue3'
@@ -9,6 +10,12 @@ import VueFusionCharts from 'vue-fusioncharts';
 import FusionCharts from 'fusioncharts';
 import Column2D from 'fusioncharts/fusioncharts.charts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+
+import alertify from 'alertifyjs';
+import DataTable from 'datatables.net-vue3';
+import DataTablesCore from 'datatables.net';
+import 'datatables.net-dt';
+
 
 
 createInertiaApp({
@@ -21,6 +28,8 @@ createInertiaApp({
       .use(plugin)
       .use(ZiggyVue, Ziggy)
       .use(VueFusionCharts, FusionCharts, Column2D, FusionTheme)
+      .use(DataTable.use(DataTablesCore))
+      .use(alertify)
       .mount(el)
   },
 })

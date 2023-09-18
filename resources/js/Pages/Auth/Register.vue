@@ -1,27 +1,31 @@
-<script>
+<script setup>
 import { useForm } from '@inertiajs/vue3'
-import { Link } from '@inertiajs/vue3'
-export default {
-    setup() {
-        const form = useForm({
-            name: '',
-            email: '',
-            password: '',
-            password_confirmation: '',
-            course_id: '',
-            school_year: '',
-            year_level: '',
-            subject_code: ''
-        });
-        return { form };
-    },
-    components: {
-        Link
-    },
-    props: {
-        courses: Array, // Define 'courses' as a prop
-    }
-};
+import { Link, router } from '@inertiajs/vue3'
+
+const form = useForm({
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+  course_id: '',
+  school_year: '',
+  // year_level: '',
+  subject_code: '',
+  id_number: '',
+  phone_number: '',
+  terms: false,
+ enrollment_form: null,
+});
+
+import { defineProps } from 'vue'
+const props = defineProps({
+  courses: Array
+});
+
+const submit = () => {
+  form.post('/register')
+    console.log(form.enrollment_form)
+}
 </script>
 
 <template>
@@ -40,7 +44,14 @@ export default {
                         <div class="card">
                             <div class="card-body">
                                 <div class="m-sm-4">
-                                    <form @submit.prevent="form.post('/register')">
+                                    <form @submit.prevent="submit">
+                                        <div class="mb-3">
+                                            <label class="form-label">ID Number</label>
+                                            <input class="form-control form-control-lg" type="text" name="id_number"
+                                                placeholder="401589" v-model="form.id_number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"/>
+                                            <div v-if="form.errors.id_number" class="text-danger">{{ form.errors.id_number
+                                            }}</div>
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
                                             <input class="form-control form-control-lg" type="text" name="name"
@@ -51,11 +62,19 @@ export default {
                                             <label class="form-label">Email</label>
                                             <input class="form-control form-control-lg" type="email" name="email"
                                                 placeholder="Enter your email" v-model="form.email" />
+                                                <div v-if="form.errors.name" class="text-danger">{{ form.errors.name }}</div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Course</label>
+                                            <label class="form-label">Phone</label>
+                                            <input class="form-control form-control-lg" type="text" name="phone_number"
+                                                placeholder="09123456789" v-model="form.phone_number" />
+                                            <div v-if="form.errors.phone_number" class="text-danger">{{
+                                                form.errors.phone_number }}</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Program</label>
                                             <select class="form-select mb-3" v-model="form.course_id" name="course_id">
-                                                <option value="" selected disabled>Select a course</option>
+                                                <option value="" selected disabled>Select a program</option>
                                                 <option v-for="course in courses" :key="course.id" :value="course.id">{{
                                                     course.name }}</option>
                                             </select>
@@ -64,20 +83,26 @@ export default {
                                             <label class="form-label">School Year</label>
                                             <input class="form-control form-control-lg" type="text" name="school_year"
                                                 placeholder="2023-2024" v-model="form.school_year" />
+                                                <div v-if="form.errors.school_year" class="text-danger">{{
+                                                form.errors.school_year }}</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Subject Code</label>
                                             <input class="form-control form-control-lg" type="text" name="subject_code"
                                                 placeholder="00000" v-model="form.subject_code" />
+                                                <div v-if="form.errors.subject_code" class="text-danger">{{
+                                                form.errors.subject_code }}</div>
                                         </div>
-                                        <div class="mb-3">
+                                        <!-- <div class="mb-3">
                                             <label class="form-label">Year Level</label>
                                             <select class="form-select mb-3" v-model="form.year_level" name="year_level">
                                                 <option selected disabled>Select year</option>
                                                 <option v-for="year in (form.course_id === 5 ? 5 : 4)" :key="year">{{ year
                                                 }}</option>
                                             </select>
-                                        </div>
+                                            <div v-if="form.errors.year_level" class="text-danger">{{
+                                                form.errors.year_level }}</div>
+                                        </div> -->
                                         <div class="mb-3">
                                             <label class="form-label">Password</label>
                                             <input class="form-control form-control-lg" type="password" name="password"
@@ -85,13 +110,34 @@ export default {
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Confirm Password</label>
-                                            <input class="form-control form-control-lg" type="password" name="password_confirmation"
-                                                placeholder="Enter password" v-model="form.password_confirmation" />
+                                            <input class="form-control form-control-lg" type="password"
+                                                name="password_confirmation" placeholder="Enter password"
+                                                v-model="form.password_confirmation" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Enrollment form</label>
+                                            <input class="form-control form-control-lg" type="file"
+                                                name="enrollment_form"
+                                                @input="form.enrollment_form = $event.target.files[0]" />
+                                                <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+                                                {{ form.progress.percentage }}%
+                                                </progress>
+                                                <div v-if="form.errors.enrollment_form" class="text-danger">{{
+                                                'Upload your enrollment form' }}</div>
+                                        </div>
+                                        <div>
+                                            <div class="form-check align-items-center">
+                                                <input id="customControlInline" type="checkbox" v-model="form.terms" class="form-check-input"
+                                                    value="remember-me" name="remember-me">
+                                                <label class="form-check-label text-small" for="customControlInline">Agree to terms and conditions</label>
+                                            </div>
+                                            <div v-if="form.errors.terms" class="text-danger">{{ 'You must accept the terms and conditions'
+                                            }}</div>
                                         </div>
                                         <small>
                                             <Link style="color: #af2532" href="/login">Alrady have an account?</Link>
                                         </small>
-                                        <div class="text-center mt-3">
+                                        <div class="text-center mt-3 d-grid gap-2 mt-3">
                                             <button :disabled="form.processing" type="submit"
                                                 style="background: #af2532; color: #fff" class="btn btn-lg">
                                                 Sign up
@@ -102,7 +148,7 @@ export default {
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
+    </div>
 </main></template>
