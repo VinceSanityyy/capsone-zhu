@@ -40,9 +40,6 @@ class Handler extends ExceptionHandler
             // case 500:
             //     return Inertia::render('Errors/500');
             //     break;
-            // case 401:
-            //     return Inertia::render('Erros/NotSubscribed');
-            //     break;
             default:
                 return $response;
                 break;

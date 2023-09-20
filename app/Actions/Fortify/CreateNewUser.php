@@ -55,21 +55,25 @@ class CreateNewUser implements CreatesNewUsers
         ])->assignRole('student');
 
 
-         if ($input['enrollment_form']->isValid()) {
+        if ($input['enrollment_form']->isValid()) {
             // Generate a unique filename
             $filename = uniqid('enrollment_form_') . '.' . $input['enrollment_form']->getClientOriginalExtension();
         
-            // Store the uploaded file in the 'users' directory with the user's ID as a subdirectory
-            $path = $input['enrollment_form']->storeAs("public/enrollment_forms/users/{$user->id}", $filename);
+            // Define the path where the file will be stored, e.g., in the 'users' directory with the user's ID as a subdirectory
+            $path = 'users/' . $user->id;
+        
+            // Store the uploaded file in the specified path
+            $file = Storage::disk('public')->putFileAs($path, $input['enrollment_form'], $filename);
         
             // Create a new Form record and associate it with the user
-            $form = $user->form()->create(['file_path' => $path]);
+            $form = $user->form()->create(['file_path' => $path . '/' . $filename]);
         
             // Get the full URL of the uploaded enrollment form
             $form->file_path = Storage::disk('public')->url($form->file_path);
+        
             $form->save(); // Save the updated form with the full URL
         }
-
+        
         return $user;
     }
 
