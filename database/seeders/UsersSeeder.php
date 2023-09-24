@@ -44,7 +44,8 @@ class UsersSeeder extends Seeder
                 'course_id' => Course::find(1)->value('id'),
                 'school_year' => '2023-2024',
                 'is_active' => true,
-                'subject_code' => '321244'
+                'subject_code' => '321244',
+                'degree_type' => 'masteral'
             ],
         ];
 
@@ -61,16 +62,20 @@ class UsersSeeder extends Seeder
 
         // Create 15 random student users using Faker
         for ($i = 1; $i <= 15; $i++) {
+            $course = Course::inRandomOrder()->first();
+            $degree_type = $course->name && str_contains(strtolower($course->name), 'masters') ? 'masteral' : 'doctoral';
+            
             $user = User::create([
                 'email' => "student{$i}@abc.com",
                 'name' => $faker->name,
                 'password' => Hash::make('password'),
                 'phone_number' => $faker->phoneNumber,
                 'id_number' => $faker->unique()->randomNumber(5),
-                'course_id' => Course::inRandomOrder()->first()->id,
+                'course_id' => $course->id,
                 'school_year' => $faker->randomElement(['2023-2024', '2024-2025']),
                 'is_active' => $faker->boolean(),
                 'subject_code' => $faker->unique()->randomNumber(6),
+                'degree_type' => $degree_type,
             ]);
             $user->assignRole('student');
             $user->form()->create(['file_path' => 'https://images.template.net/wp-content/uploads/2019/09/Student-Enrollment-Form-in-PDF.jpg']); //random url only

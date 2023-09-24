@@ -44,7 +44,7 @@ export default {
                                             <label class="form-label">Password</label>
                                             <input class="form-control form-control-lg" type="password" name="password"
                                                 placeholder="Enter your password" v-model="form.password" />
-                                            <div v-if="form.errors.email">
+                                            <div v-if="form.errors.password">
                                                 <p style="color:red">{{ form.errors.password }}</p>
                                             </div>
                                             <small>

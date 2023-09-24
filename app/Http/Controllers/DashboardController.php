@@ -14,7 +14,18 @@ class DashboardController extends Controller
     {
         $isAdmin = auth()->user()->hasRole('admin');
         $isStudent = auth()->user()->hasRole('student');
-        $submissions = ResearchPaper::with('user', 'user.course', 'user.form')->get();
+        $submissions = ResearchPaper::with('user', 'user.course', 'user.form')
+        ->when($request->status, function ($q, $search) {
+            $q->where('title', 'LIKE', "%{$search}%")
+                ->orWhere('status', 'LIKE', "%{$search}%");
+        })
+        ->when($request->degree_type, function ($q, $degreeType) {
+            $q->whereHas('user', function ($userQuery) use ($degreeType) {
+                $userQuery->where('degree_type', $degreeType);
+            });
+        })
+        ->get();
+        $total_submissions = ResearchPaper::with('user', 'user.course', 'user.form')->get();
         $data = [];
         
         if ($isAdmin) {
@@ -22,6 +33,7 @@ class DashboardController extends Controller
             $data['pendingUsers'] = $this->getUserStatistics()['pending_users'];
             $data['userPerCourse'] = $this->getUserPerCourse();
             $data['submissions'] = $submissions;
+            $data['total_submissions'] = $total_submissions;
             $view = 'Dashboard';
         } elseif ($isStudent) {
             $view = 'StudentDashboard';
@@ -68,10 +80,36 @@ class DashboardController extends Controller
                 ->orWhere('id_number', 'LIKE', "%{$search}%")
                 ->orWhere('subject_code', 'LIKE', "%{$search}%")
                 ->orWhere('phone_number', 'LIKE', "%{$search}%");
-        })->get()->toArray();
+        })->where('is_active', true)->get()->toArray();
         // dd($users);
         return Inertia::render('Admin/Users', [
             'users' => $users
         ]);
+    }
+
+    public function showInactiveUsers(Request $request)
+    {
+        $users = User::query()->whereDoesntHave('roles', function ($query) {
+            $query->whereIn('name', ['admin', 'faculty']);
+        })->with('course')->when($request->search, function($q, $search){
+            $q->where('name', 'LIKE', "%{$search}%")
+                ->orWhere('email', 'LIKE', "%{$search}%")
+                ->orWhere('id_number', 'LIKE', "%{$search}%")
+                ->orWhere('subject_code', 'LIKE', "%{$search}%")
+                ->orWhere('phone_number', 'LIKE', "%{$search}%");
+        })->where('is_active', false)->get()->toArray();
+        // dd($users);
+        return Inertia::render('Admin/InactiveUsers', [
+            'users' => $users
+        ]);
+    }
+
+    public function dataTableFilter(Request $request)
+    {
+
+        $submissions = ResearchPaper::where('status', 'LIKE', "%{$request->status}%")
+            ->with('user', 'user.course', 'user.form')->get();
+      
+        return response()->json($submissions);
     }
 }

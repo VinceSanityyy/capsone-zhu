@@ -12,13 +12,12 @@
     </div>
     <div class="row justify-content-center">
       <div v-for="(card, index) in cards" :key="index" class="col-md-2">
-        <div class="card">
-          <div class="card-body">
+        <div class="card cards" @click="card.click">
+          <div class="card-body" style="hover:p">
             <div class="row">
               <div class="col mt-0">
                 <h5 class="card-title">{{ card.title }}</h5>
               </div>
-
               <div class="col-auto">
                 <div class="stat text-primary">
                   <i class="bi bi-journal-medical"></i>
@@ -45,13 +44,26 @@
           <h5 class="card-title">Submission List</h5>
         </div>
         <div class="card-body">
+
+          <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-3 offset-md-6">
+              <select class="form-control mb-3" v-model="selectedDegree" @change="handleFilterChange">
+                <option value="">Select Degree</option>
+                <option value="masteral">Masters</option>
+                <option value="doctoral">Doctors</option>
+              </select>
+            </div>
+          </div>
+
           <div class="table-responsive">
-            <DataTable class="display" ref="table">
+            <DataTable class="display" ref="table" id="example">
               <thead>
                 <tr>
                   <th>Date</th>
                   <th>Title</th>
                   <th>Name</th>
+                  <th>Degree Type</th>
                   <th>Status</th>
                   <th>Adviser</th>
                   <th>Program</th>
@@ -64,6 +76,7 @@
                   <td>{{ submission.formattedDate }}</td>
                   <td>{{ submission.title }}</td>
                   <td>{{ submission.user.name }}</td>
+                  <td>{{ submission.user.degree_type.toUpperCase() }}</td>
                   <td v-html="statusBadge(submission)"></td>
                   <td>{{ submission.adviser }}</td>
                   <td>{{ submission.user.course.name }}</td>
@@ -83,11 +96,11 @@
   
 <script setup>
 import { defineProps, ref, onMounted, computed } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link, usePage, router } from '@inertiajs/vue3'
 
 import MainLayout from './../Layouts/MainLayout.vue';
 import DataTable from 'datatables.net-vue3';
-
+import axios from 'axios';
 
 const type = 'column2d';
 const width = '100%';
@@ -109,16 +122,25 @@ const statusBadge = (submission) => {
   }
 }
 
+
+const selectedDegree = ref('');
+const handleFilterChange = () => {
+  const params = [];
+  if (selectedDegree.value) {
+    params.push(`degree_type=${selectedDegree.value}`);
+  }
+  const queryString = params.join('&');
+  router.get(`/dashboard?${queryString}`);
+};
+
 const countSubmissionsByStatus = computed(() => {
   const statusesToCount = ['title_defense', 'final_defense', 'outline_defense', 'quality_checking'];
-  
+
   return statusesToCount.reduce((countObj, status) => {
-    countObj[status] = submissions.filter(submission => submission.status === status).length;
+    countObj[status] = total_submissions.filter(submission => submission.status === status).length;
     return countObj;
   }, {});
 });
-
-console.log(countSubmissionsByStatus.value)
 
 const formattedSubmissions = computed(() => {
   return submissions.map(submission => {
@@ -133,11 +155,13 @@ const formattedSubmissions = computed(() => {
 });
 
 
-const { users, pendingUsers, userPerCourse, submissions } = defineProps({
+
+const { users, pendingUsers, userPerCourse, submissions, total_submissions } = defineProps({
   users: Object,
   pendingUsers: Number,
   userPerCourse: Array,
-  submissions: Object
+  submissions: Object,
+  total_submissions: Object
 });
 
 const dataSource = {
@@ -158,31 +182,55 @@ const cards = ref([
     value: pendingUsers,
     change: '2.4%',
     isPositiveChange: true,
+    click: () => {
+      router.get(`/admin/users-pending`)
+    }
   },
   {
     title: 'For Title Defense',
     value: countSubmissionsByStatus.value.title_defense,
     change: '0.8%',
     isPositiveChange: false,
+    click: () => {
+      console.log(selectedDegree.value)
+      router.get(`/dashboard?status=title_defense`)
+    }
   },
   {
     title: 'For Outline Defense',
     value: countSubmissionsByStatus.value.outline_defense,
     change: '0.8%',
     isPositiveChange: false,
+    click: () => {
+      router.get(`/dashboard?status=outline_defense`)
+    }
   },
   {
     title: 'For Final Defense',
     value: countSubmissionsByStatus.value.final_defense,
     change: '0.8%',
     isPositiveChange: false,
-    link: '/asd'
+    click: () => {
+      router.get(`/dashboard?status=final_defense`)
+    }
   },
   {
     title: 'For Quality Checking',
     value: countSubmissionsByStatus.value.quality_checking,
     change: '0.8%',
     isPositiveChange: false,
+    click: () => {
+      router.get(`/dashboard?status=quality_checking`)
+    }
+  },
+  {
+    title: 'Total Submissions',
+    value: total_submissions.length,
+    change: '0.8%',
+    isPositiveChange: false,
+    click: () => {
+      router.get(`/dashboard`)
+    }
   },
 ]);
 
@@ -201,6 +249,17 @@ onMounted(() => {
 });
 </script>
 
-<style>
+<style scoped>
 @import 'datatables.net-dt';
+
+.cards{
+transition: all 0.2s ease;
+cursor: pointer;
+
+
+}
+.cards:hover{
+box-shadow: 5px 6px 6px 2px #e9ecef;
+transform: scale(1.1);
+}
 </style>

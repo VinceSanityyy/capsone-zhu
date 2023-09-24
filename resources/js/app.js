@@ -14,6 +14,7 @@ import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import alertify from 'alertifyjs';
 import DataTable from 'datatables.net-vue3';
 import DataTablesCore from 'datatables.net';
+import Select from 'datatables.net-select';
 import 'datatables.net-dt';
 
 
@@ -28,7 +29,7 @@ createInertiaApp({
       .use(plugin)
       .use(ZiggyVue, Ziggy)
       .use(VueFusionCharts, FusionCharts, Column2D, FusionTheme)
-      .use(DataTable.use(DataTablesCore))
+      .use(DataTable.use(DataTablesCore, Select))
       .use(alertify)
       .mount(el)
   },

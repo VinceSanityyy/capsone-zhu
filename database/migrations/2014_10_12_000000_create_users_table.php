@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('subject_code')->nullable();
             $table->string('school_year')->nullable();
-            // $table->tinyInteger('year_level')->nullable();
+            $table->string('degree_type')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->boolean('is_active')->default(false);

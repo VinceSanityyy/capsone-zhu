@@ -35,11 +35,12 @@ class CreateNewUser implements CreatesNewUsers
             // 'year_level' => 'required',
             'school_year' => 'required',
             'subject_code' => 'required',
-            'phone_number' => 'required',
-            'id_number' => 'required',
+            'phone_number' => ['required', 'string', 'max:255', Rule::unique(User::class)],
+            'id_number' => ['required', 'string', 'max:255', Rule::unique(User::class)],
             'terms' => 'accepted',
             'password' => $this->passwordRules(),
             'enrollment_form' => 'required|file|max:2048',
+            'degree_type' => 'required'
         ])->validate();
 
         $user =  User::create([
@@ -47,7 +48,7 @@ class CreateNewUser implements CreatesNewUsers
             'email' => $input['email'],
             'password' => Hash::make($input['password']),
             'course_id' => $input['course_id'],
-            // 'year_level' => $input['year_level'],
+            'degree_type' => $input['degree_type'],
             'school_year' => $input['school_year'],
             'subject_code' => $input['subject_code'],
             'id_number' => $input['id_number'],
