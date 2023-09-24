@@ -13,12 +13,7 @@
                         Admin Menu
                     </li>
                     <li class="sidebar-item">
-                        <Link class="sidebar-link" href="/dashboard">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Dashboard</span>
-                        </Link>
-                    </li>
-                    <li class="sidebar-item">
-                        <a data-bs-target="#charts" data-bs-toggle="collapse" class="sidebar-link collapsed"
+                        <a data-bs-target="#dashboard-menu" data-bs-toggle="collapse" class="sidebar-link collapsed"
                             aria-expanded="false">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -26,18 +21,38 @@
                                 <line x1="18" y1="20" x2="18" y2="10"></line>
                                 <line x1="12" y1="20" x2="12" y2="4"></line>
                                 <line x1="6" y1="20" x2="6" y2="14"></line>
-                            </svg> <span class="align-middle">User Management <i class="bi bi-caret-down-fill"
+                            </svg> <span class="align-middle">Dashboard Menu <i class="bi bi-caret-down-fill"
                                     style="float: right;"></i></span>
+                        </a>
+                        <ul id="dashboard-menu" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar"
+                            style="">
+                            <li class="sidebar-item">
+                                <Link class="sidebar-link" href="/dashboard">
+                                <i class="bi bi-bar-chart-steps"></i><span class="align-middle">Overview</span>
+                                </Link>
+                            </li>
+                            <li class="sidebar-item">
+                                <Link class="sidebar-link " href="/calendar">
+                                <i class="bi bi-calendar-check"></i><span class="align-middle">Scheduling</span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-item">
+                        <a data-bs-target="#charts" data-bs-toggle="collapse" class="sidebar-link collapsed"
+                            aria-expanded="false">
+                            <i class="bi bi-people"></i> <span class="align-middle">User Management <i
+                                    class="bi bi-caret-down-fill" style="float: right;"></i></span>
                         </a>
                         <ul id="charts" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
                             <li class="sidebar-item">
                                 <Link class="sidebar-link" href="/admin/users-pending">
-                                    <i class="bi bi-person-dash-fill"></i><span class="align-middle">Pending Users</span>
+                                <i class="bi bi-person-dash-fill"></i><span class="align-middle">Pending Users</span>
                                 </Link>
                             </li>
                             <li class="sidebar-item">
                                 <Link class="sidebar-link " href="/admin/users">
-                                    <i class="bi bi-person-check-fill"></i><span class="align-middle">Approved Users</span>
+                                <i class="bi bi-person-check-fill"></i><span class="align-middle">Approved Users</span>
                                 </Link>
                             </li>
                         </ul>
@@ -46,6 +61,21 @@
                         <Link class="sidebar-link" href="pages-profile.html">
                         <i class="bi bi-journal-check"></i> <span class="align-middle">Submission
                             List</span>
+                        </Link>
+                    </li>
+                    <li class="sidebar-item ">
+                        <Link class="sidebar-link" href="pages-profile.html">
+                        <i class="bi bi-exclamation-triangle"></i> <span class="align-middle">Announcements</span>
+                        </Link>
+                    </li>
+                    <li class="sidebar-item ">
+                        <Link class="sidebar-link" href="pages-profile.html">
+                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Reports</span>
+                        </Link>
+                    </li>
+                    <li class="sidebar-item ">
+                        <Link class="sidebar-link" href="pages-profile.html">
+                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Forms</span>
                         </Link>
                     </li>
                 </div>
@@ -57,6 +87,11 @@
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/dashboard">
                         <i class="bi bi-bar-chart-line"></i><span class="align-middle">Student Dashboard</span>
+                        </Link>
+                    </li>
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/account">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Account Details</span>
                         </Link>
                     </li>
                     <li class="sidebar-item">
@@ -77,10 +112,14 @@
                         <i class="bi bi-bar-chart-line"></i><span class="align-middle">Faculty Dashboard</span>
                         </Link>
                     </li>
-
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/account-details">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Account Details</span>
+                        </Link>
+                    </li>
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/students-list">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Students List</span>
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Submissions</span>
                         </Link>
                     </li>
                 </div>
@@ -164,4 +203,5 @@ a.sidebar-link:hover svg {
 .sidebar-item.active>.sidebar-link {
     border-left-color: black;
     color: #e9ecef;
-}</style>
+}
+</style>
