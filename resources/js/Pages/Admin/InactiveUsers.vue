@@ -12,8 +12,9 @@
                                 <thead>
                                     <tr>
                                         <th>Id Number</th>
-                                        <th>Student Name</th>
+                                        <th>Name</th>
                                         <th>Email</th>
+                                        <th>Role(s)</th>
                                         <th>Program</th>
                                         <th>School Year</th>
                                         <th>Subject Code</th>
@@ -27,7 +28,9 @@
                                         <td>{{ user.id_number }}</td>
                                         <td>{{ user.name }}</td>
                                         <td>{{ user.email }}</td>
-                                        <td>{{ user.course.name }}</td>
+                                        <td>{{ user.current_roles }}</td>
+                                        <!-- <td>{{ user.course.name }}</td> -->
+                                        <td>{{ user.course ? user.course.name : 'Not Applicable' }}</td>
                                         <td>{{ user.school_year }}</td>
                                         <td>{{ user.subject_code }}</td>
                                         <td>{{ user.phone_number }}</td>

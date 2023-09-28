@@ -80,5 +80,43 @@ class UsersSeeder extends Seeder
             $user->assignRole('student');
             $user->form()->create(['file_path' => 'https://images.template.net/wp-content/uploads/2019/09/Student-Enrollment-Form-in-PDF.jpg']); //random url only
         }
+
+        /** 
+        //panels
+        for ($a = 1; $a <= 5; $a ++){
+            $user = User::create([
+                'email' => "panel{$a}@abc.com",
+                'name' => $faker->name,
+                'password' => Hash::make('password'),
+                'phone_number' => $faker->phoneNumber,
+                'is_active' => true,
+            ]);
+            $user->assignRole('panel');
+        }
+
+        //adviser
+        for ($b = 1; $b <= 5; $b++){
+            $user = User::create([
+                'email' => "adviser{$b}@abc.com",
+                'name' => $faker->name,
+                'password' => Hash::make('password'),
+                'phone_number' => $faker->phoneNumber,
+                'is_active' => true,
+            ]);
+            $user->assignRole('adviser');
+        }
+
+        */
+        //faculty
+        for ($c = 1; $c <= 5; $c++){
+            $faculty = User::create([
+                'email' => "faculty{$c}@abc.com",
+                'name' => $faker->name,
+                'password' => Hash::make('password'),
+                'phone_number' => $faker->phoneNumber,
+                'is_active' => true,
+            ]);
+            $faculty->assignRole('faculty');
+        }
     }
 }

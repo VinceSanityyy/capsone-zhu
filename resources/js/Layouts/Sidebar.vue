@@ -55,6 +55,11 @@
                                 <i class="bi bi-person-check-fill"></i><span class="align-middle">Approved Users</span>
                                 </Link>
                             </li>
+                            <li class="sidebar-item">
+                                <Link class="sidebar-link " href="/admin/users/create">
+                                <i class="bi bi-person-plus-fill"></i><span class="align-middle">Add New User</span>
+                                </Link>
+                            </li>
                         </ul>
                     </li>
                     <li class="sidebar-item ">
@@ -64,7 +69,7 @@
                         </Link>
                     </li>
                     <li class="sidebar-item ">
-                        <Link class="sidebar-link" href="pages-profile.html">
+                        <Link class="sidebar-link" href="/admin/announcements">
                         <i class="bi bi-exclamation-triangle"></i> <span class="align-middle">Announcements</span>
                         </Link>
                     </li>
@@ -89,14 +94,14 @@
                         <i class="bi bi-bar-chart-line"></i><span class="align-middle">Student Dashboard</span>
                         </Link>
                     </li>
-                    <li class="sidebar-item">
+                    <!-- <li class="sidebar-item">
                         <Link class="sidebar-link" href="/account">
                         <i class="bi bi-bar-chart-line"></i><span class="align-middle">Account Details</span>
                         </Link>
-                    </li>
+                    </li> -->
                     <li class="sidebar-item">
-                        <Link class="sidebar-link" href="my-submissions">
-                        <i class="bi bi-list-ul"></i> <span class="align-middle">Submission</span>
+                        <Link class="sidebar-link" href="/student/my-submissions">
+                        <i class="bi bi-list-ul"></i> <span class="align-middle">My Submissions</span>
                         </Link>
                     </li>
                 </div>
@@ -109,8 +114,43 @@
 
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/dashboard">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Faculty Dashboard</span>
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Dashboard</span>
                         </Link>
+                    </li>
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/account-details">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Account Details</span>
+                        </Link>
+                    </li>
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/students-list">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Submissions</span>
+                        </Link>
+                    </li>
+                </div>
+
+                <div v-if="$page.props.user.roles.includes('panel')">
+
+                    <li class="sidebar-header">
+                        Panel Menu
+                    </li>
+
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/dashboard">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Dashboard</span>
+                        </Link>
+                    </li>
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/students-list">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Submissions</span>
+                        </Link>
+                    </li>
+                </div>
+
+                <div v-if="$page.props.user.roles.includes('adviser')">
+
+                    <li class="sidebar-header">
+                        Adviser Menu
                     </li>
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/account-details">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
@@ -14,19 +15,25 @@ class DashboardController extends Controller
     {
         $isAdmin = auth()->user()->hasRole('admin');
         $isStudent = auth()->user()->hasRole('student');
-        $submissions = ResearchPaper::with('user', 'user.course', 'user.form')
+        $isPanel = auth()->user()->hasRole('panel');
+        $isFaculty = auth()->user()->hasRole('faculty');
+        $submissions = ResearchPaper::with('author', 'author.course', 'author.form', 'adviser', 'panelMembers')
         ->when($request->status, function ($q, $search) {
             $q->where('title', 'LIKE', "%{$search}%")
                 ->orWhere('status', 'LIKE', "%{$search}%");
         })
         ->when($request->degree_type, function ($q, $degreeType) {
-            $q->whereHas('user', function ($userQuery) use ($degreeType) {
+            $q->whereHas('author', function ($userQuery) use ($degreeType) {
                 $userQuery->where('degree_type', $degreeType);
             });
         })
         ->get();
-        $total_submissions = ResearchPaper::with('user', 'user.course', 'user.form')->get();
+        
+        $total_submissions = ResearchPaper::with('author', 'author.course', 'author.form')->get();
+
+        $announcements = Announcement::where('is_active', true)->with('user')->get();
         $data = [];
+
         
         if ($isAdmin) {
             $data['users'] = $this->getUserStatistics()['total_users']; // Pass users only if admin
@@ -34,10 +41,16 @@ class DashboardController extends Controller
             $data['userPerCourse'] = $this->getUserPerCourse();
             $data['submissions'] = $submissions;
             $data['total_submissions'] = $total_submissions;
+            $data['$announcements'] = $announcements;
             $view = 'Dashboard';
         } elseif ($isStudent) {
+            $data['announcements'] = $announcements;
             $view = 'StudentDashboard';
-        } else {
+        } elseif ($isPanel) {
+            $data['announcements'] = $announcements;
+            $view = 'PanelDashboard';
+        }else {
+            $data['announcements'] = $announcements;
             $view = 'FacultyDashboard';
         }
     
@@ -73,15 +86,15 @@ class DashboardController extends Controller
     {
 
         $users = User::query()->whereDoesntHave('roles', function ($query) {
-            $query->whereIn('name', ['admin', 'faculty']);
+            $query->whereIn('name', ['admin', ]);
         })->with('course')->when($request->search, function($q, $search){
             $q->where('name', 'LIKE', "%{$search}%")
                 ->orWhere('email', 'LIKE', "%{$search}%")
                 ->orWhere('id_number', 'LIKE', "%{$search}%")
                 ->orWhere('subject_code', 'LIKE', "%{$search}%")
                 ->orWhere('phone_number', 'LIKE', "%{$search}%");
-        })->where('is_active', true)->get()->toArray();
-        // dd($users);
+        })->where('is_active', true)->get();
+        // dd($users[23]);
         return Inertia::render('Admin/Users', [
             'users' => $users
         ]);
@@ -90,7 +103,7 @@ class DashboardController extends Controller
     public function showInactiveUsers(Request $request)
     {
         $users = User::query()->whereDoesntHave('roles', function ($query) {
-            $query->whereIn('name', ['admin', 'faculty']);
+            $query->whereIn('name', ['admin']);
         })->with('course')->when($request->search, function($q, $search){
             $q->where('name', 'LIKE', "%{$search}%")
                 ->orWhere('email', 'LIKE', "%{$search}%")

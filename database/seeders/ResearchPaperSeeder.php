@@ -2,37 +2,48 @@
 
 namespace Database\Seeders;
 
-use App\Enums\ResearchStatusType;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use App\ResearchPaper;
 use Faker\Factory as Faker;
+use App\Enums\ResearchStatusType;
+use Spatie\Permission\Models\Role;
 
 class ResearchPaperSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $faker = Faker::create();
-        $users = User::where('is_active', true)
-        ->whereDoesntHave('roles', function ($q) {
-            $q->whereIn('name', ['admin', 'faculty']);
-        })
-        ->get();
-      
+        // Retrieve only users with the 'student' role
+        $studentRole = Role::where('name', 'student')->first();
+        $users = $studentRole->users()->where('is_active', true)->get();
+
         $sampleForm = 'https://images.shiksha.com/mediadata/images/articles/1681379362phpFssVQ8.jpeg';
-        foreach ($users as $user){
-            $user->researchPaper()->create([
+
+        foreach ($users as $user) {
+            // Assign an adviser
+            $adviserRole = Role::where('name', 'adviser')->first();
+            $adviser = $adviserRole->users()->inRandomOrder()->first();
+
+            $researchPaper = $user->researchPapers()->create([
                 'title' => $faker->sentence(),
-                'adviser' => $faker->name(),
                 'proposal_form' => $sampleForm,
                 'endorsment_form' => $sampleForm,
-                'panels' => implode(', ', [$faker->name(), $faker->name(), $faker->name()]),
-                'receipt' => $faker->unique()->randomNumber(5),
+                // 'receipt' => $faker->unique()->randomNumber(5),
                 'status' => $faker->randomElement(ResearchStatusType::values())
             ]);
+
+            // Associate the adviser
+            $researchPaper->adviser()->associate($adviser);
+            $researchPaper->save();
+
+            // Assign panel members (assuming panels is a many-to-many relationship)
+            $panelMembersRole = Role::where('name', 'panel')->first();
+            $panelMembers = $panelMembersRole->users()->inRandomOrder()->limit(3)->get();
+
+            foreach ($panelMembers as $panelMember) {
+                $researchPaper->panelMembers()->attach($panelMember);
+            }
         }
     }
 }

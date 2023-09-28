@@ -15,8 +15,31 @@ class ResearchPaper extends Model
         'panels' => 'array',
     ];
 
-    public function user()
+    protected $appends = [
+        'pannels' 
+    ];
+
+    public function getPannelsAttribute()
     {
-        return $this->belongsTo(User::class);
+        $panels = $this->panelMembers->pluck('name')->implode(', ');
+
+        return $panels;
     }
+    public function author() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function adviser() {
+        return $this->belongsTo(User::class, 'adviser_id');
+    }
+    
+    public function panelMembers() {
+        return $this->belongsToMany(User::class, 'research_paper_panels_pivot', 'research_paper_id', 'user_id');
+    }
+
+    public function receipts()
+    {
+        return $this->hasMany(PaymentReceipt::class);
+    }
+
 }

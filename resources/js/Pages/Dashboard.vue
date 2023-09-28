@@ -75,12 +75,12 @@
                 <tr v-for="submission in formattedSubmissions" :key="submission.id">
                   <td>{{ submission.formattedDate }}</td>
                   <td>{{ submission.title }}</td>
-                  <td>{{ submission.user.name }}</td>
-                  <td>{{ submission.user.degree_type.toUpperCase() }}</td>
+                  <td>{{ submission.author.name }}</td>
+                  <td>{{ submission.author.degree_type.toUpperCase() }}</td>
                   <td v-html="statusBadge(submission)"></td>
-                  <td>{{ submission.adviser }}</td>
-                  <td>{{ submission.user.course.name }}</td>
-                  <td>{{ submission.panels }}</td>
+                  <td>{{ submission.adviser.name }}</td>
+                  <td>{{ submission.author.course.name }}</td>
+                  <td>{{ submission.pannels }}</td>
                   <td>
                     <Link :href="`/wala`" class="btn btn-sm um-button">View</Link>
                   </td>
@@ -156,12 +156,13 @@ const formattedSubmissions = computed(() => {
 
 
 
-const { users, pendingUsers, userPerCourse, submissions, total_submissions } = defineProps({
+const { users, pendingUsers, userPerCourse, submissions, total_submissions, announcements } = defineProps({
   users: Object,
   pendingUsers: Number,
   userPerCourse: Array,
   submissions: Object,
-  total_submissions: Object
+  total_submissions: Object,
+  announcements: Object
 });
 
 const dataSource = {

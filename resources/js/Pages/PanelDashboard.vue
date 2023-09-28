@@ -1,6 +1,6 @@
 <template>
     <MainLayout>
-        <h1 class="h3 mb-3"><strong>Faculty</strong> Dashboard</h1>
+        <h1 class="h3 mb-3"><strong></strong> Announcements</h1>
         <div class="row">
             <div class="col-12">
                 <div class="card">

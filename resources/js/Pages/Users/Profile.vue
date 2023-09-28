@@ -1,6 +1,6 @@
 <template>
     <MainLayout>
-        <h1 class="h3 mb-3">User Details</h1>
+        <h1 class="h3 mb-3">Profile</h1>
         <div class="row">
             <div class="col-md-3 col-xl-2">
 
@@ -16,7 +16,7 @@
                         </a>
                         <a class="list-group-item list-group-item-action" data-bs-toggle="list" href="#password" role="tab"
                             aria-selected="false" tabindex="-1">
-                            Credentials
+                            Password
                         </a>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
 
                                 <h5 class="card-title mb-0">Personal info</h5>
                             </div>
-                            <div class="card-body">
+                            <!-- <div class="card-body">
                                 <form>
                                     <div class="row">
                                         <div class="mb-3">
@@ -45,18 +45,18 @@
                                         <input type="email" class="form-control" id="inputEmail4" placeholder="Email"
                                             v-model="userDetails.email" disabled>
                                     </div>
-                                    <div class="mb-3" v-if="userDetails.roles.name !== 'panel' && userDetails.roles.name !== 'adviser' && userDetails.roles.name !== 'faculty'">
+                                    <div class="mb-3">
                                         <label class="form-label" for="inputAddress">Program</label>
                                         <input type="text" class="form-control" id="inputAddress"
-                                            v-model="courseName" disabled>
+                                            v-model="userDetails.course.name" disabled>
                                     </div>
-                                    <div class="mb-3" v-if="userDetails.roles.name !== 'panel' && userDetails.roles.name !== 'adviser' && userDetails.roles.name !== 'faculty'"> 
+                                    <div class="mb-3">
                                         <label class="form-label" for="inputAddress2">School year</label>
                                         <input type="text" class="form-control" id="inputAddress2"
                                             v-model="userDetails.school_year" disabled>
                                     </div>
                                     <div class="row">
-                                        <div class="mb-3 col-md-6" v-if="userDetails.roles.name !== 'panel' && userDetails.roles.name !== 'adviser' && userDetails.roles.name !== 'faculty'">
+                                        <div class="mb-3 col-md-6">
                                             <label class="form-label" for="inputCity">Subject Code</label>
                                             <input type="text" class="form-control" id="inputCity"
                                                 v-model="userDetails.subject_code" disabled>
@@ -79,28 +79,39 @@
                                     </button>
                                 </form>
 
-                            </div>
+                            </div> -->
                         </div>
 
                     </div>
                     <div class="tab-pane fade" id="password" role="tabpanel">
                         <div class="card">
-   
-                            <img class="card-img-top" :src="userFormFilePath.file_path">
-                            <div class="card-header">
-                                <h5 class="card-title mb-0"></h5>
-                            </div>
                             <div class="card-body">
-                                <p class="card-text">Please check the form before accepting the user (if student).</p>
-                                <!-- <a href="#" class="card-link">Download</a> -->
+                                <h5 class="card-title">Password</h5>
+
+                                <form @submit.prevent="handleSubmit">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="inputPasswordCurrent">Current password</label>
+                                        <input v-model="form.current_password" type="password" class="form-control" id="inputPasswordCurrent">
+                                        <div v-if="form.errors.current_password" class="text-danger">{{ form.errors.current_password
+                                            }}</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="inputPasswordNew">New password</label>
+                                        <input v-model="form.new_password" type="password" class="form-control" id="inputPasswordNew">
+                                        <div class="text-muted">Make sure your password is strong and easy to remember.</div>
+                                        <div v-if="form.errors.new_password" class="text-danger">{{ form.errors.new_password
+                                            }}</div>
+                                    </div>
+                            
+                                    <button type="submit" class="btn um-button">Save changes</button>
+                                </form>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        {{ userDetails.roles }}
-
     </MainLayout>
 </template>
 
@@ -112,36 +123,37 @@ import { Link, router } from '@inertiajs/vue3'
 const { userDetails } = defineProps({
     userDetails: Object
 })
-const rolesToHide = ['panel', 'adviser', 'faculty'];
 
-const courseName = computed(() => {
-  return userDetails.course ? userDetails.course.name : 'Not Applicable';
-});
+import { useForm } from '@inertiajs/vue3'
+const form = useForm({
+  current_password: null,
+  new_password: null,
+})
 
-
-const userFormFilePath = computed(() => userDetails.form || '');
-
-const handleUser = ref((user) => {
-    const actionTitle = user.is_active ? 'Deactivate User' : 'Confirm User';
-    const actionMessage = user.is_active ? `Deactivate ${user.name} ?` : `Accept ${user.name} ?`;
-
-    alertify.confirm(actionTitle, actionMessage, () => {
-        router.put(`/admin/users/${user.id}/${user.is_active ? 'deactivate' : 'approve'}`)
+const handleSubmit = async () => {
+  try {
+    await form.post('/profile/change-password', {
+      onSuccess: () => {
+        alertify.success('Password changed successfully.');
         alertify.set('notifier', 'position', 'top-right');
-        alertify.success('User Status Updated');
-    }, () => {
-        console.log('cancel')
+      },
+      onError: (errors) => {
+        console.error(errors); // Log the errors for debugging
+        alertify.set('notifier', 'position', 'top-right');
+      },
     });
-});
+  } catch (error) {
+    console.error(error); // Log the error for debugging
+    alertify.error('An error occurred while changing the password.');
+  }
+};
 
 </script>
 
 
-<style scoped>
-.list-group-item.active {
+<style scoped>.list-group-item.active {
     background-color: #af2532;
     border-color: #af2532;
     color: white;
     z-index: 2;
-}
-</style>
+}</style>

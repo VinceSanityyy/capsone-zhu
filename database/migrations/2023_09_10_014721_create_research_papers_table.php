@@ -16,12 +16,9 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->foreignId('user_id')->constrained(); //student
-            // $table->foreignId('course_id')->constrained(); // removed na dapat ni since makuha man nato sa user ang course
-            $table->string('adviser'); //part ni sa users na adviser or dili?
+            $table->foreignId('adviser_id')->nullable()->constrained('users'); //adviser
             $table->text('proposal_form')->nullable();
             $table->text('endorsment_form')->nullable();
-            $table->text('receipt')->nullable();
-            $table->text('panels')->nullable();
             $table->string('status');
             $table->timestamps();
         });

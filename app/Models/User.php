@@ -40,6 +40,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    protected $appends = [
+        'current_roles'
+    ];
+
+    public function getCurrentRolesAttribute()
+    {
+        $roles = $this->roles->pluck('name')->implode(', ');
+
+        return $roles;
+    }
+    
     public function course()
     {
         return $this->belongsTo(Course::class);
@@ -50,10 +61,11 @@ class User extends Authenticatable
         //this should be hasMany in the future since user can add the forms for the next school yr.
         return $this->hasOne(StudentForm::class, 'user_id');
     }
-
-    public function researchPaper()
-    {
-        return $this->hasOne(ResearchPaper::class);
+    public function researchPapers() {
+        return $this->hasMany(ResearchPaper::class);
     }
-
+    
+    public function papersOnPanel() {
+        return $this->belongsToMany(ResearchPaper::class, 'panel_paper', 'user_id', 'research_paper_id');
+    }
 }
