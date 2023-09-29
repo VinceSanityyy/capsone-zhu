@@ -31,8 +31,8 @@
 
                                 <h5 class="card-title mb-0">Personal info</h5>
                             </div>
-                            <!-- <div class="card-body">
-                                <form>
+                            <div class="card-body">
+                                <form @submit.prevent="updateUserInfo">
                                     <div class="row">
                                         <div class="mb-3">
                                             <label class="form-label" for="inputFirstName">Name </label>
@@ -45,10 +45,15 @@
                                         <input type="email" class="form-control" id="inputEmail4" placeholder="Email"
                                             v-model="userDetails.email" disabled>
                                     </div>
+                                    <!-- <div class="mb-3">
+                                        <label class="form-label" for="inputAddress">Program</label>
+                                        <input type="text" class="form-control" id="inputAddress"
+                                            v-model="userDetails.course.name ?? ''" disabled>
+                                    </div> -->
                                     <div class="mb-3">
                                         <label class="form-label" for="inputAddress">Program</label>
                                         <input type="text" class="form-control" id="inputAddress"
-                                            v-model="userDetails.course.name" disabled>
+                                            :value="userDetails.course ? userDetails.course.name : ''" disabled>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="inputAddress2">School year</label>
@@ -73,13 +78,38 @@
                                                 {{ userDetails.is_active ? 'Approved' : 'Waiting for approval' }}
                                             </span>
                                         </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label" for="inputCity">Birthday</label>
+                                            <input v-model="form.birthday" class="form-control" type="date" name="" id="">
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label" for="inputCity">Address</label>
+                                            <input type="text" class="form-control" id="inputCity"
+                                                v-model="form.address">
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label class="form-label" for="inputCity">Gender</label>
+                                            <select v-model="form.gender" class="form-control" name="" id="">
+                                                <option value="male"> Male </option>
+                                                <option value="female"> Female </option>
+                                            </select>
+                                        </div>
                                     </div>
-                                    <button type="button" @click="handleUser(userDetails)" class="btn um-button">
+                                    <button type="button" @click="handleUser(userDetails)" class="btn um-button"
+                                        v-if="userDetails.roles.some(role => role.name === 'admin')">
                                         {{ userDetails.is_active ? 'Deactivate User' : 'Confirm User' }}
                                     </button>
-                                </form>
 
-                            </div> -->
+                                    <button type="button" @click="updateUserInfo(userDetails)" class="btn um-button" v-else>
+                                        Update User Info
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        //current user roles (for dbugging)
+                        <div v-for="role in userDetails.roles" :key="role.id">
+                            {{ role.name }}
                         </div>
 
                     </div>
@@ -91,18 +121,22 @@
                                 <form @submit.prevent="handleSubmit">
                                     <div class="mb-3">
                                         <label class="form-label" for="inputPasswordCurrent">Current password</label>
-                                        <input v-model="form.current_password" type="password" class="form-control" id="inputPasswordCurrent">
-                                        <div v-if="form.errors.current_password" class="text-danger">{{ form.errors.current_password
-                                            }}</div>
+                                        <input v-model="form.current_password" type="password" class="form-control"
+                                            id="inputPasswordCurrent">
+                                        <div v-if="form.errors.current_password" class="text-danger">{{
+                                            form.errors.current_password
+                                        }}</div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="inputPasswordNew">New password</label>
-                                        <input v-model="form.new_password" type="password" class="form-control" id="inputPasswordNew">
-                                        <div class="text-muted">Make sure your password is strong and easy to remember.</div>
+                                        <input v-model="form.new_password" type="password" class="form-control"
+                                            id="inputPasswordNew">
+                                        <div class="text-muted">Make sure your password is strong and easy to remember.
+                                        </div>
                                         <div v-if="form.errors.new_password" class="text-danger">{{ form.errors.new_password
-                                            }}</div>
+                                        }}</div>
                                     </div>
-                            
+
                                     <button type="submit" class="btn um-button">Save changes</button>
                                 </form>
 
@@ -126,34 +160,57 @@ const { userDetails } = defineProps({
 
 import { useForm } from '@inertiajs/vue3'
 const form = useForm({
-  current_password: null,
-  new_password: null,
+    current_password: null,
+    new_password: null,
+    address: null,
+    gender: null,
+    birthday: null
 })
 
 const handleSubmit = async () => {
-  try {
-    await form.post('/profile/change-password', {
-      onSuccess: () => {
-        alertify.success('Password changed successfully.');
-        alertify.set('notifier', 'position', 'top-right');
-      },
-      onError: (errors) => {
-        console.error(errors); // Log the errors for debugging
-        alertify.set('notifier', 'position', 'top-right');
-      },
-    });
-  } catch (error) {
-    console.error(error); // Log the error for debugging
-    alertify.error('An error occurred while changing the password.');
-  }
+    try {
+        await form.post('/profile/change-password', {
+            onSuccess: () => {
+                alertify.success('Password changed successfully.');
+                alertify.set('notifier', 'position', 'top-right');
+            },
+            onError: (errors) => {
+                console.error(errors); // Log the errors for debugging
+                alertify.set('notifier', 'position', 'top-right');
+            },
+        });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        alertify.error('An error occurred while changing the password.');
+    }
 };
+
+const updateUserInfo = async () => {
+    try {
+        await form.put('/profile/update', {
+            onSuccess: () => {
+                alertify.success('Information updated successfully.');
+                alertify.set('notifier', 'position', 'top-right');
+            },
+            onError: (errors) => {
+                console.error(errors); // Log the errors for debugging
+                alertify.set('notifier', 'position', 'top-right');
+            },
+        });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        alertify.error('Error');
+    }
+}
 
 </script>
 
 
-<style scoped>.list-group-item.active {
+<style scoped>
+.list-group-item.active {
     background-color: #af2532;
     border-color: #af2532;
     color: white;
     z-index: 2;
-}</style>
+}
+</style>

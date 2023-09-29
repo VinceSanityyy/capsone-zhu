@@ -41,7 +41,7 @@ Route::group(['middleware' => ['accepted','auth']], function () {
     });
     Route::get('/profile', [UserController::class, 'showProfile'])->name('users.profile');
     Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('users.change-password');
-    
+    Route::put('/profile/update', [UserController::class, 'updateUserDetails'])->name('users.update');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/filters', [DashboardController::class, 'dataTableFilter']);
 

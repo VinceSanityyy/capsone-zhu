@@ -117,4 +117,15 @@ class UserController extends Controller
         ]);
         return to_route('users.index');
     }
+
+    public function updateUserDetails(Request $request)
+    {
+        $user = auth()->user();
+        $data = $request->only(['gender', 'address', 'birthday']);
+        $user->update($data);
+
+        if($user){
+            return to_route('users.profile');
+        }
+    }
 }
