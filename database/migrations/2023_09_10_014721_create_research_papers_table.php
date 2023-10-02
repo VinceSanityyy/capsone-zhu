@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('title');
             $table->foreignId('user_id')->constrained(); //student
             $table->foreignId('adviser_id')->nullable()->constrained('users'); //adviser
-            $table->text('proposal_form')->nullable();
-            $table->text('endorsment_form')->nullable();
+            $table->text('document')->nullable();
+            $table->text('endorsement')->nullable();
+            $table->text('receipt')->nullable();
             $table->string('status');
             $table->timestamps();
         });

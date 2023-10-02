@@ -61,11 +61,25 @@ class User extends Authenticatable
         //this should be hasMany in the future since user can add the forms for the next school yr.
         return $this->hasOne(StudentForm::class, 'user_id');
     }
-    public function researchPapers() {
-        return $this->hasMany(ResearchPaper::class);
+    // public function researchPapers() {
+    //     return $this->hasMany(ResearchPaper::class);
+    // }
+
+    public function adviserPaper() {
+        return $this->hasMany(ResearchPaper::class, 'adviser_id');
     }
-    
+
+    public function studentPaper()
+    {
+        return $this->hasOne(ResearchPaper::class, 'user_id')->with('adviser');
+    }    
+
     public function papersOnPanel() {
         return $this->belongsToMany(ResearchPaper::class, 'panel_paper', 'user_id', 'research_paper_id');
     }
+
+    // public function comments()
+    // {
+    //     return $this->hasMany(Comment::class, 'user_id');
+    // }
 }

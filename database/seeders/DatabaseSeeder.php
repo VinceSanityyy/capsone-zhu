@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             AdvisersAndPannelsSeeder::class,
             ResearchPaperSeeder::class,
             AnnouncementSeeder::class,
+            CommentsSeeder::class
         ]);
     }
 }

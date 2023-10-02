@@ -4,6 +4,7 @@ use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ResearchPaperController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Inertia\Inertia;
@@ -38,6 +39,7 @@ Route::group(['middleware' => ['accepted','auth']], function () {
       Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcement.index');
       Route::get('/announcements/create', [AnnouncementController::class, 'create'])->name('announcement.create');
       Route::post('/announcements/create', [AnnouncementController::class, 'store'])->name('announcement.store');
+      Route::get('/research-paper/{researchPaper}', [ResearchPaperController::class, 'show'])->name('admin.research-paper.show');
     });
     Route::get('/profile', [UserController::class, 'showProfile'])->name('users.profile');
     Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('users.change-password');
@@ -47,6 +49,7 @@ Route::group(['middleware' => ['accepted','auth']], function () {
 
     Route::prefix('student')->group(function(){
       Route::get('/my-submissions', [StudentController::class, 'showSubmissions'])->name('student.submissions');
+      Route::post('/my-submissions/submit', [StudentController::class, 'submitResearchPaper'])->name('student.research.submit');
     });
     // Route::get('/users/filter', [DashboardController::class, 'filterUsers']);
 });

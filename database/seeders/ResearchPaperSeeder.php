@@ -27,8 +27,9 @@ class ResearchPaperSeeder extends Seeder
 
             $researchPaper = $user->researchPapers()->create([
                 'title' => $faker->sentence(),
-                'proposal_form' => $sampleForm,
-                'endorsment_form' => $sampleForm,
+                'document' => $sampleForm,
+                'endorsement' => $sampleForm,
+                'receipt' => 'https://files.jotform.com/jotformapps/payment-receipt-template-5fd30596666e2866e04390d48ec89876.png?v=1695990972',
                 // 'receipt' => $faker->unique()->randomNumber(5),
                 'status' => $faker->randomElement(ResearchStatusType::values())
             ]);

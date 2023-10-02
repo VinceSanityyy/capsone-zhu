@@ -19,6 +19,10 @@ class ResearchPaper extends Model
         'pannels' 
     ];
 
+    protected $guarded = [
+        'id'
+    ];
+
     public function getPannelsAttribute()
     {
         $panels = $this->panelMembers->pluck('name')->implode(', ');
@@ -27,6 +31,16 @@ class ResearchPaper extends Model
     }
     public function author() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function masteral()
+    {
+        return $this->author()->where('degree_type', 'masteral');
+    }
+
+    public function doctoral()
+    {
+        return $this->author()->where('degree_type', 'doctoral');
     }
     
     public function adviser() {
@@ -42,4 +56,34 @@ class ResearchPaper extends Model
         return $this->hasMany(PaymentReceipt::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function panelMemberComments()
+    {
+        $panelMemberIds = $this->panelMembers()->pluck('users.id')->toArray();
+        $comments = Comment::where('research_paper_id', $this->id)
+            ->whereIn('user_id', $panelMemberIds)
+            ->with('user')
+            ->get();
+
+        return $comments;
+    }
+
+    public function adviserComments()
+    {
+        $comments = Comment::where('research_paper_id', $this->id)
+            ->where('user_id', $this->adviser->id)
+            ->with('user')
+            ->get();
+
+        return $comments;
+    }
+
+    public function endorsment()
+    {
+        return $this->hasOne(Endorsment::class);
+    }
 }

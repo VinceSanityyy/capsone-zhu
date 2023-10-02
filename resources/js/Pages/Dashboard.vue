@@ -82,7 +82,7 @@
                   <td>{{ submission.author.course.name }}</td>
                   <td>{{ submission.pannels }}</td>
                   <td>
-                    <Link :href="`/wala`" class="btn btn-sm um-button">View</Link>
+                    <Link :href="`/admin/research-paper/${submission.id}`" class="btn btn-sm um-button">View</Link>
                   </td>
                 </tr>
               </tbody>

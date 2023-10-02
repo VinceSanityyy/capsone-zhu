@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ResearchPaper;
+use App\Models\Endorsment;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
-class ResearchPaperController extends Controller
+class EndorsmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,24 +34,15 @@ class ResearchPaperController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ResearchPaper $researchPaper)
+    public function show(Endorsment $endorsment)
     {
-        $researchPaper->load('adviser', 'panelMembers');
-        $panelMemberComments = $researchPaper->panelMemberComments();
-        $adviserComments = $researchPaper->adviserComments();
-
-    
-        return Inertia::render('Admin/Submissions/Show', [
-            'researchPaper' => $researchPaper,
-            'panelMemberComments' => $panelMemberComments,
-            'adviserComments' => $adviserComments
-        ]);
+        //
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ResearchPaper $researchPaper)
+    public function edit(Endorsment $endorsment)
     {
         //
     }
@@ -60,7 +50,7 @@ class ResearchPaperController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ResearchPaper $researchPaper)
+    public function update(Request $request, Endorsment $endorsment)
     {
         //
     }
@@ -68,7 +58,7 @@ class ResearchPaperController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ResearchPaper $researchPaper)
+    public function destroy(Endorsment $endorsment)
     {
         //
     }
