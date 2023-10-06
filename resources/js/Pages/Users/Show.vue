@@ -108,6 +108,8 @@
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { defineProps, ref, onMounted, reactive, computed, toRaw } from 'vue';
 import { Link, router } from '@inertiajs/vue3'
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 const { userDetails } = defineProps({
     userDetails: Object
@@ -127,8 +129,7 @@ const handleUser = ref((user) => {
 
     alertify.confirm(actionTitle, actionMessage, () => {
         router.put(`/admin/users/${user.id}/${user.is_active ? 'deactivate' : 'approve'}`)
-        alertify.set('notifier', 'position', 'top-right');
-        alertify.success('User Status Updated');
+        toast.success('User Status Updated');
     }, () => {
         console.log('cancel')
     });

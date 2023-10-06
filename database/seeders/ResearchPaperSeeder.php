@@ -25,7 +25,7 @@ class ResearchPaperSeeder extends Seeder
             $adviserRole = Role::where('name', 'adviser')->first();
             $adviser = $adviserRole->users()->inRandomOrder()->first();
 
-            $researchPaper = $user->researchPapers()->create([
+            $researchPaper = $user->studentPaper()->create([
                 'title' => $faker->sentence(),
                 'document' => $sampleForm,
                 'endorsement' => $sampleForm,

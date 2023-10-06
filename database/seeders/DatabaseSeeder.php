@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             RolesAndPermissionsSeeder::class,
             UsersSeeder::class,
             AdvisersAndPannelsSeeder::class,
-            ResearchPaperSeeder::class,
+            // ResearchPaperSeeder::class, comment sa ka
             AnnouncementSeeder::class,
             CommentsSeeder::class
         ]);

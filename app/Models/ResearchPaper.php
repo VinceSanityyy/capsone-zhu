@@ -13,6 +13,7 @@ class ResearchPaper extends Model
     protected $casts = [
         'status' => ResearchStatusType::class,
         'panels' => 'array',
+        'for_scheduling' => 'boolean'
     ];
 
     protected $appends = [

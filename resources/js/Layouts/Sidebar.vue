@@ -62,12 +62,12 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="sidebar-item ">
+                    <!-- <li class="sidebar-item ">
                         <Link class="sidebar-link" href="pages-profile.html">
                         <i class="bi bi-journal-check"></i> <span class="align-middle">Submission
                             List</span>
                         </Link>
-                    </li>
+                    </li> -->
                     <li class="sidebar-item ">
                         <Link class="sidebar-link" href="/admin/announcements">
                         <i class="bi bi-exclamation-triangle"></i> <span class="align-middle">Announcements</span>
@@ -141,8 +141,8 @@
                         </Link>
                     </li>
                     <li class="sidebar-item">
-                        <Link class="sidebar-link" href="/students-list">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Submissions</span>
+                        <Link class="sidebar-link" href="/panel/panelled-papers">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Panelled Papers</span>
                         </Link>
                     </li>
                 </div>
@@ -152,14 +152,14 @@
                     <li class="sidebar-header">
                         Adviser Menu
                     </li>
-                    <li class="sidebar-item">
+                    <!-- <li class="sidebar-item">
                         <Link class="sidebar-link" href="/account-details">
                         <i class="bi bi-bar-chart-line"></i><span class="align-middle">Account Details</span>
                         </Link>
-                    </li>
+                    </li> -->
                     <li class="sidebar-item">
-                        <Link class="sidebar-link" href="/students-list">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Submissions</span>
+                        <Link class="sidebar-link" href="/adviser/advised-papers">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Advised Papers</span>
                         </Link>
                     </li>
                 </div>

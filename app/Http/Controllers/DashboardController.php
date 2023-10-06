@@ -26,7 +26,7 @@ class DashboardController extends Controller
             $q->whereHas('author', function ($userQuery) use ($degreeType) {
                 $userQuery->where('degree_type', $degreeType);
             });
-        })
+        })->where('for_scheduling', true)
         ->get();
         
         $total_submissions = ResearchPaper::with('author', 'author.course', 'author.form')->get();

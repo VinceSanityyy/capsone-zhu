@@ -9,12 +9,12 @@
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item" role="presentation"><a class="nav-link active" href="#tab-1"
                                         data-bs-toggle="tab" role="tab" aria-selected="true">Overview</a></li>
-                                <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-2"
+                                <!-- <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-2"
                                         data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">Panel
                                         Comments</a></li>
                                 <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-3"
                                         data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">Adviser
-                                        Comments</a></li>
+                                        Comments</a></li> -->
                                 <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-4"
                                         data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
                                         Forms</a></li>
@@ -25,96 +25,68 @@
                                     <h4 class="tab-title">Research Paper Overview</h4>
                                     <hr>
                                     <h1 class="mb-4">Title: {{ researchPaper.title }}</h1>
-
-                                    <div class="mb-4">
-                                        <h3>Adviser</h3>
-                                        <ul class="list-unstyled">
-                                            <li>{{ researchPaper.adviser.name }}</li>
-                                        </ul>
-                                    </div>
-
-                                    <div>
-                                        <h3>Panel Members</h3>
-                                        <ul class="list-unstyled">
-                                            <li v-for="panel in researchPaper.panel_members" :key="panel.id">{{ panel.name
-                                            }}</li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane" id="tab-2" role="tabpanel">
-                                    <br>
-                                    <h4 class="tab-title">Panel Comments</h4>
-                                    <hr>
-                                    <div v-for="comment in panelMemberComments" :key="comment.id" class="card-body h-100">
-                                        <hr>
-                                        <div class="d-flex align-items-start">
-                                            <img src="https://edukasyon-production.s3.amazonaws.com/uploads/school/avatar/17455/red.jpg"
-                                                width="36" height="36" class="rounded-circle me-2" alt="Charles Hall">
-                                            <div class="flex-grow-1">
-                                                <small class="float-end text-navy">30m ago</small>
-                                                <strong>{{ comment.user.name }}</strong> wrote a comment <strong>
-                                                    on the study {{ researchPaper.title }}</strong><br>
-                                                <small class="text-muted">{{ comment.date_created }}</small>
-
-                                                <div class="border text-sm text-muted p-2 mt-1">
-                                                    {{ comment.comment }}
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-4">
+                                                <h3>Author</h3>
+                                                <ul class="list-unstyled">
+                                                    <li>{{ researchPaper.author.name }} - {{ researchPaper.author.degree_type }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-4">
+                                                <h3>Adviser</h3>
+                                                <ul class="list-unstyled">
+                                                    <li>{{ researchPaper.adviser.name }}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <h3>Panel Members</h3>
+                                                <ul v-if="researchPaper.panel_members.length > 0" class="list-unstyled">
+                                                    <li v-for="panel in researchPaper.panel_members" :key="panel.id">{{ panel.name
+                                                    }}</li>
+                                                </ul>
+                                                <p v-else>No panels assigned</p>
+                                                <br>
+                                                <div class="container">
+                                                    <form @submit.prevent="addPanelMembers">
+                                                        <div v-for="index in (researchPaper.author.degree_type === 'masters' ? 4 : 5)"
+                                                            :key="index" class="mb-3 row">
+                                                            <label for="inputName" class="col-4 col-form-label">Panel Member #
+                                                                {{ index }}</label>
+                                                            <div class="col-6">
+                                                                <select class="form-select mb-3" v-model="form.panels[index - 1]">
+                                                                    <option selected="" disabled>Open this select menu</option>
+                                                                    <option v-for="panel in panelMembers" :key="panel.id" :value="panel.id">{{ panel.name }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div v-if="form.errors.panels" class="text-danger">{{ form.errors.panels }}</div>
+                                                        <button class="btn um-button">Save Changes</button>
+                                                    </form>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-4">
+                                                <h3>Status</h3>
+                                                <ul class="list-unstyled">
+                                                    <li>{{researchPaper.status}}</li>
+                                                </ul>
+                                            </div>
+                                            <div class="mb-4">
+                                                <h3>For Scheduling</h3>
+                                                <ul class="list-unstyled">
+                                                    <li>{{researchPaper.for_scheduling}}</li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="tab-3" role="tabpanel">
-                                    <br>
-                                    <h4 class="tab-title">Adviser Comments</h4>
-                                    <hr>
-                                    <div v-for="comment in adviserComments" :key="comment.id" class="card-body h-100">
-                                        <hr>
-                                        <div class="d-flex align-items-start">
-                                            <img src="https://edukasyon-production.s3.amazonaws.com/uploads/school/avatar/17455/red.jpg"
-                                                width="36" height="36" class="rounded-circle me-2" alt="Charles Hall">
-                                            <div class="flex-grow-1">
-                                                <small class="float-end text-navy">30m ago</small>
-                                                <strong>{{ comment.user.name }}</strong> wrote a comment <strong>
-                                                    on the study {{ researchPaper.title }}</strong><br>
-                                                <small class="text-muted">{{ comment.date_created }}</small>
-
-                                                <div class="border text-sm text-muted p-2 mt-1">
-                                                    {{ comment.comment }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="tab-4" role="tabpanel">
-                                    <br>
-                                    <h4 class="tab-title">Forms Submitted</h4>
-                                    <hr>
-                                    <ul>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Endorsement Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Other Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Receipt Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-
-                                        </li>
-                                    </ul>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -127,10 +99,29 @@
 
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
+import { useForm } from '@inertiajs/vue3'
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
-const { researchPaper, panelMemberComments, adviserComments } = defineProps({
+
+const form = useForm({
+  panels: [],
+})
+
+const { researchPaper, panelMemberComments, adviserComments, panelMembers } = defineProps({
     researchPaper: Object,
     panelMemberComments: Object,
-    adviserComments: Object
+    adviserComments: Object,
+    panelMembers: Object
 })
+
+const addPanelMembers = () =>{
+    form.post(`/admin/submissions/${researchPaper.id}/add-panel-members`,{
+        onSuccess: () => {
+            toast.success("Panel Members Added");
+        }, onError: (err) => {
+            console.log(err)
+            toast.error("Error Adding Panel Members");
+        }})
+}
 </script>

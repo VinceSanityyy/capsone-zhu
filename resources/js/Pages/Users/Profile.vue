@@ -153,6 +153,8 @@
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { defineProps, ref, onMounted, reactive, computed, toRaw } from 'vue';
 import { Link, router } from '@inertiajs/vue3'
+import { useToast } from "vue-toastification";
+const toast = useToast();
 
 const { userDetails } = defineProps({
     userDetails: Object
@@ -171,17 +173,17 @@ const handleSubmit = async () => {
     try {
         await form.post('/profile/change-password', {
             onSuccess: () => {
-                alertify.success('Password changed successfully.');
-                alertify.set('notifier', 'position', 'top-right');
+                toast.success('Password changed successfully.');
+                toast.set('notifier', 'position', 'top-right');
             },
             onError: (errors) => {
                 console.error(errors); // Log the errors for debugging
-                alertify.set('notifier', 'position', 'top-right');
+                toast.set('notifier', 'position', 'top-right');
             },
         });
     } catch (error) {
         console.error(error); // Log the error for debugging
-        alertify.error('An error occurred while changing the password.');
+        toast.error('An error occurred while changing the password.');
     }
 };
 
@@ -189,17 +191,17 @@ const updateUserInfo = async () => {
     try {
         await form.put('/profile/update', {
             onSuccess: () => {
-                alertify.success('Information updated successfully.');
-                alertify.set('notifier', 'position', 'top-right');
+                toast.success('Information updated successfully.');
+                toast.set('notifier', 'position', 'top-right');
             },
             onError: (errors) => {
                 console.error(errors); // Log the errors for debugging
-                alertify.set('notifier', 'position', 'top-right');
+                toast.set('notifier', 'position', 'top-right');
             },
         });
     } catch (error) {
         console.error(error); // Log the error for debugging
-        alertify.error('Error');
+        toast.error('Error');
     }
 }
 

@@ -75,7 +75,7 @@ class User extends Authenticatable
     }    
 
     public function papersOnPanel() {
-        return $this->belongsToMany(ResearchPaper::class, 'panel_paper', 'user_id', 'research_paper_id');
+        return $this->belongsToMany(ResearchPaper::class, 'research_paper_panels_pivot', 'user_id', 'research_paper_id');
     }
 
     // public function comments()

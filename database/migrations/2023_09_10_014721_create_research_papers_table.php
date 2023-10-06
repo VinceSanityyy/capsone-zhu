@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('document')->nullable();
             $table->text('endorsement')->nullable();
             $table->text('receipt')->nullable();
+            $table->boolean('for_scheduling')->default(false);
+            $table->boolean('is_approved_by_adviser')->default(false);
             $table->string('status');
             $table->timestamps();
         });

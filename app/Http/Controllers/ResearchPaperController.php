@@ -5,71 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\ResearchPaper;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use App\Models\User;
+use Spatie\Permission\Models\Role;
 class ResearchPaperController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(ResearchPaper $researchPaper)
     {
-        $researchPaper->load('adviser', 'panelMembers');
+        $researchPaper->load('author', 'adviser', 'panelMembers');
         $panelMemberComments = $researchPaper->panelMemberComments();
         $adviserComments = $researchPaper->adviserComments();
 
+        $panelRole = Role::where('name', 'panel')->first();
+        $panelMembers = User::role($panelRole)->get();
     
         return Inertia::render('Admin/Submissions/Show', [
             'researchPaper' => $researchPaper,
             'panelMemberComments' => $panelMemberComments,
-            'adviserComments' => $adviserComments
+            'adviserComments' => $adviserComments,
+            'panelMembers' => $panelMembers
         ]);
     }
+
+    public function addPanelMembers(ResearchPaper $researchPaper, Request $request)
+    {
+        $requiredPanelMembersCount = ($researchPaper->author->degree_type === 'masters') ? 4 : 5;
+        
+        $request->validate([
+            'panels' => 'required|array|size:' . $requiredPanelMembersCount
+        ]);
     
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ResearchPaper $researchPaper)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ResearchPaper $researchPaper)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(ResearchPaper $researchPaper)
-    {
-        //
+        $researchPaper->panelMembers()->sync($request->panels);
+        
+        return to_route('admin.research-paper.show', $researchPaper->id);
     }
 }

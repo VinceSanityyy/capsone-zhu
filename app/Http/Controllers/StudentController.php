@@ -11,8 +11,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
 
-use function PHPUnit\Framework\isEmpty;
-
 class StudentController extends Controller
 {
     public function showSubmissions()
@@ -21,40 +19,47 @@ class StudentController extends Controller
         $advisers = User::role($adviserRole)->get();
         // dd(auth()->user()->studentPaper);
         $alreadySubmitted = auth()->user()->studentPaper ? true : false;
-   
+
+        // $paper->load('author', 'adviser', 'panelMembers');
+        // $panelMemberComments = $paper->panelMemberComments();
+        // $adviserComments = $paper->adviserComments();
+
         return Inertia::render('Student/CreateResearchPaper',[
             'advisers' => $advisers,
             'alreadySubmitted' => $alreadySubmitted,
             'studentPaper' => auth()->user()->studentPaper,
+            'adviserComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->adviserComments() : null,
+            'panelMemberComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->panelMemberComments() : null,
         ]);
     }
 
-
-
     public function submitResearchPaper(Request $request)
     {
+     
        
-        if(!auth()->user()->studentPaper){
+        $scheduling = $request->for_scheduling == 'yes' ? true : false;
+        // if(!auth()->user()->studentPaper){
             // dd(1);
-            $request->validate([
+           $request->validate([
                 'title' => 'required',
-                'adviser' => 'required',
+                'adviser_id' => 'required',
                 'status' => 'required',
-                'document' => 'required|mimes:pdf|max:10000',
-                'endorsement' => 'nullable|mimes:pdf|max:10000',
-                'receipt' => 'nullable|mimes:pdf|max:10000',
+                'document' => 'required|mimes:pdf',
+                'endorsement' => 'nullable|mimes:pdf,jpg|max:10000',
+                'receipt' => 'nullable|mimes:pdf,jpg|max:10000',
+                'for_scheduling' => 'required'
             ]);
         
             $data = [
                 'user_id' => auth()->user()->id,
                 'title' => $request->title,
-                'adviser' => $request->adviser,
+                'adviser_id' => $request->adviser_id,
                 'status' => ResearchStatusType::byName($request->status)->value,
                 'document' => url(Config::get('app.url') . Storage::url($request->file('document')->store('research_papers', 'public'))),
+                'for_scheduling' => $scheduling,
             ];
             
             if ($request->status == 'for_scheduling') {
-                dd(1);
                 if ($request->hasFile('endorsement')) {
                     $data['endorsement'] = url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public')));
                 }
@@ -64,14 +69,18 @@ class StudentController extends Controller
                 }
             }
         
-            $research = ResearchPaper::create($data); 
-    
-            if($research)
-            {
-                return to_route('student.submissions');
+            // Find the existing research paper by user_id
+            $research = ResearchPaper::where('user_id', auth()->user()->id)->first();
+
+            if ($research) {
+                // Update the existing research paper
+                $research->update($data);
+            } else {
+                // Create a new research paper
+                ResearchPaper::create($data);
             }
-        }
-        dd('naka submit naka oy unsa ka duha ka thesis?');
-   
+
+            return redirect()->route('student.submissions');
+        // }
     }
 }

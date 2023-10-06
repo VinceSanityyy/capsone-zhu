@@ -13,6 +13,10 @@ class Comment extends Model
         'date_created'
     ];
 
+    protected $guarded = [
+        'id'
+    ];
+
     public function getDateCreatedAttribute()
     {
         return $this->created_at->format('M d, Y h:i A');
