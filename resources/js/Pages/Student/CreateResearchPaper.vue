@@ -10,7 +10,7 @@
                             your title</h6>
                     </div>
                     <div class="card-body">
-                        <div class="stepper-wrapper">
+                        <!-- <div class="stepper-wrapper">
                             <div :class="['stepper-item', studentPaper.status === 'title_defense' ? 'active' : 'completed']">
                                 <div class="step-counter"></div>
                                 <div class="step-name">For Title Defense</div>
@@ -29,7 +29,7 @@
                                 <div class="step-counter"></div>
                                 <div class="step-name">Quality Checking</div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item" role="presentation"><a class="nav-link active" href="#tab-1"
