@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('endorsments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('research_paper_id')->constrained();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
+use App\Notifications\AnnouncementCreated;
+use App\Models\User;
 class AnnouncementController extends Controller
 {
     /**
@@ -45,38 +46,16 @@ class AnnouncementController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
+        $this->sendNotificationsToStudents($request->title);
+        
         return to_route('announcement.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Announcement $announcement)
+    private function sendNotificationsToStudents($title)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Announcement $announcement)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Announcement $announcement)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Announcement $announcement)
-    {
-        //
+        $students = User::role('student')->get();
+        foreach ($students as $student) {
+            $student->notify(new AnnouncementCreated($title));
+        }
     }
 }

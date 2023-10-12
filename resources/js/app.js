@@ -20,7 +20,6 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
-import "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.css";
 
 createInertiaApp({
     resolve: (name) => {

@@ -83,8 +83,23 @@ class ResearchPaper extends Model
         return $comments;
     }
 
-    public function endorsment()
+    public function adminComments()
     {
-        return $this->hasOne(Endorsment::class);
+        $comments = Comment::where('research_paper_id', $this->id)
+            ->where('user_id', 1)
+            ->with('user')
+            ->get();
+
+        return $comments;
+    }
+
+    public function endorsement()
+    {
+        return $this->hasMany(Endorsment::class)->latest();
+    }
+
+    public function defenseSchedules()
+    {
+        return $this->hasMany(DefenseSchedule::class);
     }
 }

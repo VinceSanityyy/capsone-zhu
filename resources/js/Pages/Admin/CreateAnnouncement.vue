@@ -48,16 +48,15 @@ const form = useForm({
 
 
 const handleSubmit = () => {
-  form.post('/admin/announcements/create',{
-    onSuccess: () => {
-        toast.success("Announcement Created");
-    }, onError: (err) => {
-        toast.error("Error Creating Announcement");
-    },onProgress: progress => {
-        console.log(progress)
-        // alertify.success('Paper Submitted!');
-        // alertify.set('notifier', 'position', 'top-right');
-    },})
+    form.post('/admin/announcements/create', {
+        onSuccess: () => {
+            toast.success("Announcement Created");
+        }, onError: (err) => {
+            toast.error("Error Creating Announcement");
+        }, onProgress: progress => {
+            console.log(progress)
+        }
+    })
 }
 
 </script>

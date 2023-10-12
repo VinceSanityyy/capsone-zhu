@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Notifications\CommentAddedNotification;
 
 class PanelController extends Controller
 {
@@ -40,6 +41,8 @@ class PanelController extends Controller
             'comment' => $request->comment,
             'user_id' => auth()->user()->id
         ]);
+        $paper->author->notify(new CommentAddedNotification(auth()->user()));
+
         return redirect()->back();
     }
 }

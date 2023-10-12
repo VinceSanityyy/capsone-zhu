@@ -44,6 +44,7 @@
                                             }}</li>
                                         </ul>
                                     </div>
+                                    <a :href="paper.document" target="_blank" class="btn um-button">Download Paper</a>
                                 </div>
 
                                 <!-- <div class="tab-pane" id="tab-2" role="tabpanel">
@@ -163,27 +164,104 @@ const { paper, panelMemberComments, adviserComments } = defineProps({
     panelMemberComments: Object
 })
 
+
+
+// const handleApprovalStatusChange = () => {
+//     if (form.approvalStatus === 'yes') {
+//         alertify.confirm('Confirm', 'Are you sure you want to approve this paper?',
+//             () => {
+//                 form.post(`/adviser/advised-papers/${paper.id}/approve`, {
+//                     onSuccess: () => {
+//                         toast.success("Paper Approved");
+//                     }, 
+//                     onError: (err) => {
+//                         toast.error("Error Approving Paper");
+//                     }
+//                 });
+//             },
+//             () => alertify.error('Cancel')
+//         );
+//     }
+// };
+
 const form = useForm({
     comment: '',
-    approvalStatus: ''
+    approvalStatus: '',
+    file: ''
 })
+// const handleApprovalStatusChange = () => {
+//     if (form.approvalStatus === 'yes') {
+//         // Create a file input element
+//         const input = document.createElement('input');
+//         input.type = 'file';
+//         input.accept = 'application/pdf'; // Define accepted file types if necessary
 
+//         // Create a div element to hold the file input
+//         const fileInputContainer = document.createElement('div');
+//         fileInputContainer.appendChild(input);
+
+//         alertify.confirm('Confirm', fileInputContainer, // Attach the file input to the dialog
+//             () => {
+//                 // Access the selected file using input.files[0] if needed
+//                 const selectedFile = input.files[0];
+                
+//                 // Proceed with your logic, for example, sending the file via API
+//                 if (selectedFile) {
+//                     const formData = new FormData();
+//                     formData.append('file', selectedFile);
+
+//                     form.post(`/adviser/advised-papers/${paper.id}/approve`, formData, {
+//                         headers: {
+//                             'Content-Type': 'multipart/form-data'
+//                         },
+//                         onSuccess: () => {
+//                             toast.success("Paper Approved");
+//                         }, 
+//                         onError: (err) => {
+//                             toast.error("Error Approving Paper");
+//                         }
+//                     });
+//                 } else {
+//                     alertify.error('No file selected');
+//                 }
+//             },
+//             () => alertify.error('Cancel')
+//         );
+//     }
+// };
 const handleApprovalStatusChange = () => {
-    if (form.approvalStatus === 'yes') {
-        alertify.confirm('Confirm', 'Are you sure you want to approve this paper?',
-            () => {
-                form.post(`/adviser/advised-papers/${paper.id}/approve`, {
-                    onSuccess: () => {
-                        toast.success("Paper Approved");
-                    }, 
-                    onError: (err) => {
-                        toast.error("Error Approving Paper");
-                    }
-                });
-            },
-            () => alertify.error('Cancel')
-        );
-    }
+    alertify.confirm("Confirm", "Are you sure you want to approve this paper?",
+        () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.pdf';
+
+            input.addEventListener('change', (event) => {
+                form.file = event.target.files[0];
+
+                if (form.file) {
+                    const formData = new FormData();
+                    formData.append('file', form.file);
+
+                    form.post(`/adviser/advised-papers/${paper.id}/approve`, {
+                        onSuccess: () => {
+                            toast.success("Paper Approved");
+                        },
+                        onError: (err) => {
+                            toast.error("Error Approving Paper");
+                        }
+                    });
+                } else {
+                    alertify.error("No file selected");
+                }
+            });
+
+            input.click();
+        },
+        () => {
+            alertify.error('Paper approval canceled');
+        }
+    );
 };
 
 const handleSubmitComment = () => {

@@ -36,15 +36,15 @@
                     </svg>
                   </div>
                   <div class="col-10">
-                    <div class="text-dark">{{ notification.title }}</div>
-                    <div class="text-muted small mt-1">{{ notification.detais }}</div>
-                    <div class="text-muted small mt-1">30m ago</div>
+                    <div class="text-dark">{{ notification.data.information }}</div>
+                    <div class="text-muted small mt-1">{{ notification.data.announcement_title }}</div>
+                    <!-- <div class="text-muted small mt-1">3{{ notification.data.title }}</div> -->
                   </div>
                 </div>
               </a>
             </div>
             <div class="dropdown-menu-footer">
-              <a href="#" class="text-muted">Clear all notifications</a>
+              <a href="#" @click="clearNotifications" class="text-muted">Clear all notifications</a>
             </div>
           </div>
         </li>
@@ -84,20 +84,24 @@
 
 
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link, usePage, router } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 const page = usePage()
 const user = computed(() => page.props.auth.user)
 
-const notifications = ref([
-  {
-    title: 'wala pa',
-    details: 'wala pa'
-  },
-  {
-    title: 'wala pa lage',
-    details: 'wala pa lage'
-  }
-]);
+const notifications = computed(()=> page.props.notifications)
 
+const clearNotifications = () => {
+  router.get('/clear-notifications',{},{
+    onSuccess: () => {
+      toast.success("Notifications cleared successfully");
+    },
+    onError: (err) => {
+      console.error("Error clearing notifications:", err);
+  }})
+}
 </script>
+

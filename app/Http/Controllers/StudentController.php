@@ -23,13 +23,15 @@ class StudentController extends Controller
         // $paper->load('author', 'adviser', 'panelMembers');
         // $panelMemberComments = $paper->panelMemberComments();
         // $adviserComments = $paper->adviserComments();
-
+        // $studentPaper = auth()->user()->studentPaper;
+        // dd($studentPaper->adminComments());
         return Inertia::render('Student/CreateResearchPaper',[
             'advisers' => $advisers,
             'alreadySubmitted' => $alreadySubmitted,
             'studentPaper' => auth()->user()->studentPaper,
             'adviserComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->adviserComments() : null,
             'panelMemberComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->panelMemberComments() : null,
+            'adminComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->adminComments() : null,
         ]);
     }
 
@@ -83,4 +85,5 @@ class StudentController extends Controller
             return redirect()->route('student.submissions');
         // }
     }
+    
 }

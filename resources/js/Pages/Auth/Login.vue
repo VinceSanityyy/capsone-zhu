@@ -50,6 +50,9 @@ export default {
                                             <small>
                                                 <Link style="color: #af2532" href="/register">Don't have an account?</Link>
                                             </small>
+                                            <small>
+                                                <Link style="color: #af2532; float: right;" href="/forgot-password">Forgot password?</Link>
+                                            </small>
                                         </div>
                                         <!-- <div>
                                             <label class="form-check">

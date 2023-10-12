@@ -32,7 +32,7 @@
                                 </Link>
                             </li>
                             <li class="sidebar-item">
-                                <Link class="sidebar-link " href="/calendar">
+                                <Link class="sidebar-link " href="/admin/schedules">
                                 <i class="bi bi-calendar-check"></i><span class="align-middle">Scheduling</span>
                                 </Link>
                             </li>
