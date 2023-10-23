@@ -59,7 +59,7 @@
                                                 <br>
                                                 <div class="container">
                                                     <form @submit.prevent="addPanelMembers">
-                                                        <div v-for="index in (researchPaper.author.degree_type === 'masters' ? 4 : 5)"
+                                                        <div v-for="index in (researchPaper.author.degree_type === 'masteral' ? 4 : 5)"
                                                             :key="index" class="mb-3 row">
                                                             <label for="inputName" class="col-4 col-form-label">Panel Member
                                                                 #
