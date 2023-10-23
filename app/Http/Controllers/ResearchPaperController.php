@@ -12,13 +12,13 @@ class ResearchPaperController extends Controller
 
     public function show(ResearchPaper $researchPaper)
     {
-        $researchPaper->load('author', 'adviser', 'panelMembers');
+        $researchPaper->load('author', 'adviser', 'panelMembers', 'defenseSchedules');
         // $panelMemberComments = $researchPaper->panelMemberComments();
         // $adviserComments = $researchPaper->adviserComments();
         $adminComments = $researchPaper->adminComments();
         $panelRole = Role::where('name', 'panel')->first();
         $panelMembers = User::role($panelRole)->get();
-    
+       
         return Inertia::render('Admin/Submissions/Show', [
             'researchPaper' => $researchPaper,
             // 'panelMemberComments' => $panelMemberComments,
@@ -53,6 +53,18 @@ class ResearchPaperController extends Controller
             'comment' => $request->comment,
             'user_id' => auth()->user()->id
         ]);
+        return redirect()->back();
+    }
+
+    public function changeResearchStatus(Request $request, ResearchPaper $researchPaper)
+    {
+        $request->validate([
+            'status' => 'required'
+        ]);
+        $researchPaper->update([
+            'status' => $request->status
+        ]);
+        
         return redirect()->back();
     }
 }

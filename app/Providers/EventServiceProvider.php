@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\SchedulePlotted;
 use App\Events\UserConfirmed;
 use App\Events\UserCreated;
 use App\Listeners\SendEmailNotification;
+use App\Listeners\SendSMSMessageToStudent;
 use App\Listeners\SendUserEmailWithPassword;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserCreated::class =>[
             SendUserEmailWithPassword::class,
+        ],
+        SchedulePlotted::class => [
+            SendSMSMessageToStudent::class,
         ]
     ];
 

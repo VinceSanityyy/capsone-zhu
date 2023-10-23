@@ -17,7 +17,7 @@ class DefenseSchedule extends Model
         return $this->belongsTo(ResearchPaper::class, 'research_paper_id');
     }
 
-    protected $appends = ['title', 'author', 'adviser', 'object'];
+    protected $appends = ['title', 'author', 'adviser', 'object', 'color'];
 
     public function getTitleAttribute()
     {
@@ -37,5 +37,10 @@ class DefenseSchedule extends Model
     public function getObjectAttribute()
     {
         return $this->researchPaper;
+    }
+
+    public function getColorAttribute()
+    {
+        return $this->is_done ? 'green' : '#af2532';
     }
 }

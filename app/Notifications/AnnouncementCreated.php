@@ -51,6 +51,7 @@ class AnnouncementCreated extends Notification
         return [
             'information' => "New announcement has been created.",
             'announcement_title' => $this->title,
+            'link' => '/dashboard'
         ];
     }
 }

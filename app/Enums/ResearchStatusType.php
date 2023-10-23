@@ -8,9 +8,10 @@ enum ResearchStatusType:string{
     case OUTLINE_DEFENSE = 'outline_defense';
     case FINAL_DEFENSE = 'final_defense';
     case QUALITY_CHECKING = 'quality_checking';
-
+    case FINAL_CHECKING = 'final_checking';
     case FOR_SCHEDULING = 'for_scheduling';
-    // case COMPLETED = 'completed';
+    case COMPLETED = 'completed';
+
     // case OUTDATED = 'outdated';
     // case ABANDONED = 'abandoned';
 
@@ -21,7 +22,9 @@ enum ResearchStatusType:string{
             self::OUTLINE_DEFENSE,
             self::FINAL_DEFENSE,
             self::QUALITY_CHECKING,
-            // self::COMPLETED,
+            self::COMPLETED,
+            self::FINAL_CHECKING,
+            self::FOR_SCHEDULING
             // self::OUTDATED,
             // self::ABANDONED,
         ];

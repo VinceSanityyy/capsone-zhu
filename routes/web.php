@@ -10,6 +10,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 use Inertia\Inertia;
 use App\Http\Controllers\AdviserController;
+use App\Http\Controllers\DefenseScheduleController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\NotificationController;
@@ -60,6 +61,8 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     Route::get('/schedules', [AdminController::class, 'showCalendarAndSchedules'])->name('schedules.index');
     Route::get('/research-papers/for-scheduling', [AdminController::class, 'showResearchPapersForScheduling'])->name('research-papers.for-scheduling');
     Route::post('/research-papers/{researchPaper}/plot-schedule', [AdminController::class, 'plotResearchSchedule'])->name('research-papers.plot-schedule');
+    Route::put('/schedules/{defenseSchedule}/update', [DefenseScheduleController::class, 'changeDefenseStatus'])->name('schedules.update');
+    Route::put('/research-paper/{researchPaper}/change-status', [ResearchPaperController::class, 'changeResearchStatus'])->name('research-paper.change-status');
   });
   Route::get('/profile', [UserController::class, 'showProfile'])->name('users.profile');
   Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('users.change-password');
@@ -70,6 +73,11 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
   Route::prefix('student')->group(function () {
     Route::get('/my-submissions', [StudentController::class, 'showSubmissions'])->name('student.submissions');
     Route::post('/my-submissions/submit', [StudentController::class, 'submitResearchPaper'])->name('student.research.submit');
+    //static forms url only kay kapoy
+    Route::get('/forms', function(){
+      return Inertia::render('Student/Forms');
+    });
+    Route::get('/schedules', [StudentController::class, 'showSchedules'])->name('student.schedules.show');
   });
 
   Route::prefix('adviser')->group(function () {
@@ -84,5 +92,8 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     Route::get('/panelled-papers/{id}/show', [PanelController::class, 'showPanelledPaper'])->name('panel.students.show');
     Route::post('/panelled-papers/{id}/comment', [PanelController::class, 'addPanelComment'])->name('panel.students.comment');
   });
+
   // Route::get('/users/filter', [DashboardController::class, 'filterUsers']);
 });
+
+

@@ -78,11 +78,11 @@
                         <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Reports</span>
                         </Link>
                     </li>
-                    <li class="sidebar-item ">
+                    <!-- <li class="sidebar-item ">
                         <Link class="sidebar-link" href="pages-profile.html">
                         <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Forms</span>
                         </Link>
-                    </li>
+                    </li> -->
                 </div>
                 <div v-if="$page.props.user.roles.includes('student')">
 
@@ -94,14 +94,19 @@
                         <i class="bi bi-bar-chart-line"></i><span class="align-middle">Student Dashboard</span>
                         </Link>
                     </li>
-                    <!-- <li class="sidebar-item">
-                        <Link class="sidebar-link" href="/account">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Account Details</span>
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/student/schedules">
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Schedules</span>
                         </Link>
-                    </li> -->
+                    </li>
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/student/my-submissions">
                         <i class="bi bi-list-ul"></i> <span class="align-middle">My Submissions</span>
+                        </Link>
+                    </li>
+                    <li class="sidebar-item">
+                        <Link class="sidebar-link" href="/student/forms">
+                        <i class="bi bi-list-ul"></i> <span class="align-middle">Downloadable Forms</span>
                         </Link>
                     </li>
                 </div>

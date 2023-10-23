@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('research_paper_id')->constrained();
             $table->text('receipt');
+            $table->float('amount', 8, 2);
+            $table->string('reference_number');
             $table->boolean('is_approved')->default(false);
             $table->timestamps();
         });

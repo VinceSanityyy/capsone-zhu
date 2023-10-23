@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ResearchStatusType;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
 use App\Notifications\CommentAddedNotification;
+use App\Notifications\ResearchStatusChanged;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 class AdviserController extends Controller
@@ -24,11 +26,12 @@ class AdviserController extends Controller
         $paper->load('author', 'adviser', 'panelMembers');
         $panelMemberComments = $paper->panelMemberComments();
         $adviserComments = $paper->adviserComments();
-    
+        
         return Inertia::render('Adviser/ShowAdvisedPaper',[
             'paper' => $paper,
             'panelMemberComments' => $panelMemberComments,
-            'adviserComments' => $adviserComments
+            'adviserComments' => $adviserComments,
+            'attachedEndorsementFromStudent' => $paper->attachedEndorsmentFiles(auth()->user()->id),
         ]);
     }
 
@@ -49,14 +52,34 @@ class AdviserController extends Controller
 
     public function approvePaper(Request $request)
     {
-        // dd($request->file('file'));
+        
         $paper = auth()->user()->adviserPaper()->where('id', $request->id)->first();
-        $paper->endorsement()->create([
-            'file_path' => url(Config::get('app.url') . Storage::url($request->file('file')->store('endorsements', 'public'))),
-        ]);
+        $newStatus = '';
+        if ($paper->status === ResearchStatusType::FINAL_DEFENSE) {
+            $newStatus = ResearchStatusType::FINAL_CHECKING;
+        } elseif ($paper->status === ResearchStatusType::FINAL_CHECKING) {
+            $newStatus = ResearchStatusType::QUALITY_CHECKING;
+        } else{
+            $newStatus = $paper->status;
+        }
+
         $paper->update([
-            'is_approved_by_adviser' => true
+            'is_approved_by_adviser' => true,
+            'status' => $newStatus
         ]);
+
+        if($paper->wasChanged()){
+            $paper->endorsement()->create([
+                'file_path' => url(Config::get('app.url') . Storage::url($request->file('file')->store('endorsements', 'public'))),
+                'stage_submitted' => $paper->status,
+                'user_id' => auth()->user()->id,
+            ]);
+            $paper->update([
+                'for_scheduling' => true
+            ]);
+        }
+        $paper->author->notify(new ResearchStatusChanged($paper->author, $newStatus));
+
         return redirect()->back();
     }
 

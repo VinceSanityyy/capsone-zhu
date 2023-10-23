@@ -187,4 +187,10 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+
+    //SMS provider credentials
+    'sms' => [
+        'username' => env('ONE_SMS_USERNAME'),
+        'password' => env('ONE_SMS_PASSWORD'),
+    ],
 ];

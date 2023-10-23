@@ -2,23 +2,25 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use App\Models\User;
 
-class CommentAddedNotification extends Notification
+class ResearchStatusChanged extends Notification
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    protected $user;
-    public function __construct(User $user)
+    public $user;
+    public $status;
+    public function __construct(User $user, $status)
     {
         $this->user = $user;
+        $this->status = $status;
     }
 
     /**
@@ -49,10 +51,10 @@ class CommentAddedNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $name = $this->user->name;
+        // dd($this->status);
         return [
-            'information' => "$name has commented on your submission",
-            'announcement_title' => '',
+            'information' => 'Adviser has changed your research status.',
+            'announcement_title' => "Current status {$this->status->value} has been approved",
             'link' => '/student/my-submissions'
         ];
     }

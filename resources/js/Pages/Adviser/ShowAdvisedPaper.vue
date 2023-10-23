@@ -73,7 +73,7 @@
                                     <br>
                                     <h4 class="tab-title">Your Previous Comments</h4>
                                     <hr>
-                                    <label class="form-label">Approve Current Status?</label>
+                                    <label class="form-label">Approve Current Status? <strong>{{ paper.status }}</strong></label>
                                     <select v-model="form.approvalStatus" @change="handleApprovalStatusChange" class="form-select mb-3">
                                         <option value="" disabled selected>Select Option</option>
                                         <option value="yes">Yes</option>
@@ -112,31 +112,29 @@
                                 </div>
                                 <div class="tab-pane" id="tab-4" role="tabpanel">
                                     <br>
-                                    <h4 class="tab-title">Forms Submitted</h4>
+                                    <h4 class="tab-title">Forms Attached (by student)</h4>
                                     <hr>
-                                    <ul>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Endorsement Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Other Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Receipt Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-
-                                        </li>
-                                    </ul>
+                                    <DataTable class="display" ref="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Stage Attached</th>
+                                                <th>Date Submitted</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="endorsement in attachedEndorsementFromStudent" :key="endorsement.id">
+                                                <td>Endorsement Form</td>
+                                                <td>{{ endorsement.stage_submitted }}</td>
+                                                <td>{{ endorsement.created_at }}</td>
+                                                <td>
+                                                    <a :href="endorsement.file_path" class="btn btn-sm um-button"
+                                                        target="_blank">Download</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </DataTable>
                                 </div>
 
                             </div>
@@ -154,81 +152,27 @@ import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useToast } from "vue-toastification";
+import DataTable from 'datatables.net-vue3';
+
 const toast = useToast();
 
 const editor = ClassicEditor;
 
-const { paper, panelMemberComments, adviserComments } = defineProps({
+const { paper, panelMemberComments, adviserComments, attachedEndorsementFromStudent } = defineProps({
     paper: Object,
     adviserComments: Object,
-    panelMemberComments: Object
+    panelMemberComments: Object,
+    attachedEndorsementFromStudent: Object
 })
 
-
-
-// const handleApprovalStatusChange = () => {
-//     if (form.approvalStatus === 'yes') {
-//         alertify.confirm('Confirm', 'Are you sure you want to approve this paper?',
-//             () => {
-//                 form.post(`/adviser/advised-papers/${paper.id}/approve`, {
-//                     onSuccess: () => {
-//                         toast.success("Paper Approved");
-//                     }, 
-//                     onError: (err) => {
-//                         toast.error("Error Approving Paper");
-//                     }
-//                 });
-//             },
-//             () => alertify.error('Cancel')
-//         );
-//     }
-// };
 
 const form = useForm({
     comment: '',
     approvalStatus: '',
+    current_stage: '',
     file: ''
 })
-// const handleApprovalStatusChange = () => {
-//     if (form.approvalStatus === 'yes') {
-//         // Create a file input element
-//         const input = document.createElement('input');
-//         input.type = 'file';
-//         input.accept = 'application/pdf'; // Define accepted file types if necessary
 
-//         // Create a div element to hold the file input
-//         const fileInputContainer = document.createElement('div');
-//         fileInputContainer.appendChild(input);
-
-//         alertify.confirm('Confirm', fileInputContainer, // Attach the file input to the dialog
-//             () => {
-//                 // Access the selected file using input.files[0] if needed
-//                 const selectedFile = input.files[0];
-                
-//                 // Proceed with your logic, for example, sending the file via API
-//                 if (selectedFile) {
-//                     const formData = new FormData();
-//                     formData.append('file', selectedFile);
-
-//                     form.post(`/adviser/advised-papers/${paper.id}/approve`, formData, {
-//                         headers: {
-//                             'Content-Type': 'multipart/form-data'
-//                         },
-//                         onSuccess: () => {
-//                             toast.success("Paper Approved");
-//                         }, 
-//                         onError: (err) => {
-//                             toast.error("Error Approving Paper");
-//                         }
-//                     });
-//                 } else {
-//                     alertify.error('No file selected');
-//                 }
-//             },
-//             () => alertify.error('Cancel')
-//         );
-//     }
-// };
 const handleApprovalStatusChange = () => {
     alertify.confirm("Confirm", "Are you sure you want to approve this paper?",
         () => {
@@ -278,3 +222,7 @@ const handleSubmitComment = () => {
 
 
 </script>
+
+<style scoped>
+@import 'datatables.net-dt';
+</style>

@@ -53,6 +53,7 @@ class DefenseScheduleNotification extends Notification
         return [
             'information' => $this->message,
             'announcement_title' => 'Defense Schedule',
+            'link' => '/student/schedules'
         ];
     }
 }

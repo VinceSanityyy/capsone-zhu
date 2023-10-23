@@ -84,15 +84,29 @@
                                         <div class="col-md-6">
                                             <div class="mb-4">
                                                 <h3>Status</h3>
-                                                <ul class="list-unstyled">
+                                                <!-- <ul class="list-unstyled">
                                                     <li>{{ researchPaper.status }}</li>
-                                                </ul>
+                                                </ul> -->
+                                                <select @change="handleResearchStatus" v-model="form.research_status" class="form-control mb-3">
+                                                    <option selected="">Open this select menu</option>
+                                                    <option v-for="stat in status" :key="stat.name" :value="stat.name" :selected="researchPaper.status === stat.name">{{ stat.name }}</option>
+                                                </select>
                                             </div>
                                             <div class="mb-4">
                                                 <h3>For Scheduling</h3>
                                                 <ul class="list-unstyled">
                                                     <li>{{ researchPaper.for_scheduling }}</li>
                                                 </ul>
+                                            </div>
+                                            <div class="mb-4">
+                                                <h3>Defense Completed</h3>
+                                                <!-- <ul class="list-unstyled">
+                                                    <li>{{ researchPaper.defense_schedules.is_done }}</li>
+                                                </ul> -->
+                                                <select @change="handleDefenseStatus" class="form-control mb-3" v-model="form.defense_status">
+                                                    <option value="1" :selected="researchPaper.defense_schedules.is_done == 1">Yes</option>
+                                                    <option value="0" :selected="researchPaper.defense_schedules.is_done == 0">No</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -150,7 +164,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { router } from '@inertiajs/vue3'
+import { ref, reactive } from 'vue'
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
@@ -161,6 +176,41 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 // import { INITIAL_EVENTS, createEventId } from './event-utils'
+
+const toast = useToast();
+const editor = ClassicEditor;
+
+const handleResearchStatus = (e) =>{
+    console.log(e.target.value)
+    alertify.confirm('Notice', 'Change research status?',
+        () => {
+            router.put(`/admin/research-paper/${researchPaper.id}/change-status`, {status: e.target.value }, {
+                onSuccess: () => {
+                    toast.success('Defense Status Updated')
+                },
+                onError: () =>{
+                    toast.error('Error Updating Defense Status')
+                }
+            })
+        },
+        () => alertify.error('Cancel')
+    );
+}
+const handleDefenseStatus = (e) => {
+    alertify.confirm('Notice', 'Change defense status?',
+        () => {
+            router.put(`/admin/schedules/${researchPaper.defense_schedules.id}/update`, {status: e.target.value }, {
+                onSuccess: () => {
+                    toast.success('Defense Status Updated')
+                },
+                onError: () =>{
+                    toast.error('Error Updating Defense Status')
+                }
+            })
+        },
+        () => alertify.error('Cancel')
+    );
+}
 
 const handleDateClick = (info) =>{
     console.log(info)
@@ -192,16 +242,31 @@ const calendarOptions = ref({
   select: console.log(1)
 })
 
-const toast = useToast();
-const editor = ClassicEditor;
-
-
 const form = useForm({
     panels: [],
     comment: '',
+    defense_status: researchPaper.defense_schedules.is_done,
+    research_status: researchPaper.status
 })
 
 
+const status  = reactive([
+    {
+        name: 'title_defense'
+    },
+    {
+        name: 'final_defense'
+    },
+    {
+        name: 'outline_defense'
+    },
+    {
+        name: 'quality_checking'
+    },
+    {
+        name: 'completed'
+    }
+])
 
 const { researchPaper, panelMembers, adminComments } = defineProps({
     researchPaper: Object,

@@ -19,12 +19,12 @@
               <span class="indicator" style="background:#af2532">{{ notifications.length }}</span>
             </div>
           </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown" style="max-height: 500px; overflow-y: scroll;">
             <div class="dropdown-menu-header">
               {{ notifications.length }} New Notification(s)
             </div>
             <div class="list-group" v-for="notification in notifications" :key="notification.id">
-              <a href="#" class="list-group-item">
+              <Link :href="notification.data.link" class="list-group-item">
                 <div class="row g-0 align-items-center">
                   <div class="col-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -41,7 +41,7 @@
                     <!-- <div class="text-muted small mt-1">3{{ notification.data.title }}</div> -->
                   </div>
                 </div>
-              </a>
+              </Link>
             </div>
             <div class="dropdown-menu-footer">
               <a href="#" @click="clearNotifications" class="text-muted">Clear all notifications</a>
@@ -63,7 +63,7 @@
           <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
             <span class="text-dark">{{ user.name }}</span>
           </a>
-          <div class="dropdown-menu dropdown-menu-end">
+          <div class="dropdown-menu dropdown-menu-end" >
             <Link class="dropdown-item" href="/profile"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                 stroke-linejoin="round" class="feather feather-settings align-middle me-1">

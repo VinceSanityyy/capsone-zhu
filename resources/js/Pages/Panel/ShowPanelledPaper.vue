@@ -116,33 +116,19 @@
                                 </div> -->
                                 <div class="tab-pane" id="tab-4" role="tabpanel">
                                     <br>
-                                    <h4 class="tab-title">Forms Submitted</h4>
+                                    <h4 class="tab-title">Downloadable Forms</h4>
                                     <hr>
                                     <ul>
                                         <li>
-                                            <button class="btn um-button">
-                                                Endorsement Form &nbsp;
+                                            <a :href="formUrl" target="_blank" class="btn um-button">
+                                                Evaluation Form &nbsp;
                                                 <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
+                                            </a>
                                         </li>
+                                        <small>dummy form kay wala pay eval</small>
                                         <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Other Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Receipt Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-
-                                        </li>
                                     </ul>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -183,6 +169,8 @@ const handleSubmitComment = () => {
         }
     })
 }
+
+const formUrl = ref('/forms/endorsement_for_defense.pdf')
 
 
 </script>

@@ -117,6 +117,8 @@ const statusBadge = (submission) => {
       return '<span class="badge bg-danger">Final Defense</span>';
     case 'outline_defense':
       return '<span class="badge bg-info">Outline Defense</span>';
+    case 'completed':
+      return '<span class="badge bg-success">Completed</span>';
     default:
       break
   }

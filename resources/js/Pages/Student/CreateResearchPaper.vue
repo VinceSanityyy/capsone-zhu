@@ -16,16 +16,16 @@
                                 <div class="step-name">For Title Defense</div>
                             </div>
                             <div
-                                :class="['stepper-item', studentPaper.status === 'outline_defense' ? 'active' : '']">
+                                :class="['stepper-item', studentPaper.status === 'outline_defense' ? 'active' : 'completed']">
                                 <div class="step-counter"></div>
                                 <div class="step-name">Outline Defense</div>
                             </div>
-                            <div :class="['stepper-item', studentPaper.status === 'final_defense' ? 'active' : '']">
+                            <div :class="['stepper-item', studentPaper.status === 'final_defense' ? 'active' : 'completed']">
                                 <div class="step-counter"></div>
                                 <div class="step-name">Final Defense</div>
                             </div>
                             <div
-                                :class="['stepper-item', studentPaper.status === 'quality_checking' ? 'active' : '']">
+                                :class="['stepper-item', studentPaper.status === 'quality_checking' ? 'active' : 'completed']">
                                 <div class="step-counter"></div>
                                 <div class="step-name">Quality Checking</div>
                             </div>
@@ -76,13 +76,14 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label class="form-label" for="inputAddress">Status</label>
+                                                <label class="form-label" for="inputAddress">Status</label> 
+                                                Current Status: <strong v-if="form.status !== '' ">{{ studentPaper.status }}</strong>
                                                 <select v-model="form.status" class="form-control mb-3">
                                                     <option selected="" disabled>Open this select menu</option>
                                                     <option value="title_defense">For Title Defense</option>
                                                     <option value="outline_defense">For Outline Defense</option>
                                                     <option value="final_defense">For Final Defense</option>
-                                                    <option value="quality_checking">For Quality Checking</option>
+                                                    <option value="final_checking">For Final Checking</option>
                                                 </select>
                                             </div>
                                             <div v-if="form.errors.status" class="text-danger">{{
@@ -95,7 +96,7 @@
                                                     <option value="no">No</option>
                                                 </select>
                                             </div> -->
-                                            <div class="col-md-6">
+                                            <div class="col-md-6" v-show="form.status !== 'final_checking'">
                                                 <label class="form-label" for="inputAddress">For Scheduling?</label>
                                                 <select :disabled="!studentPaper || !studentPaper.is_approved_by_adviser"
                                                     v-model="form.for_scheduling" class="form-control mb-3">
@@ -115,7 +116,7 @@
                                                 <small id="helpId" class="form-text text-muted">Pdf only</small>
                                             </div>
 
-                                            <div class="mb-3" v-if="form.for_scheduling === 'yes'">
+                                            <div class="mb-3" v-if="form.for_scheduling === 'yes' || form.status == 'final_checking'">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label for="endorsementInput">
@@ -127,7 +128,7 @@
                                                         <div v-if="form.errors.endorsement" class="text-danger">{{
                                                             form.errors.endorsement }}</div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6" v-if="form.status !== 'final_checking'">
                                                         <label for="receiptInput">
                                                             Attach Receipt
                                                             <input type="file" id="receiptInput"
@@ -137,6 +138,27 @@
                                                         <div v-if="form.errors.receipt" class="text-danger">{{
                                                             form.errors.receipt }}</div>
                                                     </div>
+                                                    <div class="col-md-6">
+
+                                                    </div>
+                                                    <div class="col-md-3 mt-3" v-if="form.status !== 'final_checking'">
+                                                        <label for="receiptInput">
+                                                            Amount
+                                                            <input v-model="form.amount" type="text" id="receiptInput"
+                                                                class="form-control">
+                                                        </label>
+                                                        <div v-if="form.errors.amount" class="text-danger">{{
+                                                            form.errors.amount }}</div>
+                                                    </div>
+                                                    <div class="col-md-3 mt-3" v-if="form.status !== 'final_checking'">
+                                                        <label for="receiptInput">
+                                                            Reference Number
+                                                            <input v-model="form.reference_number" type="text"
+                                                                id="receiptInput" class="form-control">
+                                                        </label>
+                                                        <div v-if="form.errors.reference_number" class="text-danger">{{
+                                                            form.errors.reference_number }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,7 +166,8 @@
                                             class="btn um-button">Submit</button>
                                         <button v-show="alreadySubmitted" type="submit" class="btn um-button">Update
                                             Status</button>
-
+                                            <br>
+                                            <!-- <small>If your paper's status is completed, you cannot motify or update it.</small> -->
                                     </form>
                                     <br>
                                     {{ form }}
@@ -226,31 +249,29 @@
                                 </div>
                                 <div class="tab-pane" id="tab-5" role="tabpanel">
                                     <br>
-                                    <h4 class="tab-title">Forms Attached</h4>
+                                    <h4 class="tab-title">Forms Attached (by adviser)</h4>
                                     <hr>
-                                    <ul>
-                                        <li>
-                                            <a :href="studentPaper?.endorsement?.[0]?.file_path ?? '#'" target="_blank" class="btn um-button">
-                                                Endorsement Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </a>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Other Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-                                        </li>
-                                        <br>
-                                        <li>
-                                            <button class="btn um-button">
-                                                Receipt Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </button>
-
-                                        </li>
-                                    </ul>
+                                    <DataTable class="display" ref="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Stage Attached</th>
+                                                <th>Date Submitted</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="endorsement in attachedPanelEndorsements" :key="endorsement.id">
+                                                <td>Endorsement Form</td>
+                                                <td>{{ endorsement.stage_submitted }}</td>
+                                                <td>{{ endorsement.created_at }}</td>
+                                                <td>
+                                                    <a :href="endorsement.file_path" class="btn btn-sm um-button"
+                                                        target="_blank">Download</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </DataTable>
                                 </div>
                             </div>
                         </div>
@@ -266,6 +287,8 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 import { ref, reactive } from 'vue';
 import { useForm, router } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
+import DataTable from 'datatables.net-vue3';
+
 const toast = useToast();
 
 
@@ -279,20 +302,34 @@ const form = reactive({
     endorsement: null,
     receipt: null,
     errors: {},
-    for_scheduling: 'no' //default
+    for_scheduling: 'no', //default
+    reference_number: '',
+    amount: '',
+    quality_checking: false
 });
 
 // const studentPaper = ref(studentPaper.status ?? null);
 
-const { advisers, alreadySubmitted, studentPaper, adviserComments, panelMemberComments, adminComments, endorsement } = defineProps({
-    advisers: Object,
-    alreadySubmitted: Boolean,
-    studentPaper: Object,
-    adviserComments: Object,
-    panelMemberComments: Object,
-    adminComments: Object,
-    endorsement: String
-})
+const { advisers,
+    alreadySubmitted,
+    studentPaper,
+    adviserComments,
+    panelMemberComments,
+    adminComments,
+    endorsement,
+    endorsement_forms,
+    attachedPanelEndorsements } =
+    defineProps({
+        advisers: Object,
+        alreadySubmitted: Boolean,
+        studentPaper: Object,
+        adviserComments: Object,
+        panelMemberComments: Object,
+        adminComments: Object,
+        endorsement: String,
+        endorsement_forms: Object,
+        attachedPanelEndorsements: Object
+    })
 
 const submitResearch = async () => {
     try {
@@ -391,4 +428,6 @@ const submitResearch = async () => {
 .stepper-item:last-child::after {
     content: none;
 }
+
+@import 'datatables.net-dt';
 </style>

@@ -19,36 +19,21 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue'
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { useToast } from "vue-toastification";
 import FullCalendar from '@fullcalendar/vue3'
+import { ref, reactive, watch, computed } from 'vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import momentPlugin from '@fullcalendar/moment'
-import { formatDate } from '@fullcalendar/core'
-import { router } from '@inertiajs/vue3'
+import { useToast } from "vue-toastification";
 
 const toast = useToast();
-const handleDateClick = (selectInfo) => {
-    console.log(selectInfo)
-    prompt(selectInfo)
-}
 
-const promptContent = (papers) => {
-    const options = papers.map(paper => `<option value="${paper.id}"><strong>Research Titie:</strong> ${paper.title}</option>`).join('');
-    return `
-    <select id="paperSelect" class="form-select mb-3">
-      ${options}
-    </select>
-  `;
-};
-
-
-const handleEventClick = (info) => {
-    console.log(info.event.title)
-}
+const props = defineProps({
+    papers: Object,
+    schedules: Object
+})
 
 const showEventMarkup = (selectedinfo) => {
     return `
@@ -81,7 +66,7 @@ const showEventMarkup = (selectedinfo) => {
                 </tr>
                 <tr>
                     <td style="font-weight: bold;">Status</td>
-                    <td>${selectedinfo.event.extendedProps.is_done == 1 ? 'Done' : 'Waiting for Schedule'}</td>
+                    <td>${selectedinfo.event.extendedProps.isDone ? 'Done' : 'Waiting for Schedule'}</td>
                 </tr>
             </table>
         </div>`;
@@ -94,72 +79,14 @@ const showEventDetails = (selectedinfo) => {
 
     alertify.confirm()
         .setting({
-            'onok': () => { router.visit(`/admin/research-paper/${selectedinfo.event.extendedProps.research_paper_id}`) },
-            'oncancel': () => { toast.error('wala pa'); },
+            'onok': () => { console.log('ok'); },
+            'oncancel': () => { console.log('cancel'); },
         })
         .setHeader('Schedule Details')
         .setContent(eventContent)
         .set('resizable', true)
-        .set('labels', {ok:'More Details', cancel:'Close'})
         .resizeTo('50%', 450)
         .show();
-};
-
-const addEvent = () => {
-    console.log(form)
-    router.post(`/admin/research-papers/${form.researchPaperId}/plot-schedule`, form, {
-        onSuccess: () => {
-            toast.success("Schedule Plotted");
-        },
-        onError: (err) => {
-            toast.error("Error Plotting Schedule");
-        },
-        onProgress: progress => {
-            console.log(progress);
-        }
-    });
-};
-
-const form = reactive({
-    researchPaperId: null,
-    startStr: null,
-    endStr: null
-})
-const formTransformer = (selectInfo, selectedPaperId) => {
-    form.startStr = selectInfo.startStr
-    form.endStr = selectInfo.endStr
-    form.researchPaperId = selectedPaperId
-}
-
-const props = defineProps({
-    papers: Object,
-    schedules: Object
-})
-
-const prompt = (selectInfo) => {
-    const startStr = formatDate(selectInfo.startStr, { month: 'long', day: 'numeric', timeZoneName: 'short', locale: 'en' });
-    const endStr = formatDate(selectInfo.endStr, { month: 'long', day: 'numeric', timeZoneName: 'short', locale: 'en' });
-
-    alertify.confirm()
-        // .set('labels', { ok: 'Confirm', cancel: 'Cancel' })
-        .set('labels', { ok: 'Confirm', cancel: 'Cancel' })
-        .setHeader('Choose a research paper for the indicated date and time of defense')
-        .setContent(promptContent(props.papers))
-        .set('onok', (event, value) => {
-            const selectedPaperId = document.getElementById('paperSelect').value;
-            if (selectedPaperId) {
-                const selectedPaper = props.papers.find(paper => paper.id === parseInt(selectedPaperId));
-                console.log('Confirmed! Selected Paper:', selectedPaper.title);
-                formTransformer(selectInfo, selectedPaperId);
-                addEvent()
-                calendarOptions.events = props.schedules
-            } else {
-                console.log('No paper selected.');
-            }
-        })
-        .set('oncancel', () => console.log('Cancelled!'))
-        .show()
-        .setting({ 'closableByDimmer': true });
 };
 
 const calendarOptions = computed(() => {
@@ -177,22 +104,21 @@ const calendarOptions = computed(() => {
         },
         titleFormat: 'MMMM D, YYYY',
         initialView: 'dayGridMonth',
-        // events: events,
+
         events: props.schedules,
         editable: true,
-        selectable: true,
         selectMirror: true,
         dayMaxEvents: true,
         weekends: false,
         height: 650,
         contentHeight: 650,
         // dateClick: handleDateClick,
-        select: handleDateClick,
+        // select: handleDateClick,
         slotDuration: '01:00:00',
         slotMinTime: "07:00",
         slotMaxTime: "18:00",
         eventClick: showEventDetails,
-        eventAdd: addEvent,
+        // eventAdd: addEvent,
         eventColor: '#af2532',
         eventDisplay: 'block',
         businessHours: {
@@ -203,5 +129,4 @@ const calendarOptions = computed(() => {
         selectConstraint: 'businessHours',
     }
 })
-
 </script>

@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
-
+use App\Models\DefenseSchedule;
 class StudentController extends Controller
 {
     public function showSubmissions()
@@ -19,12 +19,8 @@ class StudentController extends Controller
         $advisers = User::role($adviserRole)->get();
         // dd(auth()->user()->studentPaper);
         $alreadySubmitted = auth()->user()->studentPaper ? true : false;
-
-        // $paper->load('author', 'adviser', 'panelMembers');
-        // $panelMemberComments = $paper->panelMemberComments();
-        // $adviserComments = $paper->adviserComments();
-        // $studentPaper = auth()->user()->studentPaper;
-        // dd($studentPaper->adminComments());
+        
+        // $attachedEndorsements = auth()->user()->studentPaper->attachedEndorsmentFiles(auth()->user()->studentPaper->adviser->id) ?? null;
         return Inertia::render('Student/CreateResearchPaper',[
             'advisers' => $advisers,
             'alreadySubmitted' => $alreadySubmitted,
@@ -32,13 +28,13 @@ class StudentController extends Controller
             'adviserComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->adviserComments() : null,
             'panelMemberComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->panelMemberComments() : null,
             'adminComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->adminComments() : null,
+            'attachedPanelEndorsements' => auth()->user()->studentPaper ? auth()->user()->studentPaper->attachedEndorsmentFiles(auth()->user()->id) : null,
         ]);
     }
 
     public function submitResearchPaper(Request $request)
     {
-     
-       
+
         $scheduling = $request->for_scheduling == 'yes' ? true : false;
         // if(!auth()->user()->studentPaper){
             // dd(1);
@@ -60,23 +56,42 @@ class StudentController extends Controller
                 'document' => url(Config::get('app.url') . Storage::url($request->file('document')->store('research_papers', 'public'))),
                 'for_scheduling' => $scheduling,
             ];
-            
-            if ($request->status == 'for_scheduling') {
+            // if ($request->status == 'for_scheduling') {
+            if ($request->for_scheduling) {
                 if ($request->hasFile('endorsement')) {
                     $data['endorsement'] = url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public')));
                 }
-            
                 if ($request->hasFile('receipt')) {
                     $data['receipt'] = url(Config::get('app.url') . Storage::url($request->file('receipt')->store('receipts', 'public')));
                 }
             }
-        
+            
+            if($request->status === 'final_checking'){
+                if ($request->hasFile('endorsement')) {
+                    $data['endorsement'] = url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public')));
+                }
+            }
             // Find the existing research paper by user_id
             $research = ResearchPaper::where('user_id', auth()->user()->id)->first();
-
+          
             if ($research) {
                 // Update the existing research paper
                 $research->update($data);
+                if($request->hasFile('receipt')){
+                    $research->receipts()->create([
+                        'receipt' => url(Config::get('app.url') . Storage::url($request->file('receipt')->store('receipts', 'public'))),
+                        'user_id' => auth()->user()->id,
+                        'reference_number' => $request->reference_number,
+                        'amount' => $request->amount,
+                    ]);
+                }
+                if($request->hasFile('endorsement')){
+                    $research->endorsement()->create([
+                        'file_path' => url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public'))),
+                        'stage_submitted' => $research->status,
+                        'user_id' => auth()->user()->id,
+                    ]);
+                }
             } else {
                 // Create a new research paper
                 ResearchPaper::create($data);
@@ -85,5 +100,24 @@ class StudentController extends Controller
             return redirect()->route('student.submissions');
         // }
     }
-    
+
+    public function showSchedules()
+    {
+        $papers = $this->showResearchPaspersForScheduling();
+
+        return Inertia::render('Student/Schedules',[
+            'papers' => $papers,
+            'schedules' =>  $this->getSchedules()
+        ]);
+    }
+
+    private function showResearchPaspersForScheduling()
+    {
+        return ResearchPaper::where('for_scheduling', true)->get();
+    }
+
+    private function getSchedules()
+    {
+        return DefenseSchedule::with('researchPaper','researchPaper.author', 'researchPaper.adviser')->get();
+    }
 }

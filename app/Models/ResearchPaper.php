@@ -100,6 +100,11 @@ class ResearchPaper extends Model
 
     public function defenseSchedules()
     {
-        return $this->hasMany(DefenseSchedule::class);
+        return $this->hasOne(DefenseSchedule::class)->latestOfMany();
+    }
+
+    public function attachedEndorsmentFiles($user_id)
+    {
+        return $this->endorsement()->where('user_id', $user_id)->get();
     }
 }
