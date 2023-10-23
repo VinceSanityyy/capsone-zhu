@@ -30,7 +30,7 @@ class ResearchPaperController extends Controller
 
     public function addPanelMembers(ResearchPaper $researchPaper, Request $request)
     {
-        $requiredPanelMembersCount = ($researchPaper->author->degree_type === 'masters') ? 4 : 5;
+        $requiredPanelMembersCount = ($researchPaper->author->degree_type === 'masteral') ? 4 : 5;
         
         $request->validate([
             'panels' => 'required|array|size:' . $requiredPanelMembersCount
@@ -64,7 +64,7 @@ class ResearchPaperController extends Controller
         $researchPaper->update([
             'status' => $request->status
         ]);
-        
+
         return redirect()->back();
     }
 }

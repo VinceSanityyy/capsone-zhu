@@ -23,7 +23,8 @@ class AdminController extends Controller
 
     private function showResearchPaspersForScheduling()
     {
-        return ResearchPaper::where('for_scheduling', false)->get();
+        // return ResearchPaper::where('for_scheduling', false)->get();
+        return ResearchPaper::where('for_scheduling', true)->get();
     }
 
     public function plotResearchSchedule(Request $request, ResearchPaper $researchPaper)
@@ -31,7 +32,7 @@ class AdminController extends Controller
         $researchPaper->update([
             'for_scheduling' => true
         ]);
-        
+
         $researchPaper->defenseSchedules()->create([
             'start' => $request->startStr,
             'end' => $request->endStr,

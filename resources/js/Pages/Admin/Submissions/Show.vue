@@ -104,8 +104,8 @@
                                                     <li>{{ researchPaper.defense_schedules.is_done }}</li>
                                                 </ul> -->
                                                 <select @change="handleDefenseStatus" class="form-control mb-3" v-model="form.defense_status">
-                                                    <option value="1" :selected="researchPaper.defense_schedules.is_done == 1">Yes</option>
-                                                    <option value="0" :selected="researchPaper.defense_schedules.is_done == 0">No</option>
+                                                    <option value="1" :selected="researchPaper.defense_schedules?.is_done == 1">Yes</option>
+                                                    <option value="0" :selected="researchPaper.defense_schedules?.is_done == 0">No</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -245,7 +245,7 @@ const calendarOptions = ref({
 const form = useForm({
     panels: [],
     comment: '',
-    defense_status: researchPaper.defense_schedules.is_done,
+    defense_status: researchPaper.defense_schedules?.is_done ?? null,
     research_status: researchPaper.status
 })
 

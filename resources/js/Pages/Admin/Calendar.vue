@@ -95,7 +95,7 @@ const showEventDetails = (selectedinfo) => {
     alertify.confirm()
         .setting({
             'onok': () => { router.visit(`/admin/research-paper/${selectedinfo.event.extendedProps.research_paper_id}`) },
-            'oncancel': () => { toast.error('wala pa'); },
+            'oncancel': () => { console.log('cancel') },
         })
         .setHeader('Schedule Details')
         .setContent(eventContent)

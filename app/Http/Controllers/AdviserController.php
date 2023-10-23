@@ -31,7 +31,7 @@ class AdviserController extends Controller
             'paper' => $paper,
             'panelMemberComments' => $panelMemberComments,
             'adviserComments' => $adviserComments,
-            'attachedEndorsementFromStudent' => $paper->attachedEndorsmentFiles(auth()->user()->id),
+            'attachedEndorsementFromStudent' => $paper->attachedEndorsmentFiles($paper->author->id),
         ]);
     }
 

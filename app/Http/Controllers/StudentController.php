@@ -28,7 +28,7 @@ class StudentController extends Controller
             'adviserComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->adviserComments() : null,
             'panelMemberComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->panelMemberComments() : null,
             'adminComments' => auth()->user()->studentPaper ? auth()->user()->studentPaper->adminComments() : null,
-            'attachedPanelEndorsements' => auth()->user()->studentPaper ? auth()->user()->studentPaper->attachedEndorsmentFiles(auth()->user()->id) : null,
+            'attachedPanelEndorsements' => auth()->user()->studentPaper ? auth()->user()->studentPaper->attachedEndorsmentFiles(auth()->user()->studentPaper->adviser->id) : null,
         ]);
     }
 
