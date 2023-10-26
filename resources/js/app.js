@@ -1,3 +1,4 @@
+import './bootstrap';
 import "../adminKit/dist/js/app.js";
 import "../adminKit/dist/css/app.css";
 import "../css/app.css";

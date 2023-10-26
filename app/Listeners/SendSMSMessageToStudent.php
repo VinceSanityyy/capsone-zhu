@@ -19,7 +19,7 @@ class SendSMSMessageToStudent
     /**
      * Handle the event.
      */
-    public function handle(SchedulePlotted $event): mixed
+    public function handle(SchedulePlotted $event)
     {
         return true; //remove this line to enable sms sending
         $apiUsername = config('app.sms.username');

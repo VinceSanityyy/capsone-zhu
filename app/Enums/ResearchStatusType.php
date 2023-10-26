@@ -11,6 +11,7 @@ enum ResearchStatusType:string{
     case FINAL_CHECKING = 'final_checking';
     case FOR_SCHEDULING = 'for_scheduling';
     case COMPLETED = 'completed';
+    case FINAL_REVISION = 'final_revision';
 
     // case OUTDATED = 'outdated';
     // case ABANDONED = 'abandoned';

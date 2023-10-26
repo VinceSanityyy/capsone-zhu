@@ -75,7 +75,8 @@ class DashboardController extends Controller
             ->map(function ($courses) {
                 return [
                     "label" => ucwords(strtolower($courses->first()->name)),
-                    "value" => $courses->sum('users_count')
+                    "value" => $courses->sum('users_count'),
+                    "color" => "#af2532"
                 ];
             })
             ->values()

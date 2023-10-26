@@ -33,8 +33,11 @@
 
 <script setup>
 import MainLayout from './../Layouts/MainLayout.vue';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3'
+import { useToast } from "vue-toastification";
+import Echo from 'laravel-echo';
+const toast = useToast();
 
 const page = usePage()
 const user = computed(() => page.props.auth.user)
@@ -47,5 +50,7 @@ const { announcements } = defineProps({
 const sortedAnnouncements = computed(() => {
   return announcements.slice().sort((a, b) => b.id - a.id);
 });
+
+
 
 </script>

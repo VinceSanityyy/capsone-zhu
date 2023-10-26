@@ -1,6 +1,7 @@
 <template>
     <MainLayout>
-
+        <th>Program</th>
+        
         <h1 class="h3 mb-3">User Management</h1>
 
         <div class="row">
@@ -15,12 +16,11 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role(s)</th>
-                                        <th>Program</th>
                                         <th>School Year</th>
                                         <th>Subject Code</th>
                                         <th>Phone</th>
-                                        <th>Status</th>
                                         <th>Actions</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>

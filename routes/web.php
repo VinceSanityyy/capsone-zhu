@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\TestNotification;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\LoginController;
@@ -14,6 +15,8 @@ use App\Http\Controllers\DefenseScheduleController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\NotificationController;
+use Illuminate\Support\Facades\Event;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

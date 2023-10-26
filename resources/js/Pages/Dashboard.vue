@@ -91,6 +91,35 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-12">
+      <div class="card flex-fill w-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Students/Users Statistics</h5>
+        </div>
+        <div class="card-body py-3">
+          <div class="chart chart-sm">
+            <fusioncharts :type="type" :width="width" :height="height" :dataformat="dataFormat" :dataSource="dataSource">
+            </fusioncharts>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card flex-fill w-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Defense Completion Statistics</h5>
+        </div>
+        <div class="card-body py-3">
+          <div class="chart chart-sm">
+            <fusioncharts type="pie2d" :width="width" :height="height" :dataformat="dataFormat" :dataSource="pieDatasource">
+            </fusioncharts>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    
   </MainLayout>
 </template>
   
@@ -106,6 +135,71 @@ const type = 'column2d';
 const width = '100%';
 const height = '100%';
 const dataFormat = 'json';
+// Preparing the chart data
+const piechartdata = [
+  {
+    label: "Completed",
+    value: "2"
+  },
+  {
+    label: "Outline Defense",
+    value: "3"
+  },
+  {
+    label: "Title Defense",
+    value: "3"
+  },
+  {
+    label: "Quality Checking",
+    value: "4"
+  },
+  {
+    label: "Final Defense",
+    value: "2"
+  },
+  {
+    label: "Abandoned",
+    value: "5"
+  },
+];
+
+const pieDatasource = {
+  chart: {
+    caption: 'Number of students that are done in the defense process',
+    subcaption: '',
+    theme: 'fusion',
+    showPercentValues: 0
+  },
+  data: piechartdata,
+}
+const dataSource = {
+  chart: {
+    caption: 'Total number of students per course.',
+    subcaption: 'This includes the accounts that are pending for approval',
+    xaxisname: 'Courses',
+    yaxisname: 'Number of students',
+    numbersuffix: '',
+    theme: 'fusion',
+    palletecolors: "af2532;"
+  },
+  data: userPerCourse,
+};
+
+
+
+const fusionChartRef = ref(null);
+
+// Function to handle chart initialization
+const onChartInitialized = (chartInstance) => {
+  fusionChartRef.value = chartInstance;
+};
+
+onMounted(() => {
+  // Check if FusionCharts instance is available
+  if (fusionChartRef.value) {
+    // fusionChartRef.value.setChartData(dataSource);
+  }
+});
 
 const statusBadge = (submission) => {
   switch (submission.status) {
@@ -123,7 +217,6 @@ const statusBadge = (submission) => {
       break
   }
 }
-
 
 const selectedDegree = ref('');
 const handleFilterChange = () => {
@@ -167,17 +260,7 @@ const { users, pendingUsers, userPerCourse, submissions, total_submissions, anno
   announcements: Object
 });
 
-const dataSource = {
-  chart: {
-    caption: 'Total number of students per course.',
-    subcaption: 'This includes the accounts that are pending for approval',
-    xaxisname: 'Courses',
-    yaxisname: 'Number of students',
-    numbersuffix: '',
-    theme: 'fusion',
-  },
-  data: userPerCourse,
-};
+
 
 const cards = ref([
   {
@@ -237,32 +320,21 @@ const cards = ref([
   },
 ]);
 
-const fusionChartRef = ref(null);
 
-// Function to handle chart initialization
-const onChartInitialized = (chartInstance) => {
-  fusionChartRef.value = chartInstance;
-};
-
-onMounted(() => {
-  // Check if FusionCharts instance is available
-  if (fusionChartRef.value) {
-    fusionChartRef.value.setChartData(dataSource);
-  }
-});
 </script>
 
 <style scoped>
 @import 'datatables.net-dt';
 
-.cards{
-transition: all 0.2s ease;
-cursor: pointer;
+.cards {
+  transition: all 0.2s ease;
+  cursor: pointer;
 
 
 }
-.cards:hover{
-box-shadow: 5px 6px 6px 2px #e9ecef;
-transform: scale(1.1);
+
+.cards:hover {
+  box-shadow: 5px 6px 6px 2px #e9ecef;
+  transform: scale(1.1);
 }
 </style>

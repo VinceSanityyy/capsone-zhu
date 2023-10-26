@@ -16,14 +16,15 @@
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
               </svg>
-              <span class="indicator" style="background:#af2532">{{ notifications.length }}</span>
+              <span class="indicator" style="background:#af2532">{{ page.props.notifications.length }}</span>
+              <!-- <span class="indicator" style="background:#af2532">{{ page.props.unreadNotificationsCount }}</span> -->
             </div>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown" style="max-height: 500px; overflow-y: scroll;">
             <div class="dropdown-menu-header">
-              {{ notifications.length }} New Notification(s)
+              {{ page.props.notifications.length }} New Notification(s)    
             </div>
-            <div class="list-group" v-for="notification in notifications" :key="notification.id">
+            <div class="list-group" v-for="notification in page.props.notifications" :key="notification.id">
               <Link :href="notification.data.link" class="list-group-item">
                 <div class="row g-0 align-items-center">
                   <div class="col-2">
@@ -85,14 +86,12 @@
 
 <script setup>
 import { Link, usePage, router } from '@inertiajs/vue3'
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useToast } from "vue-toastification";
 
 const toast = useToast();
 const page = usePage()
 const user = computed(() => page.props.auth.user)
-
-const notifications = computed(()=> page.props.notifications)
 
 const clearNotifications = () => {
   router.get('/clear-notifications',{},{
@@ -103,5 +102,13 @@ const clearNotifications = () => {
       console.error("Error clearing notifications:", err);
   }})
 }
+
+onMounted(() => {
+  window.Echo.private(`App.Models.User.${page.props.auth.user.id}`)
+    .notification((notification) => {
+      toast.success(notification.information);
+      page.props.notifications.unshift({data:{...notification}})
+    });
+});
 </script>
 

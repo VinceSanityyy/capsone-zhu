@@ -1,30 +1,24 @@
 <template>
     <div class="wrapper">
-        <Sidebar/>
+        <Sidebar />
         <div class="main">
-            <Navbar/>
+            <Navbar />
             <main class="content">
                 <div class="container-fluid p-0">
-                    <slot/>
+                    <slot />
                 </div>
             </main>
-            <Footer/>
+            <Footer />
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
 import Navbar from './Navbar.vue';
 import Sidebar from './Sidebar.vue';
-import Footer from './Footer.vue'
+import Footer from './Footer.vue';
 
+import { usePage } from '@inertiajs/vue3'
 
-export default {
-    setup() {
-        
-    },
-    components:{
-        Navbar, Sidebar, Footer
-    }
-}
+const page = usePage()
 </script>

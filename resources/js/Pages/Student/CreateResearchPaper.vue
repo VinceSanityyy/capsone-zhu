@@ -351,6 +351,7 @@ const submitResearch = async () => {
 
 
 <style scoped>
+@import 'datatables.net-dt';
 .stepper-wrapper {
     margin-top: auto;
     display: flex;
@@ -429,5 +430,5 @@ const submitResearch = async () => {
     content: none;
 }
 
-@import 'datatables.net-dt';
+
 </style>
