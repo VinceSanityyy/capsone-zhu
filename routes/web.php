@@ -15,6 +15,7 @@ use App\Http\Controllers\DefenseScheduleController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Event;
 
 /*
@@ -66,6 +67,9 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     Route::post('/research-papers/{researchPaper}/plot-schedule', [AdminController::class, 'plotResearchSchedule'])->name('research-papers.plot-schedule');
     Route::put('/schedules/{defenseSchedule}/update', [DefenseScheduleController::class, 'changeDefenseStatus'])->name('schedules.update');
     Route::put('/research-paper/{researchPaper}/change-status', [ResearchPaperController::class, 'changeResearchStatus'])->name('research-paper.change-status');
+    //piechart filter
+    Route::get('/courses/{id}/completed-research-status', [ReportController::class, 'getOverallStudentsCompletedResearchPerProgramType']);
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
   });
   Route::get('/profile', [UserController::class, 'showProfile'])->name('users.profile');
   Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('users.change-password');

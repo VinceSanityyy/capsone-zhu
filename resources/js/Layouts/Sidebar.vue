@@ -74,7 +74,7 @@
                         </Link>
                     </li>
                     <li class="sidebar-item ">
-                        <Link class="sidebar-link" href="pages-profile.html">
+                        <Link class="sidebar-link" href="/admin/reports">
                         <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Reports</span>
                         </Link>
                     </li>

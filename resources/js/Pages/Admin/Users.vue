@@ -16,11 +16,12 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role(s)</th>
+                                        <th>Program</th>
                                         <th>School Year</th>
                                         <th>Subject Code</th>
                                         <th>Phone</th>
-                                        <th>Actions</th>
                                         <th>Status</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -73,7 +73,8 @@ class UsersSeeder extends Seeder
                 'id_number' => $faker->unique()->randomNumber(5),
                 'course_id' => $course->id,
                 'school_year' => $faker->randomElement(['2023-2024', '2024-2025']),
-                'is_active' => $faker->boolean(),
+                // 'is_active' => $faker->boolean(),
+                'is_active' => true,
                 'subject_code' => $faker->unique()->randomNumber(6),
                 'degree_type' => $degree_type,
             ]);

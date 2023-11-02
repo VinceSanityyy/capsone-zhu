@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ResearchStatusType;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,10 +14,12 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+        // dd($this->getOverallStudentsCompletedResearchPerProgramType());
         $isAdmin = auth()->user()->hasRole('admin');
         $isStudent = auth()->user()->hasRole('student');
         $isPanel = auth()->user()->hasRole('panel');
         $isFaculty = auth()->user()->hasRole('faculty');
+        
         $submissions = ResearchPaper::with('author', 'author.course', 'author.form', 'adviser', 'panelMembers')
         ->when($request->status, function ($q, $search) {
             $q->where('title', 'LIKE', "%{$search}%")
@@ -42,6 +45,9 @@ class DashboardController extends Controller
             $data['submissions'] = $submissions;
             $data['total_submissions'] = $total_submissions;
             $data['$announcements'] = $announcements;
+            // $data['barChartData'] = $this->getOverallStudentsCompletedResearch();
+            $data['courses'] = Course::all();
+            $data['test'] = [];
             $view = 'Dashboard';
         } elseif ($isStudent) {
             $data['announcements'] = $announcements;
@@ -94,8 +100,8 @@ class DashboardController extends Controller
                 ->orWhere('id_number', 'LIKE', "%{$search}%")
                 ->orWhere('subject_code', 'LIKE', "%{$search}%")
                 ->orWhere('phone_number', 'LIKE', "%{$search}%");
-        })->where('is_active', true)->get();
-        // dd($users[23]);
+        })->where('is_active', true)->take(10)->get();
+        // dd($users);
         return Inertia::render('Admin/Users', [
             'users' => $users
         ]);
@@ -126,4 +132,6 @@ class DashboardController extends Controller
       
         return response()->json($submissions);
     }
+
+
 }

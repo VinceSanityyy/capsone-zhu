@@ -18,10 +18,20 @@ class AnnouncementSeeder extends Seeder
 
         $announcements = [
             [
-                'title' => 'Announcement 1',
-                'content' => $faker->sentence(),
+                'title' => 'Important Submission Requirements',
+                'content' => '<ul>
+                <li>1 copy of the final manuscript in book form (hardbound)</li>
+                <li>3 CDs containing the final manuscript (in Word and PDF format)</li>
+                <li>Final adviser’s payment receipt</li>
+                <li>1 printed copy of the published paper</li>
+                <li>For masteral program – students who were enrolled June, 2018 onwards are covered by the
+                    publication policy</li>
+                <li>For doctoral program – all students are covered regardless of the year of entry in the
+                    UMPS</li>
+            </ul>',
                 'is_active' => true,
-                'user_id' => 1
+                'user_id' => 1,
+                'is_pinned' => true,
             ],
             [
                 'title' => 'Announcement 2',

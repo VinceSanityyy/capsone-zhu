@@ -91,41 +91,13 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-12">
-      <div class="card flex-fill w-100">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Students/Users Statistics</h5>
-        </div>
-        <div class="card-body py-3">
-          <div class="chart chart-sm">
-            <fusioncharts :type="type" :width="width" :height="height" :dataformat="dataFormat" :dataSource="dataSource">
-            </fusioncharts>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="card flex-fill w-100">
-        <div class="card-header">
-          <h5 class="card-title mb-0">Defense Completion Statistics</h5>
-        </div>
-        <div class="card-body py-3">
-          <div class="chart chart-sm">
-            <fusioncharts type="pie2d" :width="width" :height="height" :dataformat="dataFormat" :dataSource="pieDatasource">
-            </fusioncharts>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-    
+  
   </MainLayout>
 </template>
   
 <script setup>
-import { defineProps, ref, onMounted, computed } from 'vue';
-import { Link, usePage, router } from '@inertiajs/vue3'
+import { defineProps, ref, onMounted, computed, reactive, toRef, nextTick } from 'vue';
+import { Link, usePage, router, useForm } from '@inertiajs/vue3'
 
 import MainLayout from './../Layouts/MainLayout.vue';
 import DataTable from 'datatables.net-vue3';
@@ -133,63 +105,51 @@ import axios from 'axios';
 
 const type = 'column2d';
 const width = '100%';
-const height = '100%';
+const height = '200%';
 const dataFormat = 'json';
-// Preparing the chart data
-const piechartdata = [
-  {
-    label: "Completed",
-    value: "2"
-  },
-  {
-    label: "Outline Defense",
-    value: "3"
-  },
-  {
-    label: "Title Defense",
-    value: "3"
-  },
-  {
-    label: "Quality Checking",
-    value: "4"
-  },
-  {
-    label: "Final Defense",
-    value: "2"
-  },
-  {
-    label: "Abandoned",
-    value: "5"
-  },
-];
 
-const pieDatasource = {
-  chart: {
-    caption: 'Number of students that are done in the defense process',
-    subcaption: '',
-    theme: 'fusion',
-    showPercentValues: 0
-  },
-  data: piechartdata,
-}
+
+const piedatas = ref([]);
+
+const handlePiechartData = async (e) => {
+  const { data, status } = await axios.get(`/admin/courses/${e.target.value}/completed-research-status`)
+  piedatas.value = data
+  console.log({ data, status })
+  console.log(piedatas)
+};
+
+const pieDatasource = computed(() => {
+  return {
+    chart: {
+      caption: 'Number of students that are done in the defense process per program type',
+      subcaption: '',
+      theme: 'fusion',
+      showPercentValues: 0,
+      decimals: "0"
+    },
+    data: piedatas.value, //change default value
+    // data: piechartdata.value
+  }
+})
+
+
 const dataSource = {
   chart: {
-    caption: 'Total number of students per course.',
-    subcaption: 'This includes the accounts that are pending for approval',
-    xaxisname: 'Courses',
+    caption: 'Total number of students who were able to have completed their research status.',
+    subcaption: 'This includes all the status of the students in the research process.',
+    xaxisname: 'Status',
     yaxisname: 'Number of students',
     numbersuffix: '',
     theme: 'fusion',
-    palletecolors: "af2532;"
+    // palletecolors: "#af2532"
   },
-  data: userPerCourse,
+  data: barChartData,
 };
 
 
 
 const fusionChartRef = ref(null);
 
-// Function to handle chart initialization
 const onChartInitialized = (chartInstance) => {
   fusionChartRef.value = chartInstance;
 };
@@ -213,6 +173,8 @@ const statusBadge = (submission) => {
       return '<span class="badge bg-info">Outline Defense</span>';
     case 'completed':
       return '<span class="badge bg-success">Completed</span>';
+    case 'final_checking':
+      return '<span class="badge bg-dark">Final Checking</span>';
     default:
       break
   }
@@ -250,14 +212,20 @@ const formattedSubmissions = computed(() => {
 });
 
 
+// const props = defineProps({
+//   test: Array
+// });
 
-const { users, pendingUsers, userPerCourse, submissions, total_submissions, announcements } = defineProps({
+
+const { users, pendingUsers, userPerCourse, submissions, total_submissions, announcements, barChartData, courses } = defineProps({
   users: Object,
   pendingUsers: Number,
   userPerCourse: Array,
   submissions: Object,
   total_submissions: Object,
-  announcements: Object
+  announcements: Object,
+  barChartData: Array,
+  courses: Object,
 });
 
 
@@ -319,6 +287,8 @@ const cards = ref([
     }
   },
 ]);
+
+
 
 
 </script>

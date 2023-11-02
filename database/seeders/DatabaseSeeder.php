@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\ResearchPaper;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -22,6 +23,8 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             AdvisersAndPannelsSeeder::class,
             // ResearchPaperSeeder::class, comment sa ka
+            ResearchPaperSeeder::class,
+            DashboardDataSeeder::class, // para sa schedules
             AnnouncementSeeder::class,
             CommentsSeeder::class
         ]);

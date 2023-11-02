@@ -16,9 +16,11 @@
                                 <strong>{{ announcement.user.name }}</strong> posted an <strong>Announcement</strong>
                                 <br>
                                 <small class="text-muted">{{ announcement.date_created }}</small>
-                                <h3>{{announcement.title}}</h3>
+                                <h3>{{ announcement.title }}</h3>  
+                                <i v-if="announcement.is_pinned" class="bi bi-pin-fill"></i>
                                 <div class="border text-sm text-muted p-2 mt-1">
-                                    {{ announcement.content }}
+                                    <!-- {{ announcement.content }} -->
+                                    <div v-html="announcement.content"></div>
                                 </div>
                             </div>
                         </div>
@@ -48,9 +50,11 @@ const { announcements } = defineProps({
 });
 
 const sortedAnnouncements = computed(() => {
-  return announcements.slice().sort((a, b) => b.id - a.id);
+    // return announcements.slice().sort((a, b) => b.id - a.id);
+    return announcements.slice().sort((a, b) => {
+            if (a.is_pinned && !b.is_pinned) return -1; // pinned announcement comes first
+            if (!a.is_pinned && b.is_pinned) return 1; // pinned announcement comes first
+            return 0; // maintain the order for non-pinned announcements
+        });
 });
-
-
-
 </script>

@@ -25,7 +25,7 @@ enum ResearchStatusType:string{
             self::QUALITY_CHECKING,
             self::COMPLETED,
             self::FINAL_CHECKING,
-            self::FOR_SCHEDULING
+            // self::FOR_SCHEDULING
             // self::OUTDATED,
             // self::ABANDONED,
         ];
