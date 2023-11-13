@@ -70,15 +70,19 @@
                                     </div>
                                 </div> -->
                                 <div class="tab-pane" id="tab-3" role="tabpanel">
-                                    <br>
-                                    <h4 class="tab-title">Your Previous Comments</h4>
-                                    <hr>
-                                    <label class="form-label">Approve Current Status? <strong>{{ paper.status }}</strong></label>
-                                    <select v-model="form.approvalStatus" @change="handleApprovalStatusChange" class="form-select mb-3">
-                                        <option value="" disabled selected>Select Option</option>
-                                        <option value="yes">Yes</option>
-                                        <option value="no">No</option>
-                                      </select>
+                                    <div>
+                                        <br>
+                                        <h4 class="tab-title">Your Previous Comments</h4>
+                                        <hr>
+                                        <label class="form-label">Approve Current Status? <strong>{{ paper.status
+                                        }}</strong></label>
+                                        <select v-model="form.approvalStatus" @change="handleApprovalStatusChange"
+                                            class="form-select mb-3">
+                                            <option value="" disabled selected>Select Option</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </div>
                                     <div v-for="comment in adviserComments" :key="comment.id" class="card-body h-100">
                                         <div class="card-body h-50">
 
@@ -176,34 +180,38 @@ const form = useForm({
 const handleApprovalStatusChange = () => {
     alertify.confirm("Confirm", "Are you sure you want to approve this paper?",
         () => {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.pdf';
+            if (paper.status == 'quality_checking') {
+                toast.error('Quality checking stage approval is not allowed');
+            } else {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.pdf';
 
-            input.addEventListener('change', (event) => {
-                form.file = event.target.files[0];
+                input.addEventListener('change', (event) => {
+                    form.file = event.target.files[0];
 
-                if (form.file) {
-                    const formData = new FormData();
-                    formData.append('file', form.file);
+                    if (form.file) {
+                        const formData = new FormData();
+                        formData.append('file', form.file);
 
-                    form.post(`/adviser/advised-papers/${paper.id}/approve`, {
-                        onSuccess: () => {
-                            toast.success("Paper Approved");
-                        },
-                        onError: (err) => {
-                            toast.error("Error Approving Paper");
-                        }
-                    });
-                } else {
-                    alertify.error("No file selected");
-                }
-            });
+                        form.post(`/adviser/advised-papers/${paper.id}/approve`, {
+                            onSuccess: () => {
+                                toast.success("Paper Approved");
+                            },
+                            onError: (err) => {
+                                toast.error("Error Approving Paper");
+                            }
+                        });
+                    } else {
+                        toast.error("No file selected");
+                    }
+                });
 
-            input.click();
+                input.click();
+            }
         },
         () => {
-            alertify.error('Paper approval canceled');
+            toast.error('Action canceled');
         }
     );
 };

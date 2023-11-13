@@ -104,11 +104,12 @@ const clearNotifications = () => {
 }
 
 onMounted(() => {
-  window.Echo.private(`App.Models.User.${page.props.auth.user.id}`)
-    .notification((notification) => {
-      toast.success(notification.information);
-      page.props.notifications.unshift({data:{...notification}})
-    });
-});
+    window.Echo.private(`App.Models.User.${page.props.auth.user.id}`)
+      .notification((notification) => {
+        toast.success(notification.information);
+        page.props.notifications.unshift({data:{...notification}})
+      });
+  });
+
 </script>
 

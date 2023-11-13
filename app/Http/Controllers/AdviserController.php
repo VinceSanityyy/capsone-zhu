@@ -55,15 +55,17 @@ class AdviserController extends Controller
         
         $paper = auth()->user()->adviserPaper()->where('id', $request->id)->first();
         $newStatus = '';
-        if ($paper->status === ResearchStatusType::FINAL_DEFENSE) {
-            $newStatus = ResearchStatusType::FINAL_CHECKING;
-        } elseif ($paper->status === ResearchStatusType::FINAL_CHECKING) {
+        if ($paper->status === ResearchStatusType::FINAL_REVISION) {
             $newStatus = ResearchStatusType::QUALITY_CHECKING;
-        } else{
+        } elseif ($paper->status === ResearchStatusType::FINAL_CHECKING) {
+            $newStatus = ResearchStatusType::FINAL_SUBMISSION;
+        } 
+        else{
             $newStatus = $paper->status;
         }
 
         $paper->update([
+            // 'is_approved_by_adviser' => $newStatus === ResearchStatusType::FINAL_SUBMISSION || $newStatus === ResearchStatusType::QUALITY_CHECKING ? true : false,
             'is_approved_by_adviser' => true,
             'status' => $newStatus
         ]);
@@ -74,11 +76,12 @@ class AdviserController extends Controller
                 'stage_submitted' => $paper->status,
                 'user_id' => auth()->user()->id,
             ]);
-            $paper->update([
-                'for_scheduling' => true
-            ]);
+            // $paper->update([
+            //     'for_scheduling' => true
+            // ]);
         }
-        $paper->author->notify(new ResearchStatusChanged($paper->author, $newStatus));
+        $paper->author->notify(new ResearchStatusChanged(auth()->user(), $newStatus));
+      
 
         return redirect()->back();
     }

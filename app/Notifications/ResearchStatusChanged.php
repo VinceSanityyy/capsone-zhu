@@ -51,10 +51,10 @@ class ResearchStatusChanged extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        // dd($this->status);
+        // dd($this->status, $this->user->name);
         return [
-            'information' => 'Adviser has changed your research status.',
-            'announcement_title' => "Current status {$this->status->value} has been approved",
+            'information' => "Your research paper status has been changed to {$this->status->name}",
+            'announcement_title' => "New status: {$this->status->name}",
             'link' => '/student/my-submissions'
         ];
     }

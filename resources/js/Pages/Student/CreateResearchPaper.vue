@@ -10,26 +10,40 @@
                             your title</h6>
                     </div>
                     <div class="card-body">
-                        <!-- <div class="stepper-wrapper">
-                            <div :class="['stepper-item', studentPaper.status === 'title_defense' ? 'active' : 'completed']">
+                        <div class="stepper-wrapper">
+                            <div :class="['stepper-item', { 'active': paperStatus === 1 }, { 'completed': paperStatus >= 1 }]">
                                 <div class="step-counter"></div>
                                 <div class="step-name">For Title Defense</div>
                             </div>
-                            <div
-                                :class="['stepper-item', studentPaper.status === 'outline_defense' ? 'active' : 'completed']">
+                            <div :class="['stepper-item', { 'active': paperStatus === 2 }, { 'completed': paperStatus > 2 }]">
                                 <div class="step-counter"></div>
                                 <div class="step-name">Outline Defense</div>
                             </div>
-                            <div :class="['stepper-item', studentPaper.status === 'final_defense' ? 'active' : 'completed']">
+                            <div :class="['stepper-item', { 'active': paperStatus === 3 }, { 'completed': paperStatus > 3 }]">
                                 <div class="step-counter"></div>
                                 <div class="step-name">Final Defense</div>
                             </div>
-                            <div
-                                :class="['stepper-item', studentPaper.status === 'quality_checking' ? 'active' : 'completed']">
+                            <div :class="['stepper-item', { 'active': paperStatus === 4 }, { 'completed': paperStatus > 4 }]">
+                                <div class="step-counter"></div>
+                                <div class="step-name">Final Revision</div>
+                            </div>
+                            <div :class="['stepper-item', { 'active': paperStatus === 5 }, { 'completed': paperStatus > 5 }]">
                                 <div class="step-counter"></div>
                                 <div class="step-name">Quality Checking</div>
                             </div>
-                        </div> -->
+                            <div :class="['stepper-item', { 'active': paperStatus === 6 }, { 'completed': paperStatus > 6 }]">
+                                <div class="step-counter"></div>
+                                <div class="step-name">Final Cheking</div>
+                            </div>
+                            <div :class="['stepper-item', { 'active': paperStatus === 7 }, { 'completed': paperStatus > 7 }]">
+                                <div class="step-counter"></div>
+                                <div class="step-name">Final Submission</div>
+                            </div>
+                            <div :class="['stepper-item', { 'active': paperStatus === 8 }, { 'completed': paperStatus >= 8 }]">
+                                <div class="step-counter"></div>
+                                <div class="step-name">Completed</div>
+                            </div>
+                        </div>
                         <div class="tab">
                             <ul class="nav nav-tabs" role="tablist">
                                 <li class="nav-item" role="presentation"><a class="nav-link active" href="#tab-1"
@@ -75,28 +89,54 @@
                                                 form.errors.adviser_id }}</div>
                                         </div>
                                         <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="mb-4"
+                                                    v-if="['final_submission', 'completed'].includes(studentPaper?.status)">
+                                                    <h3>Final submission checklist status</h3>
+                                                    <div>
+                                                        <label class="form-check" v-for="checklist in checkLists"
+                                                            :key="checklist.id">
+                                                            <input :checked="studentPaper[checklist.value]"
+                                                                class="form-check-input" type="checkbox"
+                                                                :value="checklist.value" :disabled="true">
+                                                            <span class="form-check">
+                                                                {{ checklist.label }}
+                                                            </span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                Current Status: <strong v-if="form.status !== ''">{{ studentPaper?.status
+                                                }}</strong>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <label style="font-weight: bold;"> Adviser Approval:</label>
+                                                <span v-if="studentPaper?.is_approved_by_adviser == 1"
+                                                    class="badge bg-success">Approved</span>
+                                                <span v-if="studentPaper?.is_approved_by_adviser == 0"
+                                                    class="badge bg-danger">Waiting for approval</span>
+                                            </div>
                                             <div class="col-md-6">
-                                                <label class="form-label" for="inputAddress">Status</label> 
-                                                Current Status: <strong v-if="form.status !== '' ">{{ studentPaper.status }}</strong>
+                                                <label for="form-label">Select status:</label>
                                                 <select v-model="form.status" class="form-control mb-3">
                                                     <option selected="" disabled>Open this select menu</option>
                                                     <option value="title_defense">For Title Defense</option>
                                                     <option value="outline_defense">For Outline Defense</option>
                                                     <option value="final_defense">For Final Defense</option>
-                                                    <option value="final_checking">For Final Checking</option>
+                                                    <option value="final_revision">For Final Revision</option>
+                                                    <option value="quality_checking">For Quality Checking</option>
+                                                    <option value="final_checking">Final Checking</option>
+
                                                 </select>
                                             </div>
                                             <div v-if="form.errors.status" class="text-danger">{{
                                                 form.errors.status }}</div>
-                                            <!-- <div class="col-md-6">
-                                                <label class="form-label" for="inputAddress">For Scheduling?</label>
-                                                <select :disabled="!studentPaper.is_approved_by_adviser" v-model="form.for_scheduling" class="form-control mb-3">
-                                                    <option selected="" disabled>Open this select menu</option>
-                                                    <option value="yes">Yes</option>
-                                                    <option value="no">No</option>
-                                                </select>
-                                            </div> -->
-                                            <div class="col-md-6" v-show="form.status !== 'final_checking'">
+
+                                            <div class="col-md-6"
+                                                v-if="['title_defense', 'outline_defense', 'final_defense'].includes(form.status)">
                                                 <label class="form-label" for="inputAddress">For Scheduling?</label>
                                                 <select :disabled="!studentPaper || !studentPaper.is_approved_by_adviser"
                                                     v-model="form.for_scheduling" class="form-control mb-3">
@@ -116,7 +156,8 @@
                                                 <small id="helpId" class="form-text text-muted">Pdf only</small>
                                             </div>
 
-                                            <div class="mb-3" v-if="form.for_scheduling === 'yes' || form.status == 'final_checking'">
+                                            <div class="mb-3"
+                                                v-if="form.for_scheduling === 'yes' || form.status == 'final_checking'">
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <label for="endorsementInput">
@@ -162,12 +203,45 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="mb-4"  v-if="studentPaper?.status == 'quality_checking' && studentPaper?.plagiarism_counter >= 3">
+                                            <div class="col-md-6">
+                                                <label for="receiptInput">
+                                                    Attach Receipt since you reached the maximum plagiarism count
+                                                    <input type="file" id="receiptInput" class="form-control um-button" required
+                                                        @input="form.receipt = $event.target.files[0]">
+                                                </label>
+                                                <div v-if="form.errors.receipt" class="text-danger">{{
+                                                    form.errors.receipt }}</div>
+                                            </div>
+                                            <div class="col-md-6">
+
+                                            </div>
+                                            <div class="col-md-3 mt-3" >
+                                                <label for="receiptInput">
+                                                    Amount
+                                                    <input v-model="form.amount" type="text" id="receiptInput" required
+                                                        class="form-control">
+                                                </label>
+                                                <div v-if="form.errors.amount" class="text-danger">{{
+                                                    form.errors.amount }}</div>
+                                            </div>
+                                            <div class="col-md-3 mt-3">
+                                                <label for="receiptInput">
+                                                    Reference Number
+                                                    <input v-model="form.reference_number" type="text" id="receiptInput" required
+                                                        class="form-control">
+                                                </label>
+                                                <div v-if="form.errors.reference_number" class="text-danger">{{
+                                                    form.errors.reference_number }}</div>
+                                            </div>
+                                        </div>
                                         <button v-show="alreadySubmitted == false" type="submit"
                                             class="btn um-button">Submit</button>
-                                        <button v-show="alreadySubmitted" type="submit" class="btn um-button">Update
+                                        <button v-show="alreadySubmitted" :disabled="studentPaper?.status == 'completed'"
+                                            type="submit" class="btn um-button">Update
                                             Status</button>
-                                            <br>
-                                            <!-- <small>If your paper's status is completed, you cannot motify or update it.</small> -->
+                                        <br>
+                                        <!-- <small>If your paper's status is completed, you cannot motify or update it.</small> -->
                                     </form>
                                     <br>
                                     {{ form }}
@@ -284,7 +358,7 @@
 
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { ref, reactive } from 'vue';
+import { ref, reactive, computed, watch } from 'vue';
 import { useForm, router } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
 import DataTable from 'datatables.net-vue3';
@@ -295,9 +369,9 @@ const toast = useToast();
 const status = ref('');
 
 const form = reactive({
-    title: alreadySubmitted ? studentPaper.title : '',
-    adviser_id: alreadySubmitted ? studentPaper.adviser_id : null,
-    status: alreadySubmitted ? studentPaper.status : '',
+    title: props.alreadySubmitted ? props.studentPaper.title : '',
+    adviser_id: props.alreadySubmitted ? props.studentPaper.adviser_id : null,
+    status: props.alreadySubmitted ? props.studentPaper.status : '',
     document: null,
     endorsement: null,
     receipt: null,
@@ -308,50 +382,94 @@ const form = reactive({
     quality_checking: false
 });
 
-// const studentPaper = ref(studentPaper.status ?? null);
+const props = defineProps({
+    advisers: Object,
+    alreadySubmitted: Boolean,
+    studentPaper: Object,
+    adviserComments: Object,
+    panelMemberComments: Object,
+    adminComments: Object,
+    endorsement: String,
+    endorsement_forms: Object,
+    attachedPanelEndorsements: Object
+})
 
-const { advisers,
-    alreadySubmitted,
-    studentPaper,
-    adviserComments,
-    panelMemberComments,
-    adminComments,
-    endorsement,
-    endorsement_forms,
-    attachedPanelEndorsements } =
-    defineProps({
-        advisers: Object,
-        alreadySubmitted: Boolean,
-        studentPaper: Object,
-        adviserComments: Object,
-        panelMemberComments: Object,
-        adminComments: Object,
-        endorsement: String,
-        endorsement_forms: Object,
-        attachedPanelEndorsements: Object
-    })
+const checkLists = ref([
+    {
+        label: '1 copy of the final manuscript in book form (hardbound)',
+        checked: props.studentPaper?.has_submitted_manuscript,
+        value: 'has_submitted_manuscript'
+    },
+    {
+        label: '3 CDs containing the final manuscript (in Word and PDF format)',
+        checked: props.studentPaper?.has_submitted_cd,
+        value: 'has_submitted_cd'
+    },
+    {
+        label: 'Final adviser’s payment receipt',
+        checked: props.studentPaper?.has_submitted_final_receipt,
+        value: 'has_submitted_final_receipt'
+    },
+    {
+        label: '1 printed copy of the published paper',
+        checked: props.studentPaper?.has_submitted_printed_materials,
+        value: 'has_submitted_printed_materials'
+    },
+]);
+
+// const { advisers,
+//     alreadySubmitted,
+//     studentPaper,
+//     adviserComments,
+//     panelMemberComments,
+//     adminComments,
+//     endorsement,
+//     endorsement_forms,
+//     attachedPanelEndorsements } =
+//     defineProps({
+//         advisers: Object,
+//         alreadySubmitted: Boolean,
+//         studentPaper: Object,
+//         adviserComments: Object,
+//         panelMemberComments: Object,
+//         adminComments: Object,
+//         endorsement: String,
+//         endorsement_forms: Object,
+//         attachedPanelEndorsements: Object
+//     })
 
 const submitResearch = async () => {
-    try {
-        await router.post('/student/my-submissions/submit', form, {
-            onSuccess: () => {
-                toast.success('Paper Submitted!');
-            },
-            onError: (err) => {
-                form.errors = err
-                toast.error('Error Submitting Paper!');
-            },
-        });
-    } catch (error) {
-        console.error(error); // Log the error for debugging
-    }
+    await router.post('/student/my-submissions/submit', form, {
+        onSuccess: () => {
+            toast.success('Paper Submitted!');
+        },
+        onError: (err) => {
+            console.log(err)
+            form.errors = err
+            toast.error('Error Submitting Paper!');
+        },
+    });
 };
+
+const paperStatus = computed(() => {
+    return {
+        title_defense: 1,
+        outline_defense: 2,
+        final_defense: 3,
+        final_revision: 4,
+        quality_checking: 5,
+        final_checking: 6,
+        final_submission: 7,
+        completed: 8
+    }[props.studentPaper?.status]
+});
 
 </script>
 
 
 <style scoped>
 @import 'datatables.net-dt';
+
 .stepper-wrapper {
     margin-top: auto;
     display: flex;
@@ -429,6 +547,4 @@ const submitResearch = async () => {
 .stepper-item:last-child::after {
     content: none;
 }
-
-
 </style>

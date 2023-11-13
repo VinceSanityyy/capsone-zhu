@@ -10,7 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
-
+use App\Models\Log;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, CanResetPassword;
@@ -84,4 +84,9 @@ class User extends Authenticatable
     // {
     //     return $this->hasMany(Comment::class, 'user_id');
     // }
+
+    public function logActivities()
+    {
+        return $this->hasMany(Log::class, 'user_id');
+    }
 }

@@ -8,7 +8,8 @@
                         <FullCalendar class='demo-app-calendar' :options='calendarOptions'>
                             <template v-slot:eventContent='arg'>
                                 <b>{{ arg.timeText }}</b>
-                                <i>{{ arg.event.title }}</i>
+                                    &emsp;
+                                <b>{{ arg.event.extendedProps.author }}</b>
                             </template>
                         </FullCalendar>
                     </div>
@@ -37,7 +38,8 @@ const handleDateClick = (selectInfo) => {
 }
 
 const promptContent = (papers) => {
-    const options = papers.map(paper => `<option value="${paper.id}"><strong>Research Titie:</strong> ${paper.title}</option>`).join('');
+    console.log(papers)
+    const options = papers.map(paper => `<option value="${paper.id}"><strong>Research Titie:</strong> ${paper.author.name}</option>`).join('');
     return `
     <select id="paperSelect" class="form-select mb-3">
       ${options}

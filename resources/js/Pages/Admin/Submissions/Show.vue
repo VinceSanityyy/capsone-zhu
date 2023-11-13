@@ -18,9 +18,12 @@
                                 <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-4"
                                         data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
                                         Admin Comments</a></li>
-                                <!-- <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-5"
+                                <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-6"
                                         data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
-                                        Calendar</a></li> -->
+                                        Adviser Endorsement Forms</a></li>
+                                <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-7"
+                                        data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
+                                        Panel Evaluation Forms</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active show" id="tab-1" role="tabpanel">
@@ -82,31 +85,50 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="mb-4">
-                                                <h3>Status</h3>
-                                                <!-- <ul class="list-unstyled">
-                                                    <li>{{ researchPaper.status }}</li>
-                                                </ul> -->
-                                                <select @change="handleResearchStatus" v-model="form.research_status" class="form-control mb-3">
-                                                    <option selected="">Open this select menu</option>
-                                                    <option v-for="stat in status" :key="stat.name" :value="stat.name" :selected="researchPaper.status === stat.name">{{ stat.name }}</option>
-                                                </select>
+                                            <div class="mb-4" v-if="['final_submission','completed'].includes(researchPaper.status)">
+                                                <h3>Status: {{ researchPaper.status }}</h3>
+                                                <div>
+                                                    <label class="form-check" v-for="checklist in checkLists"
+                                                        :key="checklist.id">
+                                                        <input :checked="researchPaper[checklist.value]"
+                                                            class="form-check-input" type="checkbox"
+                                                            :value="checklist.value" @change="handleFinalSubmissionProcess">
+                                                        <span class="form-check-label">
+                                                            {{ checklist.label }}
+                                                        </span>
+                                                    </label>
+                                                </div>
                                             </div>
-                                            <div class="mb-4">
+                                            <!-- <div class="mb-4">
                                                 <h3>For Scheduling</h3>
                                                 <ul class="list-unstyled">
                                                     <li>{{ researchPaper.for_scheduling }}</li>
                                                 </ul>
-                                            </div>
-                                            <div class="mb-4">
-                                                <h3>Defense Completed</h3>
-                                                <!-- <ul class="list-unstyled">
-                                                    <li>{{ researchPaper.defense_schedules.is_done }}</li>
-                                                </ul> -->
-                                                <select @change="handleDefenseStatus" class="form-control mb-3" v-model="form.defense_status">
-                                                    <option value="1" :selected="researchPaper.defense_schedules?.is_done == 1">Yes</option>
-                                                    <option value="0" :selected="researchPaper.defense_schedules?.is_done == 0">No</option>
+                                            </div> -->
+                                            <div class="mb-4"
+                                                v-if="['title_defense', 'outline_defense', 'final_defense'].includes(researchPaper.status)">
+                                                <h3>Defense Status: <span :class="researchPaper?.defense_schedules?.is_done ? 'badge bg-success' : 'badge bg-info'">{{ researchPaper?.defense_schedules?.is_done ? 'Done' : 'Waiting' }}</span></h3>
+                                                <select @change="handleDefenseStatus" class="form-control mb-3"
+                                                    v-model="form.defense_status">
+                                                    <option value="1"
+                                                        :selected="researchPaper.defense_schedules?.is_done == 1">Yes
+                                                    </option>
+                                                    <option value="0"
+                                                        :selected="researchPaper.defense_schedules?.is_done == 0">No
+                                                    </option>
                                                 </select>
+                                            </div>
+                                            <!-- <div class="mb-4" v-if="['title_defense', 'outline_defense', 'final_defense', 'quality_checking'].includes(researchPaper.status)"> -->
+                                            <div class="mb-4" v-if="['quality_checking'].includes(researchPaper.status)">
+                                                <h3>Paper Status: {{ researchPaper.status }}</h3>
+                                                <label class="form-label" for="">Approve current status?</label>
+                                                <select @change="handleResearchStatus" class="form-control mb-3"
+                                                    v-model="form.research_status">
+                                                    <option value="1">Yes</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                                <a :href="researchPaper.document" target="_blank"
+                                                    class="btn um-button">Download Paper</a>
                                             </div>
                                         </div>
                                     </div>
@@ -142,17 +164,60 @@
 
                                     for debugging only: form value => {{ form.comment }}
                                 </div>
-                                <!-- <div class="tab-pane fade" id="tab-5">
-                                    <FullCalendar
-                                        class='demo-app-calendar'
-                                        :options='calendarOptions'
-                                    >
-                                        <template v-slot:eventContent='arg'>
-                                        <b>{{ arg.timeText }}</b>
-                                        <i>{{ arg.event.title }}</i>
-                                        </template>
-                                    </FullCalendar>
-                                </div> -->
+                                <div class="tab-pane fade" id="tab-6">
+                                    <br>
+                                    <h4 class="tab-title">Forms Attached (by adviser)</h4>
+                                    <hr>
+                                    <DataTable class="display" ref="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Stage Attached</th>
+                                                <th>Date Submitted</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="endorsement in adviserEndorsementForms" :key="endorsement.id">
+                                                <td>Endorsement Form</td>
+                                                <td>{{ endorsement.stage_submitted }}</td>
+                                                <td>{{ endorsement.created_at }}</td>
+                                                <td>
+                                                    <a :href="endorsement.file_path" class="btn btn-sm um-button"
+                                                        target="_blank">Download</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </DataTable>
+                                </div>
+                                <div class="tab-pane fade" id="tab-7">
+                                    <br>
+                                    <h4 class="tab-title">Evaluation forms Attached by pannelists</h4>
+                                    <hr>
+                                    <DataTable class="display" ref="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Panel Name</th>
+                                                <th>Stage Attached</th>
+                                                <th>Date Submitted</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="evaluation in panelMemberEvaluationForms" :key="evaluation.id">
+                                                <td>Endorsement Form</td>
+                                                <td>{{ evaluation.panel.name }}</td>
+                                                <td>{{ evaluation.stage_submitted }}</td>
+                                                <td>{{ evaluation.created_at }}</td>
+                                                <td>
+                                                    <a :href="evaluation.file_path" class="btn btn-sm um-button"
+                                                        target="_blank">Download</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </DataTable>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -170,6 +235,7 @@ import MainLayout from '@/Layouts/MainLayout.vue';
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import DataTable from 'datatables.net-vue3';
 
 import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -179,31 +245,73 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 const toast = useToast();
 const editor = ClassicEditor;
+const checkLists = ref([
+    {
+        label: '1 copy of the final manuscript in book form (hardbound)',
+        checked: false,
+        value: 'has_submitted_manuscript'
+    },
+    {
+        label: '3 CDs containing the final manuscript (in Word and PDF format)',
+        checked: false,
+        value: 'has_submitted_cd'
+    },
+    {
+        label: 'Final adviser’s payment receipt',
+        checked: false,
+        value: 'has_submitted_final_receipt'
+    },
+    {
+        label: '1 printed copy of the published paper',
+        checked: false,
+        value: 'has_submitted_printed_materials'
+    },
+]);
 
-const handleResearchStatus = (e) =>{
-    console.log(e.target.value)
+const handleFinalSubmissionProcess = (e) => {
+    console.log(e.target.checked)
+    router.put(`/admin/research-paper/${researchPaper.id}/update-final-paper-checklist`, { 
+        status: e.target.value,
+        checked: e.target.checked }, {
+        onSuccess: () => {
+            toast.success('Paper Status Updated')
+        },
+        onError: () => {
+            toast.error('Error Updating Status')
+        }
+    })
+}
+
+const handleResearchStatus = (e) => {
     alertify.confirm('Notice', 'Change research status?',
         () => {
-            router.put(`/admin/research-paper/${researchPaper.id}/change-status`, {status: e.target.value }, {
-                onSuccess: () => {
-                    toast.success('Defense Status Updated')
-                },
-                onError: () =>{
-                    toast.error('Error Updating Defense Status')
-                }
-            })
+
+            if (researchPaper.status == 'final_checking') {
+                toast.error('Final checking approval is for adviser only.')
+            } else {
+                router.put(`/admin/research-paper/${researchPaper.id}/change-status`, { status: e.target.value }, {
+                    onSuccess: () => {
+                        toast.success('Paper Status Updated')
+                    },
+                    onError: () => {
+                        toast.error('Error Updating Status')
+                    }
+                })
+            }
+
         },
         () => alertify.error('Cancel')
     );
 }
+
 const handleDefenseStatus = (e) => {
     alertify.confirm('Notice', 'Change defense status?',
         () => {
-            router.put(`/admin/schedules/${researchPaper.defense_schedules.id}/update`, {status: e.target.value }, {
+            router.put(`/admin/schedules/${researchPaper.defense_schedules.id}/update`, { status: e.target.value }, {
                 onSuccess: () => {
                     toast.success('Defense Status Updated')
                 },
-                onError: () =>{
+                onError: () => {
                     toast.error('Error Updating Defense Status')
                 }
             })
@@ -212,34 +320,34 @@ const handleDefenseStatus = (e) => {
     );
 }
 
-const handleDateClick = (info) =>{
+const handleDateClick = (info) => {
     console.log(info)
     console.log('date clicked')
 }
 
 const calendarOptions = ref({
-  plugins: [
-    dayGridPlugin,
-    timeGridPlugin,
-    interactionPlugin // needed for dateClick
-  ],
-  headerToolbar: {
-    left: 'prev,next today',
-    center: 'title',
-    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-  },
-  initialView: 'dayGridMonth',
-  initialEvents: [],
-  editable: true,
-  selectable: true,
-  selectMirror: true,
-  dayMaxEvents: true,
-  weekends: true,
-  height: 650,
-  contentHeight: 650,
+    plugins: [
+        dayGridPlugin,
+        timeGridPlugin,
+        interactionPlugin // needed for dateClick
+    ],
+    headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    initialView: 'dayGridMonth',
+    initialEvents: [],
+    editable: true,
+    selectable: true,
+    selectMirror: true,
+    dayMaxEvents: true,
+    weekends: true,
+    height: 650,
+    contentHeight: 650,
 
-  dateClick: handleDateClick,
-  select: console.log(1)
+    dateClick: handleDateClick,
+    select: console.log(1)
 })
 
 const form = useForm({
@@ -250,7 +358,7 @@ const form = useForm({
 })
 
 
-const status  = reactive([
+const status = reactive([
     {
         name: 'title_defense'
     },
@@ -268,10 +376,12 @@ const status  = reactive([
     }
 ])
 
-const { researchPaper, panelMembers, adminComments } = defineProps({
+const { researchPaper, panelMembers, adminComments, adviserEndorsementForms, panelMemberEvaluationForms } = defineProps({
     researchPaper: Object,
     panelMembers: Object,
-    adminComments: Object
+    adminComments: Object,
+    adviserEndorsementForms: Object,
+    panelMemberEvaluationForms: Object
 })
 
 const addPanelMembers = () => {
@@ -297,3 +407,7 @@ const handleSubmitComment = () => {
 }
 
 </script>
+
+<style scoped>
+@import 'datatables.net-dt';
+</style>

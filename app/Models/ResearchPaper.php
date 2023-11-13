@@ -107,4 +107,14 @@ class ResearchPaper extends Model
     {
         return $this->endorsement()->where('user_id', $user_id)->get();
     }
+
+    public function evaluationForms()
+    {
+        return $this->hasMany(Evaluation::class)->with('panel');
+    }
+
+    public function attachedEvaluationFiles($user_id)
+    {
+        return $this->evaluationForms()->where('user_id', $user_id)->get();
+    }
 }

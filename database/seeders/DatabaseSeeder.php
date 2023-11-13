@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             AdvisersAndPannelsSeeder::class,
             // ResearchPaperSeeder::class, comment sa ka
-            ResearchPaperSeeder::class,
+            // ResearchPaperSeeder::class,
             DashboardDataSeeder::class, // para sa schedules
             AnnouncementSeeder::class,
             CommentsSeeder::class

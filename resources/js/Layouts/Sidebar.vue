@@ -78,11 +78,16 @@
                         <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Reports</span>
                         </Link>
                     </li>
-                    <!-- <li class="sidebar-item ">
-                        <Link class="sidebar-link" href="pages-profile.html">
-                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Forms</span>
+                    <li class="sidebar-item ">
+                        <Link class="sidebar-link" href="/admin/logs">
+                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Logs</span>
                         </Link>
-                    </li> -->
+                    </li>
+                    <li class="sidebar-item ">
+                        <a class="sidebar-link" href="/admin/receipts/generate">
+                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Generate Receipt</span>
+                        </a>
+                    </li>
                 </div>
                 <div v-if="$page.props.user.roles.includes('student')">
 

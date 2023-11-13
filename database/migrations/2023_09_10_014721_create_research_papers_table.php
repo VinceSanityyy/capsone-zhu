@@ -23,6 +23,11 @@ return new class extends Migration
             $table->boolean('for_scheduling')->default(false);
             $table->boolean('is_approved_by_adviser')->default(false);
             $table->string('status');
+            $table->boolean('has_submitted_manuscript')->default(false);
+            $table->boolean('has_submitted_cd')->default(false);
+            $table->boolean('has_submitted_final_receipt')->default(false);
+            $table->boolean('has_submitted_printed_materials')->default(false);
+            $table->integer('plagiarism_counter')->default(0);
             $table->timestamps();
         });
     }

@@ -29,10 +29,13 @@ class DashboardController extends Controller
             $q->whereHas('author', function ($userQuery) use ($degreeType) {
                 $userQuery->where('degree_type', $degreeType);
             });
-        })->where('for_scheduling', true)
+        })->where('for_scheduling', true)->orWhere(function($q){
+            $q->whereIn('status',[ 'quality_checking', 'final_submission', 'completed'])
+            ->where('for_scheduling', false);
+        })
         ->get();
         
-        $total_submissions = ResearchPaper::with('author', 'author.course', 'author.form')->get();
+        $total_submissions = ResearchPaper::with('author', 'author.course', 'author.form')->where('is_approved_by_adviser',true)->get();
 
         $announcements = Announcement::where('is_active', true)->with('user')->get();
         $data = [];

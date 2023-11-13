@@ -12,9 +12,11 @@ use App\Http\Controllers\UserController;
 use Inertia\Inertia;
 use App\Http\Controllers\AdviserController;
 use App\Http\Controllers\DefenseScheduleController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PaymentReceiptController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Event;
 
@@ -46,7 +48,7 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
 
   Route::get('/clear-notifications', [NotificationController::class, 'clearNotifications'])->name('notifications.clear');
   
-  Route::prefix('admin')->group(function () {
+  Route::middleware('role:admin')->prefix('admin')->group(function () {
     Route::get('/users', [DashboardController::class, 'showUsers'])->name('users.index');
     Route::get('/users-pending', [DashboardController::class, 'showInactiveUsers'])->name('users.index.inactive');
 
@@ -70,14 +72,19 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     //piechart filter
     Route::get('/courses/{id}/completed-research-status', [ReportController::class, 'getOverallStudentsCompletedResearchPerProgramType']);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    Route::put('/research-paper/{researchPaper}/update-final-paper-checklist', [AdminController::class, 'updateFinalPaperChecklist'])->name('research-paper.update-final-paper-checklist');
+    Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
+    Route::get('/receipts/generate', [PaymentReceiptController::class, 'generatePaymentReceipt'])->name('receipts.generate');
   });
+  
   Route::get('/profile', [UserController::class, 'showProfile'])->name('users.profile');
   Route::post('/profile/change-password', [UserController::class, 'changePassword'])->name('users.change-password');
   Route::put('/profile/update', [UserController::class, 'updateUserDetails'])->name('users.update');
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
   Route::get('/filters', [DashboardController::class, 'dataTableFilter']);
 
-  Route::prefix('student')->group(function () {
+  Route::middleware('role:student')->prefix('student')->group(function () {
     Route::get('/my-submissions', [StudentController::class, 'showSubmissions'])->name('student.submissions');
     Route::post('/my-submissions/submit', [StudentController::class, 'submitResearchPaper'])->name('student.research.submit');
     //static forms url only kay kapoy
@@ -87,7 +94,7 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     Route::get('/schedules', [StudentController::class, 'showSchedules'])->name('student.schedules.show');
   });
 
-  Route::prefix('adviser')->group(function () {
+  Route::middleware('role:adviser')->prefix('adviser')->group(function () {
     Route::get('/advised-papers', [AdviserController::class, 'getAssignedStudents'])->name('adviser.students');
     Route::get('/advised-papers/{id}/show', [AdviserController::class, 'showAssignedPaper'])->name('adviser.students.show');
     Route::post('/advised-papers/{id}/comment', [AdviserController::class, 'addAdviserComment'])->name('adviser.students.comment');
@@ -98,6 +105,10 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     Route::get('/panelled-papers', [PanelController::class, 'panelledPapers'])->name('panel.students');
     Route::get('/panelled-papers/{id}/show', [PanelController::class, 'showPanelledPaper'])->name('panel.students.show');
     Route::post('/panelled-papers/{id}/comment', [PanelController::class, 'addPanelComment'])->name('panel.students.comment');
+
+    Route::post('/panelled-papers/{id}/attach-evaluation', [PanelController::class, 'attachEvaluationPaper'])->name('panel.evaluation.attach');
+
+
   });
 
   // Route::get('/users/filter', [DashboardController::class, 'filterUsers']);

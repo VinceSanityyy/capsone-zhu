@@ -61,7 +61,7 @@ class UsersSeeder extends Seeder
         }
 
         // Create 15 random student users using Faker
-        for ($i = 1; $i <= 1000; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $course = Course::inRandomOrder()->first();
             $degree_type = $course->name && str_contains(strtolower($course->name), 'masters') ? 'masteral' : 'doctoral';
             
@@ -79,6 +79,7 @@ class UsersSeeder extends Seeder
                 'degree_type' => $degree_type,
             ]);
             $user->assignRole('student');
+            $this->command->info("Generated user {$user->name} with the student role");
             $user->form()->create(['file_path' => 'https://images.template.net/wp-content/uploads/2019/09/Student-Enrollment-Form-in-PDF.jpg']); //random url only
         }
 

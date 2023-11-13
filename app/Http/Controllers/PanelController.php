@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ResearchPaper;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Notifications\CommentAddedNotification;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
 
 class PanelController extends Controller
 {
@@ -27,7 +30,8 @@ class PanelController extends Controller
         return Inertia::render('Panel/ShowPanelledPaper',[
             'paper' => $paper,
             'panelMemberComments' => $panelMemberComments,
-            'adviserComments' => $adviserComments
+            'adviserComments' => $adviserComments,
+            'attachedEvaluationForms' => $paper->attachedEvaluationFiles(auth()->user()->id)
         ]);
     }
 
@@ -43,6 +47,18 @@ class PanelController extends Controller
         ]);
         $paper->author->notify(new CommentAddedNotification(auth()->user()));
 
+        return redirect()->back();
+    }
+
+    public function attachEvaluationPaper( Request $request)
+    {
+        $paper = auth()->user()->papersOnPanel()->where('research_paper_id', $request->id)->first();
+ 
+        $paper->evaluationForms()->create([
+                'file_path' => url(Config::get('app.url') . Storage::url($request->file('evaluation')->store('evaluation', 'public'))),
+                'stage_submitted' => $paper->status,
+                'user_id' => auth()->user()->id,
+        ]);
         return redirect()->back();
     }
 }

@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Config;
 use App\Models\DefenseSchedule;
+
 class StudentController extends Controller
 {
     public function showSubmissions()
@@ -19,9 +20,9 @@ class StudentController extends Controller
         $advisers = User::role($adviserRole)->get();
         // dd(auth()->user()->studentPaper);
         $alreadySubmitted = auth()->user()->studentPaper ? true : false;
-        
+
         // $attachedEndorsements = auth()->user()->studentPaper->attachedEndorsmentFiles(auth()->user()->studentPaper->adviser->id) ?? null;
-        return Inertia::render('Student/CreateResearchPaper',[
+        return Inertia::render('Student/CreateResearchPaper', [
             'advisers' => $advisers,
             'alreadySubmitted' => $alreadySubmitted,
             'studentPaper' => auth()->user()->studentPaper,
@@ -37,47 +38,59 @@ class StudentController extends Controller
 
         $scheduling = $request->for_scheduling == 'yes' ? true : false;
         // if(!auth()->user()->studentPaper){
-            // dd(1);
-           $request->validate([
-                'title' => 'required',
-                'adviser_id' => 'required',
-                'status' => 'required',
-                'document' => 'required|mimes:pdf',
-                'endorsement' => 'nullable|mimes:pdf,jpg|max:10000',
-                'receipt' => 'nullable|mimes:pdf,jpg|max:10000',
-                'for_scheduling' => 'required'
-            ]);
-        
-            $data = [
-                'user_id' => auth()->user()->id,
-                'title' => $request->title,
-                'adviser_id' => $request->adviser_id,
-                'status' => ResearchStatusType::byName($request->status)->value,
-                'document' => url(Config::get('app.url') . Storage::url($request->file('document')->store('research_papers', 'public'))),
-                'for_scheduling' => $scheduling,
-            ];
-            // if ($request->status == 'for_scheduling') {
-            if ($request->for_scheduling) {
-                if ($request->hasFile('endorsement')) {
-                    $data['endorsement'] = url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public')));
-                }
-                if ($request->hasFile('receipt')) {
-                    $data['receipt'] = url(Config::get('app.url') . Storage::url($request->file('receipt')->store('receipts', 'public')));
-                }
+        // dd(1);
+        $plagiarism_counter = 0;
+        $request->validate([
+            'title' => 'required',
+            'adviser_id' => 'required',
+            'status' => 'required',
+            'document' => 'required|mimes:pdf',
+            'endorsement' => 'nullable|mimes:pdf,jpg|max:10000',
+            'receipt' => 'nullable|mimes:pdf,jpg|max:10000',
+            'for_scheduling' => 'required'
+        ]);
+
+        $data = [
+            'user_id' => auth()->user()->id,
+            'title' => $request->title,
+            'adviser_id' => $request->adviser_id,
+            'status' => ResearchStatusType::byName($request->status)->value,
+            'document' => url(Config::get('app.url') . Storage::url($request->file('document')->store('research_papers', 'public'))),
+            'for_scheduling' => $scheduling,
+        ];
+        // if ($request->status == 'for_scheduling') {
+        if ($request->for_scheduling) {
+            if ($request->hasFile('endorsement')) {
+                $data['endorsement'] = url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public')));
             }
-            
-            if($request->status === 'final_checking'){
-                if ($request->hasFile('endorsement')) {
-                    $data['endorsement'] = url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public')));
-                }
+            if ($request->hasFile('receipt')) {
+                $data['receipt'] = url(Config::get('app.url') . Storage::url($request->file('receipt')->store('receipts', 'public')));
             }
-            // Find the existing research paper by user_id
-            $research = ResearchPaper::where('user_id', auth()->user()->id)->first();
-          
-            if ($research) {
+        }
+
+        if ($request->status === 'final_checking') {
+            if ($request->hasFile('endorsement')) {
+                $data['endorsement'] = url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public')));
+            }
+        }
+        // Find the existing research paper by user_id
+        $research = ResearchPaper::where('user_id', auth()->user()->id)->first();
+
+        if ($research) {
+            if ($research->is_approved_by_adviser && !$research->for_scheduling) {
                 // Update the existing research paper
+               
+                if($research->status == ResearchStatusType::QUALITY_CHECKING){
+                    // if($research->plagiarism_counter >= 3){
+                    //     dd('You have reached the maximum number of plagiarism, attach a receipt');
+                    // }
+                    $research->update(array_merge($data,[
+                        'plagirism_counter' => $research->plagiarism_counter += 1
+                    ]));
+                  
+                }
                 $research->update($data);
-                if($request->hasFile('receipt')){
+                if ($request->hasFile('receipt')) {
                     $research->receipts()->create([
                         'receipt' => url(Config::get('app.url') . Storage::url($request->file('receipt')->store('receipts', 'public'))),
                         'user_id' => auth()->user()->id,
@@ -85,19 +98,30 @@ class StudentController extends Controller
                         'amount' => $request->amount,
                     ]);
                 }
-                if($request->hasFile('endorsement')){
+                if ($request->hasFile('endorsement')) {
                     $research->endorsement()->create([
                         'file_path' => url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public'))),
                         'stage_submitted' => $research->status,
                         'user_id' => auth()->user()->id,
                     ]);
                 }
-            } else {
-                // Create a new research paper
-                ResearchPaper::create($data);
+            } elseif (!$research->is_approved_by_adviser && !$research->for_scheduling) {
+                if ($request->hasFile('endorsement')) {
+                    $research->endorsement()->create([
+                        'file_path' => url(Config::get('app.url') . Storage::url($request->file('endorsement')->store('endorsements', 'public'))),
+                        'stage_submitted' => $research->status,
+                        'user_id' => auth()->user()->id,
+                    ]);
+                }
+                $research->update($data);
             }
+        } else {
 
-            return redirect()->route('student.submissions');
+            // Create a new research paper
+            ResearchPaper::create($data);
+        }
+
+        return redirect()->route('student.submissions');
         // }
     }
 
@@ -105,7 +129,7 @@ class StudentController extends Controller
     {
         $papers = $this->showResearchPaspersForScheduling();
 
-        return Inertia::render('Student/Schedules',[
+        return Inertia::render('Student/Schedules', [
             'papers' => $papers,
             'schedules' =>  $this->getSchedules()
         ]);
@@ -118,6 +142,6 @@ class StudentController extends Controller
 
     private function getSchedules()
     {
-        return DefenseSchedule::with('researchPaper','researchPaper.author', 'researchPaper.adviser')->get();
+        return DefenseSchedule::with('researchPaper', 'researchPaper.author', 'researchPaper.adviser')->get();
     }
 }

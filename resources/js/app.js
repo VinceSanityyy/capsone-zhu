@@ -52,3 +52,4 @@ createInertiaApp({
             .mount(el);
     },
 });
+console.log("app.js loaded");

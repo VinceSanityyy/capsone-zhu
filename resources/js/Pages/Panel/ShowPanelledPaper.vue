@@ -61,6 +61,20 @@
                                     <br>
                                     <h4 class="tab-title">Panel Comments</h4>
                                     <hr>
+                                    <div>
+                                        <div class="mb-3 col-md-3">
+                                            <form @submit.prevent="handleSubmitEvaluation">
+                                                <label for="" class="form-label">Attach evaluation form</label>
+                                                <input @input="form.evaluation = $event.target.files[0]" type="file"
+                                                    class="form-control um-button" name="" id="" placeholder="" required
+                                                    aria-describedby="fileHelpId">
+                                                <div id="fileHelpId" class="form-text">Download your evaluation first in the
+                                                    next tab</div>
+                                                <button type="submit" class="btn um-button">Submit Evaluation</button>
+                                            </form>
+
+                                        </div>
+                                    </div>
                                     <div v-for="comment in panelMemberComments" :key="comment.id" class="card-body h-100">
                                         <hr>
                                         <div class="d-flex align-items-start">
@@ -116,18 +130,40 @@
                                 </div> -->
                                 <div class="tab-pane" id="tab-4" role="tabpanel">
                                     <br>
-                                    <h4 class="tab-title">Downloadable Forms</h4>
+                                    <h4 class="tab-title">Forms Attached</h4>
+                                    <a :href="formUrl" target="_blank" class="btn um-button float-end">
+                                        Evaluation Form &nbsp;
+                                        <i class="bi bi-cloud-arrow-down"></i>
+                                    </a>
+
+                                    <br>
                                     <hr>
-                                    <ul>
-                                        <li>
-                                            <a :href="formUrl" target="_blank" class="btn um-button">
-                                                Evaluation Form &nbsp;
-                                                <i class="bi bi-cloud-arrow-down"></i>
-                                            </a>
-                                        </li>
-                                        <small>dummy form kay wala pay eval</small>
-                                        <br>
-                                    </ul>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <DataTable class="display" ref="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Title</th>
+                                                        <th>Stage Attached</th>
+                                                        <th>Date Submitted</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="evaluation in attachedEvaluationForms"
+                                                        :key="evaluation.id">
+                                                        <td>Eval Form</td>
+                                                        <td>{{ evaluation.stage_submitted }}</td>
+                                                        <td>{{ evaluation.created_at }}</td>
+                                                        <td>
+                                                            <a :href="evaluation.file_path" class="btn btn-sm um-button"
+                                                                target="_blank">Download</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </DataTable>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -144,18 +180,21 @@ import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useToast } from "vue-toastification";
+import DataTable from 'datatables.net-vue3';
 const toast = useToast();
 
 const editor = ClassicEditor;
 
-const { paper, panelMemberComments, adviserComments } = defineProps({
+const { paper, panelMemberComments, adviserComments, attachedEvaluationForms } = defineProps({
     paper: Object,
     adviserComments: Object,
-    panelMemberComments: Object
+    panelMemberComments: Object,
+    attachedEvaluationForms: Object
 })
 
 const form = useForm({
-    comment: ''
+    comment: '',
+    evaluation: ''
 })
 
 const handleSubmitComment = () => {
@@ -170,7 +209,21 @@ const handleSubmitComment = () => {
     })
 }
 
+const handleSubmitEvaluation = () =>{
+    console.log(form)
+    form.post(`/panel/panelled-papers/${paper.id}/attach-evaluation`, {
+        onSuccess: () => {
+            toast.success("Evaluation Added");
+            form.reset()
+        }, onError: (err) => {
+            toast.error("Error Adding Comment");
+        }
+    })
+}
+
 const formUrl = ref('/forms/endorsement_for_defense.pdf')
 
 
 </script>
+
+<style scoped>@import 'datatables.net-dt';</style>

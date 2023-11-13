@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\ActivityLogged;
 use App\Events\SchedulePlotted;
 use App\Events\UserConfirmed;
 use App\Events\UserCreated;
+use App\Listeners\LogActivityListener;
 use App\Listeners\SendEmailNotification;
 use App\Listeners\SendSMSMessageToStudent;
 use App\Listeners\SendUserEmailWithPassword;
@@ -32,7 +34,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         SchedulePlotted::class => [
             SendSMSMessageToStudent::class,
-        ]
+        ],
+        ActivityLogged::class => [
+            LogActivityListener::class,
+        ],
     ];
 
     /**

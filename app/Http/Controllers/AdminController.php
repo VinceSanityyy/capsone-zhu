@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ResearchStatusType;
+use App\Events\ActivityLogged;
 use App\Events\SchedulePlotted;
 use App\Models\DefenseSchedule;
 use App\Models\ResearchPaper;
@@ -14,7 +16,7 @@ class AdminController extends Controller
     public function showCalendarAndSchedules()
     {
         $papers = $this->showResearchPaspersForScheduling();
-
+        
         return Inertia::render('Admin/Calendar',[
             'papers' => $papers,
             'schedules' =>  $this->getSchedules()
@@ -24,7 +26,7 @@ class AdminController extends Controller
     private function showResearchPaspersForScheduling()
     {
         // return ResearchPaper::where('for_scheduling', false)->get();
-        return ResearchPaper::where('for_scheduling', true)->get();
+        return ResearchPaper::with('author')->where('for_scheduling', true)->get();
     }
 
     public function plotResearchSchedule(Request $request, ResearchPaper $researchPaper)
@@ -45,6 +47,7 @@ class AdminController extends Controller
         });
         
         $this->triggerSMSForStudent($researchPaper);
+        ActivityLogged::dispatch(auth()->user(), 'Defense schedule plotted for research title: ' . $researchPaper->title . ' by ' . auth()->user()->name . ' on ' . now()->format('M d, Y h:i A'));
         return redirect()->back();
     }
 
@@ -76,4 +79,84 @@ class AdminController extends Controller
         
         return SchedulePlotted::dispatch($researchPaper->author, $message);
     }
+
+
+    public function approvePaperForChecking(ResearchPaper $researchPaper, Request $request)
+    {
+        $researchPaper->update([
+            'status' => $request->status
+        ]);
+        return redirect()->back();
+    }
+
+    public function updateFinalPaperChecklist(ResearchPaper $researchPaper, Request $request)
+    {
+        $updateData = [];
+        // Check if the checkbox is checked
+        if ($request->checked) {
+            // Only update the specified field if the checkbox is checked
+            switch ($request->status) {
+                case 'has_submitted_manuscript':
+                    $updateData['has_submitted_manuscript'] = true;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin checked the manuscript submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                case 'has_submitted_cd':
+                    $updateData['has_submitted_cd'] = true;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin checked the cd submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                case 'has_submitted_final_receipt':
+                    $updateData['has_submitted_final_receipt'] = true;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin checked the final receipt submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                case 'has_submitted_printed_materials':
+                    $updateData['has_submitted_printed_materials'] = true;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin checked the printed materials submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                default:
+                    dd(1);
+                    break;
+            }
+        } else {
+            // Handle the case where the checkbox is unchecked
+            switch ($request->status) {
+                case 'has_submitted_manuscript':
+                    $updateData['has_submitted_manuscript'] = false;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin unchecked the manuscript submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                case 'has_submitted_cd':
+                    $updateData['has_submitted_cd'] = false;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin unchecked the cd submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                case 'has_submitted_final_receipt':
+                    $updateData['has_submitted_final_receipt'] = false;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin unchecked the final receipt submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                case 'has_submitted_printed_materials':
+                    $updateData['has_submitted_printed_materials'] = false;
+                    ActivityLogged::dispatch(auth()->user(), 'Admin unchecked the printed materials submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
+                default:
+                    dd(2);
+                    break;
+            }
+        }
+        
+        if (!empty($updateData)) {
+            $researchPaper->update($updateData);
+            $this->finalPaperChecklist($researchPaper) ? $researchPaper->update(['status' => ResearchStatusType::COMPLETED]) : $researchPaper->update(['status' => ResearchStatusType::FINAL_SUBMISSION]);
+        }
+    }
+
+    private function finalPaperChecklist($researchPaper)
+    {
+        if (
+            $researchPaper->has_submitted_manuscript == true
+            && $researchPaper->has_submitted_cd == true
+            && $researchPaper->has_submitted_final_receipt == true
+            && $researchPaper->has_submitted_printed_materials == true
+        ) {
+            return true;
+        }
+    }
+
 }

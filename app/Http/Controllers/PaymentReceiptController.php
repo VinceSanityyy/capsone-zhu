@@ -4,62 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\PaymentReceipt;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\App;
 class PaymentReceiptController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function generatePaymentReceipt()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(PaymentReceipt $paymentReceipt)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(PaymentReceipt $paymentReceipt)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, PaymentReceipt $paymentReceipt)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(PaymentReceipt $paymentReceipt)
-    {
-        //
+        $receipts = PaymentReceipt::with('user','researchPaper.adviser')->get();
+        $totalAmount = $receipts->sum('amount');
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->setPaper('A4');
+        $pdf->loadView('receipt', compact('receipts','totalAmount'));   
+        // return $pdf->stream();
+        return $pdf->download('paymentReceipts.pdf');
     }
 }

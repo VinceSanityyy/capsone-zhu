@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ActivityLogged;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -45,6 +46,7 @@ class AnnouncementController extends Controller
             'content' => $request->content,
             'user_id' => auth()->user()->id,
         ]);
+        ActivityLogged::dispatch(auth()->user(), 'Admin created announcement with a title of: ' . $request->title . ' on ' . now()->format('M d, Y h:i A'));
 
         $this->sendNotificationsToStudents($request->title);
         
