@@ -9,7 +9,7 @@ class PaymentReceiptController extends Controller
 {
     public function generatePaymentReceipt()
     {
-        $receipts = PaymentReceipt::with('user','researchPaper.adviser')->get();
+        $receipts = PaymentReceipt::with('user','researchPaper.adviser')->where('is_approved', true)->get();
         $totalAmount = $receipts->sum('amount');
         $pdf = App::make('dompdf.wrapper');
         $pdf->setPaper('A4');

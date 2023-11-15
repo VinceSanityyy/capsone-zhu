@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Enums\ResearchStatusType;
 use App\Models\Course;
 use App\Models\ResearchPaper;
+use Carbon\Carbon;
 
 class ReportController extends Controller
 {
@@ -25,7 +26,9 @@ class ReportController extends Controller
         $results = ResearchPaper::selectRaw('status, COUNT(*) as total')
         ->whereHas('defenseSchedules', function ($query) {
             $query->where('is_done', true);
-        })
+            })
+            ->where('status', ResearchStatusType::COMPLETED)
+            // ->whereBetween
             ->groupBy('status')
             ->get();
 
@@ -41,7 +44,7 @@ class ReportController extends Controller
         return $formattedResults;
     }
 
-    public function getOverallStudentsCompletedResearchPerProgramType($courseId)
+    public function getOverallStudentsCompletedResearchPerProgramType($courseId, $from, $to)
     {
         $researchStatusValues = ResearchStatusType::values();
 
@@ -82,5 +85,39 @@ class ReportController extends Controller
         if (request()->wantsJson()) {
             return $formattedResults;
         }
+    }
+
+
+    public function filterPiechartData(Request $request)
+    {
+        $results = ResearchPaper::selectRaw('status, COUNT(*) as total')
+        ->whereHas('defenseSchedules', function ($query) use ($request) {
+            $query->where('is_done', true)
+                // ->whereBetween('created_at',[Carbon::parse($request['form']['from'])->startOfDay(), Carbon::parse($request['form']['to'])->endOfDay()]);
+                ->where(function ($query) use ($request) {
+                    $query->whereBetween('start', [
+                        Carbon::parse($request['form']['from'])->startOfDay(),
+                        Carbon::parse($request['form']['to'])->endOfDay(),
+                    ])
+                    ->orWhereBetween('end', [
+                        Carbon::parse($request['form']['from'])->startOfDay(),
+                        Carbon::parse($request['form']['to'])->endOfDay(),
+                    ]);
+                });
+            })
+            // ->where('status', ResearchStatusType::COMPLETED)
+            ->groupBy('status')
+            ->get();
+        // dd($results);
+        $formattedResults = [];
+        foreach ($results as $result) {
+            $formattedResults[] = [
+                'label' => $result->status,
+                'value' => $result->total,
+                // 'color' => '#af2532'
+            ];
+        }
+
+        return $formattedResults;
     }
 }

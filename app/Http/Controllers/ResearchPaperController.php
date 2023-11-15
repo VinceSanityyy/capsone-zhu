@@ -33,6 +33,9 @@ class ResearchPaperController extends Controller
             'adminComments' => $adminComments,
             'adviserEndorsementForms' => $researchPaper->endorsement()->where('user_id', $researchPaper->adviser->id)->get(),
             'panelMemberEvaluationForms' => $researchPaper->evaluationForms()->whereIn('user_id', $panelMembers->pluck('id')->toArray())->get(),
+            'panelMemberComments' => $researchPaper->panelMemberComments() ?? null,
+            'adviserComments' => $researchPaper->adviserComments() ?? null,
+            'receipts' => $researchPaper->receipts,
         ]);
     }
 
@@ -75,9 +78,13 @@ class ResearchPaperController extends Controller
             } else {
                 dd('Quality cheking approval is for adviser only');
             }
-         
+            $researchPaper->latestReceipt->update([
+                'is_approved' => true
+            ]);
             $researchPaper->adviser->notify(new ResearchStatusChanged(auth()->user(), $researchPaper->status));
             $researchPaper->author->notify(new ResearchStatusChanged(auth()->user(), $researchPaper->status));
+        
+
             ActivityLogged::dispatch(auth()->user(), 'Admin changed the status for research title: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
             DB::commit();
             return redirect()->back();

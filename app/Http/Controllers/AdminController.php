@@ -159,4 +159,10 @@ class AdminController extends Controller
         }
     }
 
+    public function showArchivedPapers()
+    {
+        return Inertia::render('Admin/Submissions/ArchivedSubmissions', [
+            'papers' => ResearchPaper::where('status', ResearchStatusType::ARCHIVED)->with('author', 'author.course', 'author.form', 'adviser', 'panelMembers')->get()
+        ]);
+    }
 }

@@ -1,6 +1,8 @@
 <script>
 import { useForm } from '@inertiajs/vue3'
 import { Link } from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
+
 export default {
     setup() {
         const form = useForm({
@@ -12,6 +14,38 @@ export default {
     },
     components: {
         Link
+    },
+    methods: {
+        showTerms() {
+            alertify
+                .confirm('Terms and Conditions')
+                .setHeader('Terms and Conditions')
+                .setContent(`
+                    <div>
+                        <h2>Confidentiality Pact and Non-Disclosure Agreement</h2>
+                        <ol>
+                            <li>
+                                Access and use of the Student Advising Program (SAP) is a sacred duty of Designated Student Advisers (DSAs) in the service of student development at the University of Mindanao.
+                            </li>
+                            <li>
+                                All information, data, and materials from the personal records of the students are absolutely confidential in nature and must be preserved and protected. Violation of this confidentiality through any form of disclosure and illegal use can result in legal liability.
+                            </li>
+                            <li>
+                                Only official DSAs are authorized to access the SAP. You may proceed to log in if you have the proper authority.
+                            </li>
+                        </ol>
+                    </div>
+                `)
+                .set('modal', true)
+                .set('resizable', true)
+                .resizeTo('45%', '35%')
+                .set('labels', {ok:'Agree', cancel:'Disagree'})
+                .set('onok', function(closeEvent) { router.visit('/register') })
+                .set('oncancel', function(closeEvent) {
+                    alertify.set('notifier','position', 'top-right');
+                    alertify.error('Accept the terms and conditions to continue');
+                 });
+        }
     }
 };
 </script>
@@ -48,7 +82,7 @@ export default {
                                                 <p style="color:red">{{ form.errors.password }}</p>
                                             </div>
                                             <small>
-                                                <Link style="color: #af2532" href="/register">Don't have an account?</Link>
+                                                <a @click="showTerms" style="color: #af2532" href="#">Don't have an account?</a>
                                             </small>
                                             <small>
                                                 <Link style="color: #af2532; float: right;" href="/forgot-password">Forgot password?</Link>

@@ -24,6 +24,15 @@
                                 <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-7"
                                         data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
                                         Panel Evaluation Forms</a></li>
+                                <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-8"
+                                        data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
+                                        Panel Comments</a></li>
+                                <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-9"
+                                        data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
+                                        Adviser Comments</a></li>
+                                <li class="nav-item" role="presentation"><a class="nav-link" href="#tab-10"
+                                        data-bs-toggle="tab" role="tab" aria-selected="false" tabindex="-1">
+                                        Receipts Submitted</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active show" id="tab-1" role="tabpanel">
@@ -218,6 +227,84 @@
                                         </tbody>
                                     </DataTable>
                                 </div>
+                                <div class="tab-pane" id="tab-8" role="tabpanel">
+                                    <br>
+                                    <h4 class="tab-title">Panel Comments</h4>
+                                    <hr>
+                                    <div v-for="comment in panelMemberComments" :key="comment.id" class="card-body h-100">
+                                        <hr>
+                                        <div class="d-flex align-items-start">
+                                            <img src="https://edukasyon-production.s3.amazonaws.com/uploads/school/avatar/17455/red.jpg"
+                                                width="36" height="36" class="rounded-circle me-2" alt="Charles Hall">
+                                            <div class="flex-grow-1">
+                                                <small class="float-end text-navy">30m ago</small>
+                                                <strong>{{ comment.user.name }}</strong> wrote a comment <strong>
+                                                    on the study {{ researchPaper.title }}</strong><br>
+                                                <small class="text-muted">{{ comment.date_created }}</small>
+
+                                                <div class="border text-sm text-muted p-2 mt-1">
+                                                    <div v-html="comment.comment"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tab-9" role="tabpanel">
+                                    <br>
+                                    <h4 class="tab-title">Adviser Comments</h4>
+                                    <hr>
+                                    <div v-for="comment in adviserComments" :key="comment.id" class="card-body h-100">
+                                        <div class="card-body h-50">
+
+                                            <hr>
+                                            <div class="d-flex align-items-start">
+                                                <img src="https://edukasyon-production.s3.amazonaws.com/uploads/school/avatar/17455/red.jpg"
+                                                    width="36" height="36" class="rounded-circle me-2" alt="Charles Hall">
+                                                <div class="flex-grow-1">
+                                                    <small class="float-end text-navy"></small>
+                                                    <strong>{{ comment.user.name }}</strong> wrote a comment <strong>
+                                                        on the study {{ researchPaper.title }}</strong><br>
+                                                    <small class="text-muted">{{ comment.date_created }}</small>
+
+                                                    <div class="border text-sm text-muted p-2 mt-1">
+                                                        <div v-html="comment.comment"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tab-10" role="tabpanel">
+                                    <br>
+                                    <h4 class="tab-title">Submitted Receipts</h4>
+                                    <hr>
+                                    <DataTable class="display" ref="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Amount</th>
+                                                <th>Reference Number</th>
+                                                <th>Status</th>
+                                                <th>Date Submitted</th>
+                                                <th>View</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="receipt in receipts" :key="receipt.id" class="text-center">
+                                                <td>{{ receipt.amount }}</td>
+                                                <td>{{ receipt.reference_number }}</td>
+                                                <td>
+                                                    <span v-if="receipt.is_approved == 0" class="badge bg-warning">Pending</span>
+                                                    <span v-else class="badge bg-success">Approved</span>
+                                                </td>
+                                                <td>{{ receipt.created_at }}</td>
+                                                <td>
+                                                    <a target="_blank" :href="receipt.receipt" class="btn um-button">View</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </DataTable>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -376,12 +463,22 @@ const status = reactive([
     }
 ])
 
-const { researchPaper, panelMembers, adminComments, adviserEndorsementForms, panelMemberEvaluationForms } = defineProps({
+const { researchPaper, 
+    panelMembers, 
+    adminComments, 
+    adviserEndorsementForms, 
+    panelMemberEvaluationForms, 
+    panelMemberComments, 
+    adviserComments,
+    receipts } = defineProps({
     researchPaper: Object,
     panelMembers: Object,
     adminComments: Object,
     adviserEndorsementForms: Object,
-    panelMemberEvaluationForms: Object
+    panelMemberEvaluationForms: Object,
+    panelMemberComments: Object,
+    adviserComments: Object,
+    receipts: Object
 })
 
 const addPanelMembers = () => {

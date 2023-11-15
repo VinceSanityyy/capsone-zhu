@@ -74,15 +74,15 @@
                                         <br>
                                         <h4 class="tab-title">Your Previous Comments</h4>
                                         <hr>
-                                        <label class="form-label">Approve Current Status? <strong>{{ paper.status
-                                        }}</strong></label>
-                                        <select v-model="form.approvalStatus" @change="handleApprovalStatusChange"
-                                            class="form-select mb-3">
-                                            <option value="" disabled selected>Select Option</option>
-                                            <option value="yes">Yes</option>
-                                            <option value="no">No</option>
-                                        </select>
+
                                     </div>
+                                    <h4 class="tab-title">Add new comment</h4>
+                                    <form @submit.prevent="handleSubmitComment">
+                                        <ckeditor :editor="editor" v-model="form.comment"></ckeditor>
+                                        <div v-if="form.errors.comment" class="text-danger">{{ form.errors.comment
+                                        }}</div>
+                                        <button type="submit" class="btn um-button mt-4 btn-block">Add Comment</button>
+                                    </form>
                                     <div v-for="comment in adviserComments" :key="comment.id" class="card-body h-100">
                                         <div class="card-body h-50">
 
@@ -104,15 +104,14 @@
                                         </div>
 
                                     </div>
-                                    <h4 class="tab-title">Add new comment</h4>
-                                    <form @submit.prevent="handleSubmitComment">
-                                        <ckeditor :editor="editor" v-model="form.comment"></ckeditor>
-                                        <div v-if="form.errors.comment" class="text-danger">{{ form.errors.comment
-                                        }}</div>
-                                        <button type="submit" class="btn um-button mt-4 btn-block">Add Comment</button>
-                                    </form>
-
-                                    for debugging only: form value => {{ form.comment }}
+                                    <label class="form-label">Approve Current Status? <strong>{{ paper.status
+                                        }}</strong></label>
+                                        <select v-model="form.approvalStatus" @change="handleApprovalStatusChange"
+                                            class="form-select mb-3">
+                                            <option value="" disabled selected>Select Option</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
                                 </div>
                                 <div class="tab-pane" id="tab-4" role="tabpanel">
                                     <br>

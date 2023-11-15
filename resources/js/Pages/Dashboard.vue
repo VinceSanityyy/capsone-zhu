@@ -175,6 +175,10 @@ const statusBadge = (submission) => {
       return '<span class="badge bg-success">Completed</span>';
     case 'final_checking':
       return '<span class="badge bg-dark">Final Checking</span>';
+    case 'archived':
+      return '<span class="badge bg-dark">Archived</span>';
+    case 'final_submission':
+      return '<span class="badge bg-dark">Final Submission</span>';
     default:
       break
   }

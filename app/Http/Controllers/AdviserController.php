@@ -10,6 +10,7 @@ use App\Notifications\CommentAddedNotification;
 use App\Notifications\ResearchStatusChanged;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 class AdviserController extends Controller
 {
     public function getAssignedStudents()
@@ -37,6 +38,8 @@ class AdviserController extends Controller
 
     public function addAdviserComment(Request $request)
     {
+        $admin = User::role('admin')->first();
+     
         $request->validate([
             'comment' => 'required'
         ]);
@@ -46,7 +49,7 @@ class AdviserController extends Controller
             'user_id' => auth()->user()->id
         ]);
         $paper->author->notify(new CommentAddedNotification(auth()->user()));
-
+        $admin->notify(new CommentAddedNotification(auth()->user()));
         return redirect()->back();
     }
 

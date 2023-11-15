@@ -62,20 +62,7 @@
                                     <h4 class="tab-title">Panel Comments</h4>
                                     <hr>
                                     <div>
-                                        <div class="mb-3 col-md-3">
-                                            <form @submit.prevent="handleSubmitEvaluation">
-                                                <label for="" class="form-label">Attach evaluation form</label>
-                                                <input @input="form.evaluation = $event.target.files[0]" type="file"
-                                                    class="form-control um-button" name="" id="" placeholder="" required
-                                                    aria-describedby="fileHelpId">
-                                                <div id="fileHelpId" class="form-text">Download your evaluation first in the
-                                                    next tab</div>
-                                                <button type="submit" class="btn um-button">Submit Evaluation</button>
-                                            </form>
-
-                                        </div>
-                                    </div>
-                                    <div v-for="comment in panelMemberComments" :key="comment.id" class="card-body h-100">
+                                        <div v-for="comment in panelMemberComments" :key="comment.id" class="card-body h-100">
                                         <hr>
                                         <div class="d-flex align-items-start">
                                             <img src="https://edukasyon-production.s3.amazonaws.com/uploads/school/avatar/17455/red.jpg"
@@ -99,8 +86,20 @@
                                         }}</div>
                                         <button type="submit" class="btn um-button mt-4 btn-block">Add Comment</button>
                                     </form>
+                                    <br><br>
+                                        <div class="mb-3 col-md-3">
+                                            <form @submit.prevent="handleSubmitEvaluation">
+                                                <label for="" class="form-label">Attach evaluation form</label>
+                                                <input @input="form.evaluation = $event.target.files[0]" type="file"
+                                                    class="form-control um-button" name="" id="" placeholder="" required
+                                                    aria-describedby="fileHelpId">
+                                                <div id="fileHelpId" class="form-text">Download your evaluation first in the
+                                                    next tab</div>
+                                                <button type="submit" class="btn um-button">Submit Evaluation</button>
+                                            </form>
 
-                                    for debugging only: form value => {{ form.comment }}
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- <div class="tab-pane" id="tab-3" role="tabpanel">
                                     <br>

@@ -103,13 +103,18 @@ const clearNotifications = () => {
   }})
 }
 
-onMounted(() => {
-    window.Echo.private(`App.Models.User.${page.props.auth.user.id}`)
-      .notification((notification) => {
-        toast.success(notification.information);
-        page.props.notifications.unshift({data:{...notification}})
-      });
-  });
+const props = defineProps({
+  notification: Object
+})
+
+// onMounted(() => {
+//     window.Echo.private(`App.Models.User.${page.props.auth.user.id}`)
+//       .notification((notification) => {
+//         console.log(1)
+//         toast.success(notification.information);
+//         page.props.notifications.unshift({data:{...notification}})
+//       });
+//   });
 
 </script>
 

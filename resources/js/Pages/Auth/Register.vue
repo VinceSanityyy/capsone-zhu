@@ -96,7 +96,7 @@
                                                 'Upload your enrollment form' }}</div>
                                         </div>
                                         <div>
-                                            <div class="form-check align-items-center">
+                                            <!-- <div class="form-check align-items-center">
                                                 <input id="customControlInline" type="checkbox" v-model="form.terms"
                                                     class="form-check-input" value="remember-me" name="remember-me">
                                                 <a style="color:black" @click="showTerms()"
@@ -105,7 +105,7 @@
                                             </div>
                                             <div v-if="form.errors.terms" class="text-danger">
                                                 {{ 'You must accept the termsand conditions' }}
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <small>
                                             <Link style="color: #af2532" href="/login">Alrady have an account?</Link>
@@ -142,7 +142,7 @@ const form = useForm({
     subject_code: '',
     id_number: '',
     phone_number: '',
-    terms: false,
+    terms: true,
     enrollment_form: null,
     degree_type: ''
 });

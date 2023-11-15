@@ -33,7 +33,9 @@ class ResearchPaperSeeder extends Seeder
                 'receipt' => 'https://files.jotform.com/jotformapps/payment-receipt-template-5fd30596666e2866e04390d48ec89876.png?v=1695990972',
                 // 'receipt' => $faker->unique()->randomNumber(5),
                 'status' => $faker->randomElement(ResearchStatusType::values()),
-                'for_scheduling' => $faker->boolean()
+                // 'status' => ResearchStatusType::COMPLETED,
+                'for_scheduling' => false,
+                'is_approved_by_adviser' => true,
             ]);
 
             // Associate the adviser

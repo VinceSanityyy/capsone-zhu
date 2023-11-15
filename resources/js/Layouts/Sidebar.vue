@@ -88,6 +88,11 @@
                         <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Generate Receipt</span>
                         </a>
                     </li>
+                    <li class="sidebar-item ">
+                        <a class="sidebar-link" href="/admin/papers/archived">
+                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Archived Papers</span>
+                        </a>
+                    </li>
                 </div>
                 <div v-if="$page.props.user.roles.includes('student')">
 

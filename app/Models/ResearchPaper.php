@@ -57,6 +57,11 @@ class ResearchPaper extends Model
         return $this->hasMany(PaymentReceipt::class);
     }
 
+    public function latestReceipt()
+    {
+        return $this->hasOne(PaymentReceipt::class)->latestOfMany();
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);

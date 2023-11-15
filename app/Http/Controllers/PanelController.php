@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Notifications\CommentAddedNotification;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class PanelController extends Controller
 {
@@ -46,7 +47,8 @@ class PanelController extends Controller
             'user_id' => auth()->user()->id
         ]);
         $paper->author->notify(new CommentAddedNotification(auth()->user()));
-
+        $admin = User::role('admin')->first();
+        $admin->notify(new CommentAddedNotification(auth()->user()));
         return redirect()->back();
     }
 

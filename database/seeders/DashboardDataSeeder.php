@@ -17,19 +17,21 @@ class DashboardDataSeeder extends Seeder
      */
     public function run(): void
     {
+        // $papers = ResearchPaper::where('status', ResearchStatusType::COMPLETED)->get();
         $papers = ResearchPaper::all();
+
         $faker = Faker::create();
         
         foreach ($papers as $index => $paper) {
-            $startDateTime = Carbon::now()->setTimezone('Asia/Manila')->setTime(7, 0, 0)->addDays($index);
-            $endDateTime = $startDateTime->copy()->addHour();
+            $startDateTime = Carbon::now()->setTimezone('Asia/Manila')->setTime(7, 0, 0)->subDays($index);
+            $endDateTime = $startDateTime->copy()->subHour();
             // If the hour is 17 or greater, move to the next day and set start time to 7 AM
             if ($endDateTime->hour >= 17) {
-                $startDateTime->addDay()->setTime(7, 0, 0);
+                $startDateTime->subDay()->setTime(7, 0, 0);
             }
         
             // Add 1 hour to end time
-            $endDateTime->addHour();
+            $endDateTime->subHour();
         
             // Create defense schedule within the allowed range for each research paper
             $paper->defenseSchedules()->create([

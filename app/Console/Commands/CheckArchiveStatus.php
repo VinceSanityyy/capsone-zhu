@@ -27,9 +27,13 @@ class CheckArchiveStatus extends Command
      */
     public function handle()
     {
-        $researchPaper = ResearchPaper::all();
+        // $researchPaper = ResearchPaper::all();
+        $researchPaper = ResearchPaper::where('status', ResearchStatusType::COMPLETED)->get();
+        // dd($researchPaper);
         foreach ($researchPaper as $paper) {
-            if ($paper->created_at->diffInDays(now()) >= 7) {
+            // dd($paper->defenseSchedules);
+            // dd($paper->defenseSchedules->created_at->diffInDays(now()) <= 7);
+            if ($paper->defenseSchedules->created_at->diffInDays(now()) <= 7) {
                 $paper->update([
                     'status' => ResearchStatusType::ARCHIVED
                 ]);

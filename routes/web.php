@@ -70,12 +70,17 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     Route::put('/schedules/{defenseSchedule}/update', [DefenseScheduleController::class, 'changeDefenseStatus'])->name('schedules.update');
     Route::put('/research-paper/{researchPaper}/change-status', [ResearchPaperController::class, 'changeResearchStatus'])->name('research-paper.change-status');
     //piechart filter
-    Route::get('/courses/{id}/completed-research-status', [ReportController::class, 'getOverallStudentsCompletedResearchPerProgramType']);
+    Route::get('/courses/{id}/completed-research-status/{from}/{to}', [ReportController::class, 'getOverallStudentsCompletedResearchPerProgramType']);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    //new filter
+    Route::post('/chart/pie-chart-filter', [ReportController::class, 'filterPiechartData']);
+    
 
     Route::put('/research-paper/{researchPaper}/update-final-paper-checklist', [AdminController::class, 'updateFinalPaperChecklist'])->name('research-paper.update-final-paper-checklist');
     Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
     Route::get('/receipts/generate', [PaymentReceiptController::class, 'generatePaymentReceipt'])->name('receipts.generate');
+    Route::get('/papers/archived', [AdminController::class, 'showArchivedPapers'])->name('papers.archived');
   });
   
   Route::get('/profile', [UserController::class, 'showProfile'])->name('users.profile');

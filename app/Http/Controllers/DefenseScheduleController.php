@@ -52,7 +52,9 @@ class DefenseScheduleController extends Controller
         $defenseSchedule->update([
             'is_done' => $request->status
         ]);
-
+        $defenseSchedule->researchPaper->latestReceipt->update([
+            'is_approved' => true
+        ]);
         $defenseSchedule->researchPaper->update([
             'for_scheduling' => $request->status == 1 ? false : true
         ]);
