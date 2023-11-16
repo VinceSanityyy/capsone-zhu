@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, watch, computed, onUnmounted } from 'vue'
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { useToast } from "vue-toastification";
 import FullCalendar from '@fullcalendar/vue3'
@@ -51,6 +51,11 @@ const promptContent = (papers) => {
 const handleEventClick = (info) => {
     console.log(info.event.title)
 }
+
+onUnmounted(() => {
+    console.log('unmounted')
+    alertify.confirm().destroy()
+})
 
 const showEventMarkup = (selectedinfo) => {
     return `

@@ -317,7 +317,7 @@
 
 <script setup>
 import { router } from '@inertiajs/vue3'
-import { ref, reactive } from 'vue'
+import { ref, reactive, onUnmounted } from 'vue'
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
@@ -329,6 +329,10 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 // import { INITIAL_EVENTS, createEventId } from './event-utils'
+
+onUnmounted(() => {
+    alertify.confirm().destroy()
+})
 
 const toast = useToast();
 const editor = ClassicEditor;

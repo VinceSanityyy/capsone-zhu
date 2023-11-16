@@ -21,7 +21,7 @@
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
 import FullCalendar from '@fullcalendar/vue3'
-import { ref, reactive, watch, computed } from 'vue'
+import { ref, reactive, watch, computed, onUnmounted } from 'vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -33,6 +33,10 @@ const toast = useToast();
 const props = defineProps({
     papers: Object,
     schedules: Object
+})
+
+onUnmounted(() => {
+    alertify.confirm().destroy()
 })
 
 const showEventMarkup = (selectedinfo) => {

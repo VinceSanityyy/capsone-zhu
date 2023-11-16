@@ -151,7 +151,7 @@
 
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useToast } from "vue-toastification";
@@ -168,6 +168,10 @@ const { paper, panelMemberComments, adviserComments, attachedEndorsementFromStud
     attachedEndorsementFromStudent: Object
 })
 
+onUnmounted(() => {
+    console.log('unmounted')
+    alertify.confirm().destroy()
+})
 
 const form = useForm({
     comment: '',

@@ -130,6 +130,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
 import { Link, router } from '@inertiajs/vue3'
+import { onUnmounted } from 'vue'
 
 const form = useForm({
     name: '',
@@ -156,6 +157,10 @@ const submit = () => {
     form.post('/register')
     console.log(form.enrollment_form)
 }
+
+onUnmounted(() => {
+    alertify.confirm().destroy()
+})
 
 const showTerms = () => {
     console.log('show terms');

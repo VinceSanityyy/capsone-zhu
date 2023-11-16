@@ -2,7 +2,7 @@
 import { useForm } from '@inertiajs/vue3'
 import { Link } from '@inertiajs/vue3'
 import { router } from '@inertiajs/vue3'
-
+// import { unmounted } from 'vue'
 export default {
     setup() {
         const form = useForm({
@@ -46,6 +46,10 @@ export default {
                     alertify.error('Accept the terms and conditions to continue');
                  });
         }
+    },
+    unmounted() {
+        console.log('unmounted')
+        alertify.confirm().destroy()
     }
 };
 </script>
