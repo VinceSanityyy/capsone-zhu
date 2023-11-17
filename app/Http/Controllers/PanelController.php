@@ -47,8 +47,8 @@ class PanelController extends Controller
             'user_id' => auth()->user()->id
         ]);
         $paper->author->notify(new CommentAddedNotification(auth()->user()));
-        $admin = User::role('admin')->first();
-        $admin->notify(new CommentAddedNotification(auth()->user()));
+        // $admin = User::role('admin')->first();
+        // $admin->notify(new CommentAddedNotification(auth()->user()));
         return redirect()->back();
     }
 

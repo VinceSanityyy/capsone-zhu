@@ -38,7 +38,7 @@ class AdviserController extends Controller
 
     public function addAdviserComment(Request $request)
     {
-        $admin = User::role('admin')->first();
+        // $admin = User::role('admin')->first();
      
         $request->validate([
             'comment' => 'required'
@@ -49,7 +49,7 @@ class AdviserController extends Controller
             'user_id' => auth()->user()->id
         ]);
         $paper->author->notify(new CommentAddedNotification(auth()->user()));
-        $admin->notify(new CommentAddedNotification(auth()->user()));
+        // $admin->notify(new CommentAddedNotification(auth()->user()));
         return redirect()->back();
     }
 
