@@ -4,6 +4,6 @@ namespace App\Enums;
 
 
 enum ProgramType:string{
-    case MASTERS = 'masters';
-    case DOCTORS = 'doctors';
+    case MASTERS = 'masteral';
+    case DOCTORS = 'doctoral';
 }

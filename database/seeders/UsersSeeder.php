@@ -76,7 +76,9 @@ class UsersSeeder extends Seeder
                 // 'is_active' => $faker->boolean(),
                 'is_active' => true,
                 'subject_code' => $faker->unique()->randomNumber(6),
-                'degree_type' => $degree_type,
+                // 'degree_type' => $degree_type,
+                'degree_type' => $course->program_type->value,
+
             ]);
             $user->assignRole('student');
             $this->command->info("Generated user {$user->name} with the student role");

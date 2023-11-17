@@ -195,7 +195,7 @@ const handleFilterChange = () => {
 };
 
 const countSubmissionsByStatus = computed(() => {
-  const statusesToCount = ['title_defense', 'final_defense', 'outline_defense', 'quality_checking'];
+  const statusesToCount = ['title_defense', 'final_defense', 'outline_defense', 'quality_checking', 'final_submission'];
 
   return statusesToCount.reduce((countObj, status) => {
     countObj[status] = total_submissions.filter(submission => submission.status === status).length;
@@ -282,14 +282,23 @@ const cards = ref([
     }
   },
   {
-    title: 'Total Submissions',
-    value: total_submissions.length,
+    title: 'For Final Submission',
+    value: countSubmissionsByStatus.value.final_submission,
     change: '0.8%',
     isPositiveChange: false,
     click: () => {
-      router.get(`/dashboard`)
+      router.get(`/dashboard?status=final_submission`)
     }
   },
+  // {
+  //   title: 'Total Submissions',
+  //   value: total_submissions.length,
+  //   change: '0.8%',
+  //   isPositiveChange: false,
+  //   click: () => {
+  //     router.get(`/dashboard`)
+  //   }
+  // },
 ]);
 
 
@@ -303,8 +312,6 @@ const cards = ref([
 .cards {
   transition: all 0.2s ease;
   cursor: pointer;
-
-
 }
 
 .cards:hover {
