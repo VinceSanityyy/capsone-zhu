@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ResearchStatusType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class ResearchPaper extends Model
 {
@@ -122,4 +123,11 @@ class ResearchPaper extends Model
     {
         return $this->evaluationForms()->where('user_id', $user_id)->get();
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        // Parse the created_at timestamp using Carbon and return the desired format
+        return Carbon::parse($value)->toDayDateTimeString(); // Customize the format as per your requirement
+    }
+
 }

@@ -57,7 +57,7 @@
           </div>
 
           <div class="table-responsive">
-            <DataTable class="display" ref="table" id="example">
+            <DataTable class="display" ref="table" id="example" :data="filteredResults" :columns="columns">
               <thead>
                 <tr>
                   <th>Date</th>
@@ -71,9 +71,9 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="submission in formattedSubmissions" :key="submission.id">
-                  <td>{{ submission.formattedDate }}</td>
+              <!-- <tbody>
+                <tr v-for="submission in submissions" :key="submission.id">
+                  <td>{{ submission.created_at }}</td>
                   <td>{{ submission.title }}</td>
                   <td>{{ submission.author.name }}</td>
                   <td>{{ submission.author.degree_type.toUpperCase() }}</td>
@@ -85,7 +85,7 @@
                     <Link :href="`/admin/research-paper/${submission.id}`" class="btn btn-sm um-button">View</Link>
                   </td>
                 </tr>
-              </tbody>
+              </tbody> -->
             </DataTable>
           </div>
         </div>
@@ -101,65 +101,28 @@ import { Link, usePage, router, useForm } from '@inertiajs/vue3'
 
 import MainLayout from './../Layouts/MainLayout.vue';
 import DataTable from 'datatables.net-vue3';
-import axios from 'axios';
 
-const type = 'column2d';
-const width = '100%';
-const height = '200%';
-const dataFormat = 'json';
-
-
-const piedatas = ref([]);
-
-const handlePiechartData = async (e) => {
-  const { data, status } = await axios.get(`/admin/courses/${e.target.value}/completed-research-status`)
-  piedatas.value = data
-  console.log({ data, status })
-  console.log(piedatas)
-};
-
-const pieDatasource = computed(() => {
-  return {
-    chart: {
-      caption: 'Number of students that are done in the defense process per program type',
-      subcaption: '',
-      theme: 'fusion',
-      showPercentValues: 0,
-      decimals: "0"
+const columns = [
+  { data: 'created_at' },
+  { data: 'title' },
+  { data: 'author.name' },
+  { data: 'author.degree_type' },
+  {
+    data: 'status',
+    render: function (data, type, row) {
+      return statusBadge(row);
     },
-    data: piedatas.value, //change default value
-    // data: piechartdata.value
-  }
-})
-
-
-const dataSource = {
-  chart: {
-    caption: 'Total number of students who were able to have completed their research status.',
-    subcaption: 'This includes all the status of the students in the research process.',
-    xaxisname: 'Status',
-    yaxisname: 'Number of students',
-    numbersuffix: '',
-    theme: 'fusion',
-    // palletecolors: "#af2532"
   },
-  data: barChartData,
-};
-
-
-
-const fusionChartRef = ref(null);
-
-const onChartInitialized = (chartInstance) => {
-  fusionChartRef.value = chartInstance;
-};
-
-onMounted(() => {
-  // Check if FusionCharts instance is available
-  if (fusionChartRef.value) {
-    // fusionChartRef.value.setChartData(dataSource);
-  }
-});
+  { data: 'adviser.name' },
+  { data: 'author.course.name' },
+  { data: 'pannels' },
+  {
+    data: null,
+    render: function (data, type, row) {
+      return `<a href="/admin/research-paper/${data.id}" class="btn btn-sm um-button">View</a>`;
+    },
+  },
+];
 
 const statusBadge = (submission) => {
   switch (submission.status) {
@@ -185,43 +148,24 @@ const statusBadge = (submission) => {
 }
 
 const selectedDegree = ref('');
+const filteredResults = ref([]);
+
+onMounted(() => {
+  filteredResults.value = props.submissions;
+});
+
 const handleFilterChange = () => {
-  const params = [];
-  if (selectedDegree.value) {
-    params.push(`degree_type=${selectedDegree.value}`);
+  let filteredSubmissions;
+  if(selectedDegree.value){
+    filteredSubmissions = props.submissions.filter(submission => submission.author.degree_type === selectedDegree.value);
+    filteredResults.value = filteredSubmissions;
+  } else {
+    filteredResults.value = props.submissions;
   }
-  const queryString = params.join('&');
-  router.get(`/dashboard?${queryString}`);
 };
 
-const countSubmissionsByStatus = computed(() => {
-  const statusesToCount = ['title_defense', 'final_defense', 'outline_defense', 'quality_checking', 'final_submission'];
 
-  return statusesToCount.reduce((countObj, status) => {
-    countObj[status] = total_submissions.filter(submission => submission.status === status).length;
-    return countObj;
-  }, {});
-});
-
-const formattedSubmissions = computed(() => {
-  return submissions.map(submission => {
-    const date = new Date(submission.created_at);
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const formattedDate = date.toLocaleDateString('en-US', options);
-    return {
-      ...submission,
-      formattedDate,
-    };
-  });
-});
-
-
-// const props = defineProps({
-//   test: Array
-// });
-
-
-const { users, pendingUsers, userPerCourse, submissions, total_submissions, announcements, barChartData, courses } = defineProps({
+const props = defineProps({
   users: Object,
   pendingUsers: Number,
   userPerCourse: Array,
@@ -232,12 +176,31 @@ const { users, pendingUsers, userPerCourse, submissions, total_submissions, anno
   courses: Object,
 });
 
+const countSubmissionsByStatus = computed(() => {
+  const statusesToCount = ['title_defense', 'final_defense', 'outline_defense', 'quality_checking', 'final_submission'];
+
+  return statusesToCount.reduce((countObj, status) => {
+    countObj[status] = props.total_submissions.filter(submission => submission.status === status).length;
+    return countObj;
+  }, {});
+});
+
+// const { users, pendingUsers, userPerCourse, submissions, total_submissions, announcements, barChartData, courses } = defineProps({
+//   users: Object,
+//   pendingUsers: Number,
+//   userPerCourse: Array,
+//   submissions: Object,
+//   total_submissions: Object,
+//   announcements: Object,
+//   barChartData: Array,
+//   courses: Object,
+// });
 
 
 const cards = ref([
   {
     title: 'Users For Approval',
-    value: pendingUsers,
+    value: props.pendingUsers,
     change: '2.4%',
     isPositiveChange: true,
     click: () => {
@@ -250,8 +213,9 @@ const cards = ref([
     change: '0.8%',
     isPositiveChange: false,
     click: () => {
-      console.log(selectedDegree.value)
-      router.get(`/dashboard?status=title_defense`)
+      let filteredSubmissions;
+      filteredSubmissions = props.submissions.filter(submission => submission.status === 'title_defense');
+      filteredResults.value = filteredSubmissions;
     }
   },
   {
@@ -260,7 +224,9 @@ const cards = ref([
     change: '0.8%',
     isPositiveChange: false,
     click: () => {
-      router.get(`/dashboard?status=outline_defense`)
+      let filteredSubmissions;
+      filteredSubmissions = props.submissions.filter(submission => submission.status === 'outline_defense');
+      filteredResults.value = filteredSubmissions;
     }
   },
   {
@@ -269,7 +235,9 @@ const cards = ref([
     change: '0.8%',
     isPositiveChange: false,
     click: () => {
-      router.get(`/dashboard?status=final_defense`)
+      let filteredSubmissions;
+      filteredSubmissions = props.submissions.filter(submission => submission.status === 'final_defense');
+      filteredResults.value = filteredSubmissions;
     }
   },
   {
@@ -278,7 +246,9 @@ const cards = ref([
     change: '0.8%',
     isPositiveChange: false,
     click: () => {
-      router.get(`/dashboard?status=quality_checking`)
+      let filteredSubmissions;
+      filteredSubmissions = props.submissions.filter(submission => submission.status === 'quality_checking');
+      filteredResults.value = filteredSubmissions;
     }
   },
   {
@@ -287,7 +257,9 @@ const cards = ref([
     change: '0.8%',
     isPositiveChange: false,
     click: () => {
-      router.get(`/dashboard?status=final_submission`)
+      let filteredSubmissions;
+      filteredSubmissions = props.submissions.filter(submission => submission.status === 'final_submission');
+      filteredResults.value = filteredSubmissions;
     }
   },
   // {

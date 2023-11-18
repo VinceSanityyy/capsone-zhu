@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\ActivityLogged;
+use App\Jobs\NotifyAllStudentForAnnouncement;
 use App\Models\Announcement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -59,6 +60,8 @@ class AnnouncementController extends Controller
         foreach ($students as $student) {
             $student->notify(new AnnouncementCreated($title));
         }
+
+        // NotifyAllStudentForAnnouncement::dispatch($title); for future purposes
     }
 
     public function delete(Announcement $announcement)

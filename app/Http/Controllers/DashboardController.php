@@ -21,16 +21,17 @@ class DashboardController extends Controller
         $isFaculty = auth()->user()->hasRole('faculty');
         
         $submissions = ResearchPaper::with('author', 'author.course', 'author.form', 'adviser', 'panelMembers')
-        ->when($request->status, function ($q, $search) {
-            $q->where('title', 'LIKE', "%{$search}%")
-                ->orWhere('status', 'LIKE', "%{$search}%");
-        })
-        ->when($request->degree_type, function ($q, $degreeType) {
-            $q->whereHas('author', function ($userQuery) use ($degreeType) {
-                $userQuery->where('degree_type', $degreeType);
-            });
-        })->where('for_scheduling', true)->orWhere(function($q){
-            $q->whereIn('status',[ 'quality_checking', 'final_submission', 'completed'])
+        // ->when($request->status, function ($q, $search) {
+        //     $q->where('title', 'LIKE', "%{$search}%")
+        //         ->orWhere('status', 'LIKE', "%{$search}%");
+        // })
+        // ->when($request->degree_type, function ($q, $degreeType) {
+        //     $q->whereHas('author', function ($userQuery) use ($degreeType) {
+        //         $userQuery->where('degree_type', $degreeType);
+        //     });
+        // })
+        ->where('for_scheduling', true)->orWhere(function($q){
+            $q->whereIn('status',[ 'quality_checking', 'final_submission', 'completed', 'final_defense', 'title_defense', 'outline_defense'])
             ->where('for_scheduling', false);
         })
         ->get();
