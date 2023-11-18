@@ -21,7 +21,6 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
-
 createInertiaApp({
     resolve: (name) => {
         const pages = import.meta.glob("./Pages/**/*.vue", { eager: true });

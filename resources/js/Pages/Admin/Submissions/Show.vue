@@ -71,7 +71,7 @@
                                                 <br>
                                                 <div class="container">
                                                     <form @submit.prevent="addPanelMembers">
-                                                        <div v-for="index in (researchPaper.author.degree_type === 'masteral' ? 4 : 5)"
+                                                        <!-- <div v-for="index in (researchPaper.author.degree_type === 'masteral' ? 4 : 5)"
                                                             :key="index" class="mb-3 row">
                                                             <label for="inputName" class="col-4 col-form-label">Panel Member
                                                                 #
@@ -85,7 +85,17 @@
                                                                         :value="panel.id">{{ panel.name }}</option>
                                                                 </select>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
+                                                        <v-select
+                                                        multiple
+                                                        v-model="form.panels"
+                                                        :options="panelMembers"
+                                                        label="name"
+                                                        
+                                                        :selectable="() => form.panels.length < (researchPaper.author.degree_type === 'masteral' ? 4 : 5)"
+                                                        @input="setSelected"
+                                                        />
+                                                        <br>
                                                         <div v-if="form.errors.panels" class="text-danger">{{
                                                             form.errors.panels }}</div>
                                                         <button class="btn um-button">Save Changes</button>
@@ -329,10 +339,17 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 // import { INITIAL_EVENTS, createEventId } from './event-utils'
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
 
 onUnmounted(() => {
     alertify.confirm().destroy()
 })
+
+const setSelected = (val) => {
+    console.log(val)
+    // form.panels = val
+}
 
 const toast = useToast();
 const editor = ClassicEditor;

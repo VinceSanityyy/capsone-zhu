@@ -41,13 +41,19 @@ class ResearchPaperController extends Controller
 
     public function addPanelMembers(ResearchPaper $researchPaper, Request $request)
     {
+   
+        $panelMemberIds = array_map(function ($panel) {
+            return $panel['id'];
+        }, $request->panels);
+
         $requiredPanelMembersCount = $researchPaper->author->degree_type === 'masteral' ? 4 : 5;
 
         $request->validate([
             'panels' => 'required|array|size:' . $requiredPanelMembersCount
         ]);
         // $researchPaper->panelMembers()->sync($request->panels);
-        $researchPaper->panelMembers()->sync($request->panels);
+        $researchPaper->panelMembers()->sync($panelMemberIds);
+
 
         ActivityLogged::dispatch(auth()->user(), 'Admin added panel members for research title: ' . $researchPaper->title . ' on ' . now()->format('M d, Y h:i A'));
         return to_route('admin.research-paper.show', $researchPaper->id);

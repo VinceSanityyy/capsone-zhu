@@ -61,6 +61,7 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcement.index');
     Route::get('/announcements/create', [AnnouncementController::class, 'create'])->name('announcement.create');
     Route::post('/announcements/create', [AnnouncementController::class, 'store'])->name('announcement.store');
+    Route::delete('/announcements/{announcement}/delete', [AnnouncementController::class, 'delete'])->name('announcement.delete');
     Route::get('/research-paper/{researchPaper}', [ResearchPaperController::class, 'show'])->name('admin.research-paper.show');
     Route::post('/research-paper/{researchPaper}/comment', [ResearchPaperController::class, 'addAdminComment'])->name('admin.research-paper.comment');
     Route::post('/submissions/{researchPaper}/add-panel-members', [ResearchPaperController::class, 'addPanelMembers'])->name('admin.research-paper.add-panels');

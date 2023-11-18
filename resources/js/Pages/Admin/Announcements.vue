@@ -10,7 +10,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <DataTable class="display" ref="table">
+                        <DataTable class="display" ref="table" :data="announcements" :columns="columns">
                                 <thead>
                                     <tr>
                                         <th>Title</th>
@@ -19,16 +19,16 @@
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <!-- <tbody>
                                     <tr v-for="announcement in announcements" :key="announcement.id">
                                         <td>{{ announcement.title}}</td>
                                         <td>{{ announcement.content }}</td>
                                         <td>{{ announcement.user.name }}</td>
                                         <td>
-                                            <Link :href="`/wala pa`" class="btn btn-sm um-button">View</Link>
+                                            <button @click="deleteAnnoucement(announcement.id)" class="btn um-button">Delete</button>
                                         </td>
                                     </tr>
-                                </tbody>
+                                </tbody> -->
                             </DataTable>
                     </div>
                 </div>
@@ -40,10 +40,54 @@
 
 <script setup>
 import MainLayout from '@/Layouts/MainLayout.vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
+import alertify from 'alertifyjs';
 import DataTable from 'datatables.net-vue3';
+import { useToast } from "vue-toastification";
+import { onUnmounted, ref, onMounted} from 'vue'
+const toast = useToast();
 
-const { announcements } = defineProps({
-    announcements: Object
+const props = defineProps({
+    announcements: Array
+})
+
+
+const columns = [
+    { data: 'title' },
+    { data: 'content' },
+    { data: 'user.name' },
+    {
+        data: null,
+        render: function (data, type, row) {
+            return `<button id="del" data-attribute="${data.id}" class="btn announcement-del um-button">Delete</button>`;
+        },
+    },
+];
+
+
+
+
+onMounted(() => {
+const buttons = document.getElementsByClassName('announcement-del');
+  for (const button of buttons) {
+    button.addEventListener('click', () => {
+      alertify.confirm('Notice', 'Delete announcement?', () => {
+        router.delete(`/admin/announcements/${button.dataset.attribute}/delete`,{
+            onSuccess: () => {
+                toast.success('Announcement deleted successfully');
+                 window.location.reload()
+            },
+            onError: () => {
+                alertify.error('Announcement not deleted');
+            }
+        })
+    },() => console.log('cancelled'));
+    });
+  }  
+})
+
+onUnmounted(() =>{
+    console.log('unmounted')
+    alertify.confirm().destroy()
 })
 </script>

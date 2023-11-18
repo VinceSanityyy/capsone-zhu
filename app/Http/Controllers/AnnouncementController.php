@@ -60,4 +60,9 @@ class AnnouncementController extends Controller
             $student->notify(new AnnouncementCreated($title));
         }
     }
+
+    public function delete(Announcement $announcement)
+    {
+        $announcement->delete();
+    }
 }
