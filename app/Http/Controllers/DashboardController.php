@@ -122,7 +122,7 @@ class DashboardController extends Controller
                 ->orWhere('subject_code', 'LIKE', "%{$search}%")
                 ->orWhere('phone_number', 'LIKE', "%{$search}%");
         })->where('is_active', false)->get()->toArray();
-        // dd($users);
+
         return Inertia::render('Admin/InactiveUsers', [
             'users' => $users
         ]);
