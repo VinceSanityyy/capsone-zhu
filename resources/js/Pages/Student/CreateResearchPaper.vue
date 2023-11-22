@@ -33,7 +33,7 @@
                             </div>
                             <div :class="['stepper-item', { 'active': paperStatus === 6 }, { 'completed': paperStatus > 6 }]">
                                 <div class="step-counter"></div>
-                                <div class="step-name">Final Cheking</div>
+                                <div class="step-name">Final Checking</div>
                             </div>
                             <div :class="['stepper-item', { 'active': paperStatus === 7 }, { 'completed': paperStatus > 7 }]">
                                 <div class="step-counter"></div>

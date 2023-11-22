@@ -1,10 +1,10 @@
 <template>
-    <footer class="footer">
+    <footer class="footer" style = "background-color:#af2532;">
 				<div class="container-fluid">
 					<div class="row text-muted">
 						<div class="col-6 text-start">
 							<p class="mb-0">
-								<a class="text-muted" href="https://umindanao.edu.ph/" target="_blank"><strong>Copyrignt - University Of Mindanao</strong></a> &copy;
+								<a class="text-muted" href="https://umindanao.edu.ph/" target="_blank"><strong style = "color:white;">Copyrignt - University Of Mindanao &copy;</strong></a> 
 							</p>
 						</div>
 						<div class="col-6 text-end">

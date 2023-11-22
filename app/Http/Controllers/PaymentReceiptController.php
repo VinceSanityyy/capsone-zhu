@@ -13,8 +13,10 @@ class PaymentReceiptController extends Controller
         $totalAmount = $receipts->sum('amount');
         $pdf = App::make('dompdf.wrapper');
         $pdf->setPaper('A4');
-        $pdf->loadView('receipt', compact('receipts','totalAmount'));   
+        // $pdf->loadView('receipt', compact('receipts','totalAmount'));   // mao ni tong sa adviser
+        $pdf->loadView('student-receipts', compact('receipts','totalAmount'));   //student
+
         // return $pdf->stream();
-        return $pdf->download('paymentReceipts.pdf');
+        return $pdf->stream('paymentReceipts.pdf');
     }
 }

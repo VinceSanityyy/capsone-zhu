@@ -84,7 +84,7 @@
                         </Link>
                     </li>
                     <li class="sidebar-item ">
-                        <a class="sidebar-link" href="/admin/receipts/generate">
+                        <a class="sidebar-link" target = "_blank" href="/admin/receipts/generate">
                         <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Generate Receipt</span>
                         </a>
                     </li>
@@ -192,7 +192,7 @@ import { Link } from '@inertiajs/vue3'
 /* Sidebar and Sidebar Content */
 .sidebar,
 .sidebar-content {
-    background: #fff;
+    background: #af2532;
 }
 
 /* Sidebar Brand */
@@ -208,14 +208,14 @@ import { Link } from '@inertiajs/vue3'
 /* Sidebar Links and Anchor Links */
 .sidebar-link,
 a.sidebar-link {
-    background: #fff;
-    color: black;
+    background: #af2532;
+    color: white;
     font-weight: bold;
 }
 
 /* Sidebar Header */
 .sidebar-header {
-    color: black;
+    color: white;
 }
 
 /* Active Sidebar Item */
@@ -232,7 +232,7 @@ a.sidebar-link {
 .sidebar-link svg,
 a.sidebar-link i,
 a.sidebar-link svg {
-    color: #af2532;
+    color: white;
     margin-right: 0.75rem;
     transition: color 0.3s;
     /* Add a smooth color transition */
@@ -249,7 +249,7 @@ a.sidebar-link:hover svg {
 
 /* Background color and border styles on hover */
 .sidebar-link:hover {
-    background: #af2532;
+    background: #e0ba1f;
     color: #fff;
     border-left-color: black;
 }
@@ -257,6 +257,6 @@ a.sidebar-link:hover svg {
 .sidebar-item.active .sidebar-link:hover,
 .sidebar-item.active>.sidebar-link {
     border-left-color: black;
-    color: #e9ecef;
+    color: #af2532;
 }
 </style>

@@ -2,7 +2,7 @@
   <MainLayout>
     <div class="row mb-2 mb-xl-3">
       <div class="col-auto d-none d-sm-block">
-        <h3>Dashboard</h3>
+        <h3 style = "color:white;">Dashboard</h3>
       </div>
 
       <!-- <div class="col-auto ms-auto text-end mt-n1">
@@ -287,7 +287,7 @@ const cards = ref([
 }
 
 .cards:hover {
-  box-shadow: 5px 6px 6px 2px #e9ecef;
+  box-shadow: 5px 6px 6px 2px #e0ba1f;
   transform: scale(1.1);
 }
 </style>

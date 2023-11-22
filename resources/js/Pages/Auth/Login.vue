@@ -55,14 +55,14 @@ export default {
 </script>
 
 <template>
-    <main class="d-flex w-100">
+    <main class="d-flex w-100" style = "background-image: url('Images/background.jpg'); background-attachment:fixed; background-size: cover;">
         <div class="container d-flex flex-column">
             <div class="row vh-100">
                 <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
                     <div class="d-table-cell align-middle">
                         <div class="text-center mt-4">
-                            <h1 class="h2">Welcome</h1>
-                            <p class="lead">Sign in to your account to continue</p>
+                            <h1 class="h2" style = "color:white;">Welcome</h1>
+                            <p class="lead" style = "color:white;">Sign in to your account to continue</p>
                         </div>
 
                         <div class="card">
@@ -85,6 +85,7 @@ export default {
                                             <div v-if="form.errors.password">
                                                 <p style="color:red">{{ form.errors.password }}</p>
                                             </div>
+                                            <br>
                                             <small>
                                                 <a @click="showTerms" style="color: #af2532" href="#">Don't have an account?</a>
                                             </small>
@@ -101,6 +102,7 @@ export default {
                                                 </span>
                                             </label>
                                         </div> -->
+                                        <br>
                                         <div class="text-center mt-3">
 
                                             <button :disabled="form.processing" type="submit" style="background: #af2532; color: #fff" 

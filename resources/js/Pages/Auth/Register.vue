@@ -1,13 +1,13 @@
 <template>
-    <main class="d-flex w-100">
+    <main class="d-flex w-100" style = "background-image: url('Images/background.jpg'); background-attachment:fixed; background-size: cover;">
         <div class="container d-flex flex-column">
             <div class="row vh-100">
                 <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
                     <div class="d-table-cell align-middle">
                         <div class="text-center mt-4">
-                            <h1 class="h2">Get started</h1>
-                            <p class="lead">
-                                Please fill up the details
+                            <h1 class="h2" style = "color:white;">Get started</h1>
+                            <p class="lead" style = "color:white;">
+                                Please fill out the details
                             </p>
                         </div>
                         <div class="card">
@@ -50,6 +50,17 @@
                                             </select>
                                         </div>
                                         <div class="mb-3">
+                                            <label class="form-label">Degree Type</label>
+                                            <select class="form-select mb-3" v-model="form.degree_type" name="degree_type">
+                                                <option selected disabled>Select type</option>
+                                                <option value="MASTERAL">Masters</option>
+                                                <option value="DOCTORAL">Doctors</option>
+
+                                            </select>
+                                            <div v-if="form.errors.degree_type" class="text-danger">{{
+                                                form.errors.degree_type }}</div>
+                                        </div>
+                                        <div class="mb-3">
                                             <label class="form-label">School Year</label>
                                             <input class="form-control form-control-lg" type="text" name="school_year"
                                                 placeholder="2023-2024" v-model="form.school_year" />
@@ -63,17 +74,7 @@
                                             <div v-if="form.errors.subject_code" class="text-danger">{{
                                                 form.errors.subject_code }}</div>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Degree Type</label>
-                                            <select class="form-select mb-3" v-model="form.degree_type" name="degree_type">
-                                                <option selected disabled>Select type</option>
-                                                <option value="masters">Masters</option>
-                                                <option value="doctors">Doctors</option>
-
-                                            </select>
-                                            <div v-if="form.errors.degree_type" class="text-danger">{{
-                                                form.errors.degree_type }}</div>
-                                        </div>
+                                       
                                         <div class="mb-3">
                                             <label class="form-label">Password</label>
                                             <input class="form-control form-control-lg" type="password" name="password"
@@ -130,7 +131,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
 import { Link, router } from '@inertiajs/vue3'
-import { onUnmounted } from 'vue'
 
 const form = useForm({
     name: '',
@@ -157,10 +157,6 @@ const submit = () => {
     form.post('/register')
     console.log(form.enrollment_form)
 }
-
-onUnmounted(() => {
-    alertify.confirm().destroy()
-})
 
 const showTerms = () => {
     console.log('show terms');

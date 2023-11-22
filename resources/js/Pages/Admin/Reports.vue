@@ -23,7 +23,12 @@
             <button type="submit" class="btn um-button mt-4">Apply Dates</button>
           </div>
         </div>
-
+        <div class="mb-3">
+              <label for="" class="form-label">Select a Course to filter</label>
+              <select class="form-select" name="" id="" @change="handlePiechartData">
+                <option :value="course.id" v-for="course in courses" :key="course.id">{{ course.name }}</option>
+              </select>
+            </div>
       </div>
     </form>
     <div class="row">
@@ -38,12 +43,7 @@
                 :dataSource="pieDatasource">
               </fusioncharts>
             </div>
-            <div class="mb-3">
-              <label for="" class="form-label">Select a Course to filter</label>
-              <select class="form-select" name="" id="" @change="handlePiechartData">
-                <option :value="course.id" v-for="course in courses" :key="course.id">{{ course.name }}</option>
-              </select>
-            </div>
+            
           </div>
         </div>
       </div>

@@ -39,7 +39,7 @@ const handleDateClick = (selectInfo) => {
 
 const promptContent = (papers) => {
     console.log(papers)
-    const options = papers.map(paper => `<option value="${paper.id}"><strong>Research Titie:</strong> ${paper.author.name}</option>`).join('');
+    const options = papers.map(paper => `<option value="${paper.id}"><strong>Author's Name:</strong> ${paper.author.name}</option>`).join('');
     return `
     <select id="paperSelect" class="form-select mb-3">
       ${options}
