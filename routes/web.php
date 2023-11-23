@@ -80,8 +80,13 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
 
     Route::put('/research-paper/{researchPaper}/update-final-paper-checklist', [AdminController::class, 'updateFinalPaperChecklist'])->name('research-paper.update-final-paper-checklist');
     Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
-    Route::get('/receipts/generate', [PaymentReceiptController::class, 'generatePaymentReceipt'])->name('receipts.generate');
+    Route::get('/receipts/generate/{stage}', [PaymentReceiptController::class, 'generatePaymentReceipt'])->name('receipts.generate');
+    Route::get('/receipts/final-adviser-fee/generate', [PaymentReceiptController::class, 'generateFinalAdviserFee'])->name('receipts.generate-faf');
+
     Route::get('/papers/archived', [AdminController::class, 'showArchivedPapers'])->name('papers.archived');
+
+    //add adviser fee
+    Route::post('/research-paper/{researchPaper}/add-adviser-fee', [AdminController::class, 'addFinalAdviserFeeReciept'])->name('research-paper.add-adviser-fee');
   });
   
   Route::get('/profile', [UserController::class, 'showProfile'])->name('users.profile');

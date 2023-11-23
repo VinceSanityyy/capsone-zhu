@@ -112,8 +112,12 @@ class AdminController extends Controller
                     $updateData['has_submitted_printed_materials'] = true;
                     ActivityLogged::dispatch(auth()->user(), 'Admin checked the printed materials submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
                     break;
+                // case 'has_paid_final_adviser_fee':
+                //     $updateData['has_paid_final_adviser_fee'] = true;
+                //     ActivityLogged::dispatch(auth()->user(), 'Admin checked the submitted final advisers fee for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                //     break;
                 default:
-                    dd(1);
+             
                     break;
             }
         } else {
@@ -135,8 +139,13 @@ class AdminController extends Controller
                     $updateData['has_submitted_printed_materials'] = false;
                     ActivityLogged::dispatch(auth()->user(), 'Admin unchecked the printed materials submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
                     break;
+                case 'has_paid_final_adviser_fee':
+                    $updateData['has_paid_final_adviser_fee'] = false;
+                    $researchPaper->update(['status' => ResearchStatusType::FINAL_SUBMISSION]);
+                    ActivityLogged::dispatch(auth()->user(), 'Admin unchecked the printed materials submitted for research: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+                    break;
                 default:
-                    dd(2);
+            
                     break;
             }
         }
@@ -147,6 +156,40 @@ class AdminController extends Controller
         }
     }
 
+    public function addFinalAdviserFeeReciept(Request $request, ResearchPaper $researchPaper)
+    {
+        if (
+            $researchPaper->has_submitted_manuscript == true
+            && $researchPaper->has_submitted_cd == true
+            && $researchPaper->has_submitted_final_receipt == true
+            && $researchPaper->has_submitted_printed_materials == true
+        ) {
+            $request->validate([
+                'reference_number' => 'required',
+                'amount' => 'required',
+            ]);
+            $researchPaper->update([
+                'has_paid_final_adviser_fee' => true,
+                'status' => ResearchStatusType::COMPLETED
+            ]);
+    
+            $receipt = $researchPaper->receipts()->create([
+                'user_id' => $researchPaper->author->id,
+                'amount' => $request->amount,
+                'reference_number' => $request->reference_number,
+                'stage_submitted' => 'final_submission',
+                'is_approved' => true,
+            ]);
+            ActivityLogged::dispatch(auth()->user(), 'Admin added adviser final fee for the paper: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));
+
+        } else {
+            return response()->json([
+                'message' => 'Please check all the checkboxes first before submitting the final adviser fee.'
+            ], 422);
+        }
+
+    }
+
     private function finalPaperChecklist($researchPaper)
     {
         if (
@@ -154,6 +197,7 @@ class AdminController extends Controller
             && $researchPaper->has_submitted_cd == true
             && $researchPaper->has_submitted_final_receipt == true
             && $researchPaper->has_submitted_printed_materials == true
+            && $researchPaper->has_paid_final_adviser_fee == true
         ) {
             return true;
         }

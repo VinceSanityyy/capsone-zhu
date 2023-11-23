@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean('has_submitted_cd')->default(false);
             $table->boolean('has_submitted_final_receipt')->default(false);
             $table->boolean('has_submitted_printed_materials')->default(false);
+            $table->boolean('has_paid_final_adviser_fee')->default(false);
             $table->integer('plagiarism_counter')->default(0);
             $table->timestamps();
         });

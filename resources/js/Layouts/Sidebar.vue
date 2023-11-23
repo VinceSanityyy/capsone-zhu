@@ -75,22 +75,46 @@
                     </li>
                     <li class="sidebar-item ">
                         <Link class="sidebar-link" href="/admin/reports">
-                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Reports</span>
+                        <i class="bi bi-graph-up"></i><span class="align-middle">Reports</span>
                         </Link>
                     </li>
                     <li class="sidebar-item ">
                         <Link class="sidebar-link" href="/admin/logs">
-                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Logs</span>
+                            <i class="bi bi-box-arrow-in-right"></i><span class="align-middle">Logs</span>
                         </Link>
                     </li>
-                    <li class="sidebar-item ">
-                        <a class="sidebar-link" target = "_blank" href="/admin/receipts/generate">
-                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Generate Receipt</span>
+                    <li class="sidebar-item">
+                        <a data-bs-target="#reports-menu" data-bs-toggle="collapse" class="sidebar-link collapsed"
+                            aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-bar-chart-2 align-middle">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg> <span class="align-middle">Reciepts <i class="bi bi-caret-down-fill"
+                                    style="float: right;"></i></span>
                         </a>
+                        <ul id="reports-menu" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar"
+                            style="">
+                            <li class="sidebar-item ">
+                                <a class="sidebar-link" target="_blank" href="/admin/receipts/final-adviser-fee/generate">
+                                    <i class="bi bi-file-earmark-medical-fill"></i>
+                                    <span class="align-middle">Adviser Final Fee</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item ">
+                                <a class="sidebar-link" href="#" @click="generateDefenseReciepts">
+                                    <i class="bi bi-file-earmark-medical-fill"></i>
+                                    <span class="align-middle">Defense Receipts</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li class="sidebar-item ">
                         <a class="sidebar-link" href="/admin/papers/archived">
-                        <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Archived Papers</span>
+                            <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Archived Papers</span>
                         </a>
                     </li>
                 </div>
@@ -186,7 +210,35 @@
 
 <script setup>
 import { Link } from '@inertiajs/vue3'
+import { onUnmounted } from 'vue'
+const toast = useToast();
+import { useToast } from "vue-toastification";
 
+const generateDefenseReciepts = () => {
+    console.log('clicked')
+    alertify.confirm('Select Stage', '',
+    () => {
+        const stage = document.getElementById('stage').value;
+        console.log('Selected Stage:', stage);
+        window.open(`/admin/receipts/generate/${stage}`, '_blank');
+    },
+    () => {
+        console.log('cancel')
+        toast.error('Action Cancelled')
+    }).setContent(
+        `
+        <select id="stage" class="form-select mb-3">
+          <option selected="" disabled>Open this select menu</option>
+          <option value="title_defense">Title Defense</option>
+          <option value="outline_defense">Outline Defense</option>
+          <option value="final_defense">Final Defense</option>
+        </select>
+        `
+    )
+}
+onUnmounted(() => {
+    alertify.confirm().destroy()
+})
 </script>
 <style scoped>
 /* Sidebar and Sidebar Content */

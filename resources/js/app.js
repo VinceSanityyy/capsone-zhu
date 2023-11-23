@@ -36,8 +36,8 @@ createInertiaApp({
             .use(CKEditor)
             .use(Toast, {
                 position: "top-right",
-                timeout: 5000,
-                closeOnClick: false,
+                timeout: 4000,
+                closeOnClick: true,
                 pauseOnFocusLoss: true,
                 pauseOnHover: false,
                 draggable: false,

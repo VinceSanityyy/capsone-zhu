@@ -95,6 +95,7 @@ class StudentController extends Controller
                         'receipt' => url(Config::get('app.url') . Storage::url($request->file('receipt')->store('receipts', 'public'))),
                         'user_id' => auth()->user()->id,
                         'reference_number' => $request->reference_number,
+                        'stage_submitted' => $research->status,
                         'amount' => $request->amount,
                     ]);
                 }

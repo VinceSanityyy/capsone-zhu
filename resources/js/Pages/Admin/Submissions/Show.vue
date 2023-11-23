@@ -111,7 +111,8 @@
                                                         :key="checklist.id">
                                                         <input :checked="researchPaper[checklist.value]"
                                                             class="form-check-input" type="checkbox"
-                                                            :value="checklist.value" @change="handleFinalSubmissionProcess">
+                                                            :value="checklist.value" @change="handleFinalSubmissionProcess"
+                                                            >
                                                         <span class="form-check-label">
                                                             {{ checklist.label }}
                                                         </span>
@@ -327,7 +328,7 @@
 
 <script setup>
 import { router } from '@inertiajs/vue3'
-import { ref, reactive, onUnmounted } from 'vue'
+import { ref, reactive, onUnmounted, computed } from 'vue'
 import MainLayout from '@/Layouts/MainLayout.vue';
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
@@ -374,20 +375,63 @@ const checkLists = ref([
         checked: false,
         value: 'has_submitted_printed_materials'
     },
+    {
+        label: 'Paid Final advisers fee',
+        checked: false,
+        value: 'has_paid_final_adviser_fee',
+    },
 ]);
 
+
 const handleFinalSubmissionProcess = (e) => {
-    console.log(e.target.checked)
-    router.put(`/admin/research-paper/${researchPaper.id}/update-final-paper-checklist`, { 
-        status: e.target.value,
-        checked: e.target.checked }, {
-        onSuccess: () => {
-            toast.success('Paper Status Updated')
-        },
-        onError: () => {
-            toast.error('Error Updating Status')
-        }
-    })
+
+    if (e.target.value === 'has_paid_final_adviser_fee' && e.target.checked) {
+        alertify.confirm('Enter Receipt details', 'Are you sure you want to mark this as paid?',
+            () => {
+                // Callback for OK button
+                const referenceNumber = document.getElementById('reference_number').value;
+                const amount = document.getElementById('amount').value;
+
+                console.log('Reference Number:', referenceNumber);
+                console.log('Amount:', amount);
+                axios.post(`/admin/research-paper/${researchPaper.id}/add-adviser-fee`, {
+                    status: e.target.value,
+                    checked: e.target.checked,
+                    reference_number: referenceNumber,
+                    amount: amount
+                })
+                .then(response => {
+                    // Handle success
+                    researchPaper.status = 'completed';
+                    toast.success('Receipt Added');
+                })
+                .catch(error => {
+                    // Handle error
+                    e.target.checked = false;
+                    toast.error(error.response.data.message);
+                });
+            },
+            () => {
+                e.target.checked = false;
+                toast.error('Cancelled');
+            }
+        ).setContent(`
+        <label>Enter Reference Number</label><input type="text" class="form-control" id="reference_number">
+        <label>Enter Amount</label><input type="number" class="form-control" id="amount">
+        `);
+    } else {
+        router.put(`/admin/research-paper/${researchPaper.id}/update-final-paper-checklist`, {
+            status: e.target.value,
+            checked: e.target.checked
+        }, {
+            onSuccess: () => {
+                toast.success('Paper Status Updated')
+            },
+            onError: () => {
+                toast.error('Error Updating Status')
+            }
+        })
+    }
 }
 
 const handleResearchStatus = (e) => {
