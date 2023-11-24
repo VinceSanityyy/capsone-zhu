@@ -53,8 +53,8 @@
                                             <label class="form-label">Degree Type</label>
                                             <select class="form-select mb-3" v-model="form.degree_type" name="degree_type">
                                                 <option selected disabled>Select type</option>
-                                                <option value="MASTERAL">Masters</option>
-                                                <option value="DOCTORAL">Doctors</option>
+                                                <option value="masteral">Masters</option>
+                                                <option value="doctoral">Doctors</option>
 
                                             </select>
                                             <div v-if="form.errors.degree_type" class="text-danger">{{
