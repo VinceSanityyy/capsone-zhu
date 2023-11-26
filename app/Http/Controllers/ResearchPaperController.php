@@ -37,7 +37,7 @@ class ResearchPaperController extends Controller
             'adviserComments' => $researchPaper->adviserComments() ?? null,
             'receipts' => $researchPaper->receipts,
         ]);
-    }
+}
 
     public function addPanelMembers(ResearchPaper $researchPaper, Request $request)
     {
@@ -87,7 +87,7 @@ class ResearchPaperController extends Controller
             $researchPaper->latestReceipt->update([
                 'is_approved' => true
             ]);
-            $researchPaper->adviser->notify(new ResearchStatusChanged(auth()->user(), $researchPaper->status));
+            // $researchPaper->adviser->notify(new ResearchStatusChanged(auth()->user(), $researchPaper->status));
             $researchPaper->author->notify(new ResearchStatusChanged(auth()->user(), $researchPaper->status));
         
 

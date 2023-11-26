@@ -130,6 +130,7 @@
                                                 <h3>Defense Status: <span :class="researchPaper?.defense_schedules?.is_done ? 'badge bg-success' : 'badge bg-info'">{{ researchPaper?.defense_schedules?.is_done ? 'Done' : 'Waiting' }}</span></h3>
                                                 <select @change="handleDefenseStatus" class="form-control mb-3"
                                                     v-model="form.defense_status">
+                                                    <option value="" disabled selected>Select Option</option>
                                                     <option value="1"
                                                         :selected="researchPaper.defense_schedules?.is_done == 1">Yes
                                                     </option>

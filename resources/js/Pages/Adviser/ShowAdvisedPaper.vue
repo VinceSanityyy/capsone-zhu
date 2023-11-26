@@ -72,7 +72,7 @@
                                 <div class="tab-pane" id="tab-3" role="tabpanel">
                                     <div>
                                         <br>
-                                        <h4 class="tab-title">Your Previous Comments</h4>
+                                       
                                         <hr>
 
                                     </div>
@@ -86,7 +86,9 @@
                                     <div v-for="comment in adviserComments" :key="comment.id" class="card-body h-100">
                                         <div class="card-body h-50">
 
+                                            <h4 class="tab-title">Your Previous Comments</h4>
                                             <hr>
+                                            
                                             <div class="d-flex align-items-start">
                                                 <img src="https://edukasyon-production.s3.amazonaws.com/uploads/school/avatar/17455/red.jpg"
                                                     width="36" height="36" class="rounded-circle me-2" alt="Charles Hall">
@@ -104,8 +106,9 @@
                                         </div>
 
                                     </div>
-                                    <label class="form-label">Approve Current Status? <strong>{{ paper.status
-                                        }}</strong></label>
+                                    <br>
+                                    <label class="form-label">Approve Current Status?<!----<strong>{{ paper.status
+                                        }}</strong>--></label>
                                         <select v-model="form.approvalStatus" @change="handleApprovalStatusChange"
                                             class="form-select mb-3">
                                             <option value="" disabled selected>Select Option</option>

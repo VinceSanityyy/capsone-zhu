@@ -15,23 +15,29 @@
 </div>
 <div id="mid">
     <div class="info">
-        <hr style = "width:100%;text-align:left;background-color:red;">
-        </hr>
+        <hr style = "width:100%;background-color:red;"></hr>
+        <div id = "currentdate">Date: <strong>*INSERT DATE HERE*<strong></div>
+
+       
 
         <p style = "font-size:12px;font-family:Sans-serif;">TO
             <span style = "margin: right 20px;">:<strong> Accounting Department</strong></span></p>
             <p style = "font-size:12px;font-family:Sans-serif;">FROM
             <span style = "margin: right 2px;">:<strong> Professional Schools</strong></span></p>
             <p style = "font-size:12px;font-family:Sans-serif;">RE
-            <span style = "margin: right 20px;">:<strong> Payment of Final Adviser's Fee</strong></span></p>
+            <span style = "margin: right 20px;">:<strong> Payment of Final Adviser's Fee</strong></span>
+        </p>
 
         <hr style = "width:100%;text-align:left;background-color:red;">
         </hr>
+        
     </div>
+
+   
 </div>
 
 <div id="bot">
-    <p style = "font-size:13px;font-family:Sans-serif;">
+    <p style = "font-size:13px;font-family:Sans-serif;text-align:justify;">
         Please release thru check to the following their corresponding payment for the services rendered
         as adviser (Final Adviser's fee) of the following students:
     </p>
@@ -39,38 +45,36 @@
 
 
     <div id="table" style = "font-size:12px;font-family:Sans-serif;">
-        <strong>
+        
             <table>
                 <thead>
-                    <tr class="tabletitle">
-                        <td class="adviser" align = "left" style = "width:200px; text-align:center">Adviser</td>
-                        <td class="currency" align = "right" style = "width:200px; text-align:center">Currency</td>
-                        <td class="aamount" align = "right" style = "width:200px; text-align:center">Amount</td>
+                    <tr id="Adviserheader">
+                        <td id="tdadviser"><strong>Adviser</strong></td>
+                        <td id="tdcurrency"><strong>Currency</strong></td>
+                        <td id="tdamount"><strong>Amount</strong></td>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach($advisers as $data)
-                    <tr>
-                        <td class="student" align = "left" style = "width:150px; text-align:center">{{ $data['name'] }}</td> 
-                        <td class="student" align = "left" style = "width:150px; text-align:center">PHP</td> 
-                        <td class="student" align = "left" style = "width:150px; text-align:center">{{ $data['amount'] }}</td> 
+                    <tr id = "Adviserdata">
+                        <td id = "adv">{{ $data['name'] }}</td> 
+                        <td>Php</td> 
+                        <td>{{ $data['amount'] }}.00</td> 
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-        </strong>
-    </div>
+</div><br>
 
-    <br>
-
-
-    <div id ="table2" style = " border: 1px solid black;font-size:12px;font-family:Sans-serif;">
+<div id ="Total1" style = " border: 1px solid black;font-size:12px;font-family:Sans-serif;background-color:gray;">
         <strong>
             <table>
                 <thead>
-                    <tr class="tabletitle">
-                        <td class="total" align = "left" style = "width:200px;">Total Amount Requested</td>
-                        <td class="adviser" align = "right" style = "width:200px;">{{$adviserTotalAmount}}</td>
+                    <tr id="Total">
+                        <td id="totalreq">Total Amount Requested</td>
+                        <td id="pesos">Php</td>
+                        <td id="totalamount">{{$adviserTotalAmount}}.00</td>
                         <!--amount should be displayed here-->
                     </tr>
                 </thead>
@@ -82,82 +86,152 @@
 
 
     <div id="table3" style = "font-size:12px;font-family:Sans-serif;">
-        <strong>
-            <u>
+        
+           
                 <table>
                     <thead>
-                        <tr class="tabletitle">
-                            <td class="student" align = "left" style = "width:150px">Student's Name</td>
-                            <td class="adviser" align = "left" style = "width:150px;">Adviser</td>
-                            <td class="degree" align = "left" style = "width:150px;">Degree Type</td>
-                            <td class="amount" align = "left" style = "width:120px;">Amount</td>
-                            <td class="reference" align = "left" style = "width:120px;">Reference Number</td>
+                        <tr id="Studentheader">
+                            <td id="student"><strong>Student's Name</strong></td>
+                            <td id="adviser"><strong>Adviser</strong></td>
+                            <td id="degree"><strong>Degree</strong></td>
+                            <td id="amount"><strong>Amount</strong></td>
+                            <td id="reference"><strong>Reference Number</strong></td>
+                            <td id="date"><strong>Date Issued</strong></td>
                         </tr>
                     </thead>
                     <tbody>
-                        <br>
+
                         @foreach($students as $data)
-                        <tr>
-                            <td class="student" align = "left" style = "width:150px;">{{ $data->user->name }}</td>
-                            <td class="adviser" align = "left" style = "width:150px; ">
-                                {{ $data->researchPaper->adviser->name }}</td>
-                            <td class="degree" align = "left" style = "width:150px; text-align:center">{{ $data->user->degree_type }}
-                            </td>
-                            <td class="amount" align = "left" style = "width:120px; text-align:center">{{ $data->amount }}</td>
-                            <td class="reference" align = "left" style = "width:120px; text-align:center">
-                                {{ $data->reference_number }}</td>
+
+                        <tr id = "Studentdata">
+                            <td id = "stud">{{ $data->user->name }}</td>
+                            <td id = "adv">{{ $data->researchPaper->adviser->name }}</td>
+                            <td>{{ $data->user->degree_type }}</td>
+                            <td>{{ $data->amount }}.00</td>
+                            <td>{{ $data->reference_number }}</td>
                         </tr>
                         @endforeach
                     </tbody>
-                </table>
-            </u>
-        </strong>
-    </div>
+                    </table>
 
-    <br>
-
-
-    <div id ="table4" style = "border: 1px solid black;font-size:12px;font-family:Sans-serif;">
+<br>
+<div id ="Total2" style = "border: 1px solid black;font-size:12px;font-family:Sans-serif;background-color:gray;
+    ">
         <strong>
             <table>
-                <tr class="tabletitle">
-                    <td class="total" align = "left" style = "width:200px;">Total Payment Made by Students</td>
-                    <td class="adviser" align = "right" style = "width:300px;"> {{ $studentTotalAmount }}</td>
+                <tr id="Totalpayment">
+                    <td id = "payment">Total Payment Made by Students</td>
+                    <td id = "blank1"></td>
+                    <td id = "blank2"></td>
+                    <td id = "paymentamount">{{ $studentTotalAmount }}.00</td>
+                    <td id = "blank3"></td>
                     <!--amount should be displayed here-->
                 </tr>
-            </table>
+                </table>
         </strong>
     </div>
 
-    <p style = "font-size:10px;font-family:Sans-serif;"><i>*Please see attached receipts. Thank you*</i></p>
+<style>
 
-    <div id="footer"
-        style = "clear:both;position:absolute;bottom:50px;width:1250px;font-family:Sans-serif;font-size:13px;text-align:left;">
+#Adviserheader, #Studentheader {
+    background-color: #78c0c4;
+    border: white solid 1rem;
+    text-align: center;
+}
+#tdadviser, #tdcurrency, #tdamount {
+    width:230px;
+    text-align:center;
+}
+#Adviserdata, #Studentdata{
+    text-align:center; 
+}
+#stud, #adv{
+    text-align:left; 
+}
+#pesos, #totalamount {
+    width:230px;
+    text-align:center; 
+}
+#totalreq{
+    text-align:left;
+    width:230px;
+}
+#degree, #amount, #paymentamount {
+    width:75px;
+    text-align:center;
+}
+#date {
+    width:100px;
+}
+#adviser, #student, #blank3{ 
+    width: 150px;
+}
+#payment{
+    width: 350px;
+}
+#blank1, #blank2{ 
+    width: 12px;
+}
+#reference {
+    width: 130px;
+}
+#PB, #Signature1, #Role1 {
+    width: 180px;
+    text-align:left;
+}
+#RA, #Signature2, #Role2 {
+    width: 210px;
+    text-align:left;
+}
+#NB, #Signature3, #Role3{
+    width: 180px;
+    text-align:left;
+}
+#currentdate{
+    float:right;
+    width:160px;
+    height:10px;
+    font-family:Sans-serif;
+    text-align:left;
+    font-size:12px;
+}
+#footer{
+clear:both;
+bottom:20px;
+font-family:Sans-serif;
+font-size:13px;
+text-align:left;
+page-break-before:avoid;
+position:fixed;
+}
+</style>
 
+<p style = "font-size:10px;font-family:Sans-serif;"><i>*Please see attached receipts. Thank you*</i></p>
+
+<div id="footer">
         <table>
-            <tr class="tabletitle">
-                <td class="adviser" align = "left" style = "width:150px;">Prepared by:</td>
-                <td class="currency" align = "right" style = "width:215px;">Recommending Approval:</td>
-                <td class="aamount" align = "right" style = "width:120px;">Noted by:</td>
+            <tr class="Table6">
+                <td id ="PB">Prepared by:</td>
+                <td id ="RA">Recommending Approval:</td>
+                <td id ="NB">Noted by:</td>
             </tr>
         </table>
         <br>
 
         <strong>
             <table>
-                <tr class="tabletitle" style = "text-align:left;">
-                    <td class="adviser" align = "left" style = "width:150px;">ARNIEMEE V. NUDALO</td>
-                    <td class="currency" align = "right" style = "width:247px;">MA. LINDA B. ARQUIZA, EdD</td>
-                    <td class="aamount" align = "right" style = "width:213px;">EUGENIO S. GUHAO JR., DM</td>
+                <tr class="Table7">
+                    <td id="Signature1">ARNIEMEE V. NUDALO</td>
+                    <td id="Signature2">MA. LINDA B. ARQUIZA, EdD</td>
+                    <td id="Signature3">EUGENIO S. GUHAO JR., DM</td>
                 </tr>
             </table>
         </strong>
         <table>
-            <tr class="tabletitle" style = "text-align:left;font-size:12px;">
-                <td class="adviser" align = "left" style = "width:200px;">Research Administrative Assistant</td>
-                <td class="currency" align = "right" style = "width:100px;">Assistant Dean</td>
-                <td class="aamount" align = "right" style = "width:160px;">Dean</td>
+            <tr class="Table8">
+                <td id="Role1">Research Administrative Assistant</td>
+                <td id="Role2">Assistant Dean</td>
+                <td id="Role3">Dean</td>
             </tr>
         </table>
-
-    </div>
+</div>

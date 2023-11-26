@@ -61,7 +61,7 @@ class UsersSeeder extends Seeder
         }
 
         // Create 15 random student users using Faker
-        for ($i = 1; $i <= 50; $i++) { // <- number of students
+        for ($i = 1; $i <= 500; $i++) { // <- number of students
             $course = Course::inRandomOrder()->first();
             $degree_type = $course->program_type->value && str_contains(strtolower($course->program_type->value), 'masteral') ? 'masteral' : 'doctoral';
             

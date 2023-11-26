@@ -287,7 +287,7 @@ const cards = ref([
 }
 
 .cards:hover {
-  box-shadow: 5px 6px 6px 2px #e0ba1f;
+  box-shadow: 5px 6px 6px 2px #f5c60a;
   transform: scale(1.1);
 }
 </style>

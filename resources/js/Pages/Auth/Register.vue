@@ -42,14 +42,6 @@
                                                 form.errors.phone_number }}</div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Program</label>
-                                            <select class="form-select mb-3" v-model="form.course_id" name="course_id">
-                                                <option value="" selected disabled>Select a program</option>
-                                                <option v-for="course in courses" :key="course.id" :value="course.id">{{
-                                                    course.name }}</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
                                             <label class="form-label">Degree Type</label>
                                             <select class="form-select mb-3" v-model="form.degree_type" name="degree_type">
                                                 <option selected disabled>Select type</option>
@@ -60,6 +52,15 @@
                                             <div v-if="form.errors.degree_type" class="text-danger">{{
                                                 form.errors.degree_type }}</div>
                                         </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Program</label>
+                                            <select class="form-select mb-3" v-model="form.course_id" name="course_id">
+                                                <option value="" selected disabled>Select a program</option>
+                                                <option v-for="course in courses" :key="course.id" :value="course.id">{{
+                                                    course.name }}</option>
+                                            </select>
+                                        </div>
+                                       
                                         <div class="mb-3">
                                             <label class="form-label">School Year</label>
                                             <input class="form-control form-control-lg" type="text" name="school_year"

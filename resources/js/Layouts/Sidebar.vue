@@ -3,15 +3,13 @@
     <nav id="sidebar" class="sidebar js-sidebar">
         <div class="sidebar-content js-simplebar">
             <a class="sidebar-brand" href="index.html">
-                <img src="https://crms.umin.edu.ph/images/logo.jpg" alt="" width="200" height="50" class="border">
+                <img src="Images/Logo.png" alt="" width="215" height="200" align = "center">
                 <!-- <span class="align-middle">AdminPanel</span> -->
             </a>
 
             <ul class="sidebar-nav">
                 <div v-if="$page.props.user.roles.includes('admin')">
-                    <li class="sidebar-header">
-                        Admin Menu
-                    </li>
+                    
                     <li class="sidebar-item">
                         <a data-bs-target="#dashboard-menu" data-bs-toggle="collapse" class="sidebar-link collapsed"
                             aria-expanded="false">
@@ -92,7 +90,7 @@
                                 <line x1="18" y1="20" x2="18" y2="10"></line>
                                 <line x1="12" y1="20" x2="12" y2="4"></line>
                                 <line x1="6" y1="20" x2="6" y2="14"></line>
-                            </svg> <span class="align-middle">Reciepts <i class="bi bi-caret-down-fill"
+                            </svg> <span class="align-middle">Receipts <i class="bi bi-caret-down-fill"
                                     style="float: right;"></i></span>
                         </a>
                         <ul id="reports-menu" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar"
@@ -100,7 +98,7 @@
                             <li class="sidebar-item ">
                                 <a class="sidebar-link" target="_blank" href="/admin/receipts/final-adviser-fee/generate">
                                     <i class="bi bi-file-earmark-medical-fill"></i>
-                                    <span class="align-middle">Adviser Final Fee</span>
+                                    <span class="align-middle">Final Adviser's Fee</span>
                                 </a>
                             </li>
                             <li class="sidebar-item ">
@@ -181,7 +179,7 @@
                     </li>
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/panel/panelled-papers">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Panelled Papers</span>
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Students Under Evaluation</span>
                         </Link>
                     </li>
                 </div>
@@ -198,7 +196,7 @@
                     </li> -->
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/adviser/advised-papers">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Advised Papers</span>
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Advisees</span>
                         </Link>
                     </li>
                 </div>
@@ -310,5 +308,9 @@ a.sidebar-link:hover svg {
 .sidebar-item.active>.sidebar-link {
     border-left-color: black;
     color: #af2532;
+}
+.span{
+
+    text-align:right;
 }
 </style>

@@ -25,73 +25,108 @@
     <div id="mid">
         <div class="info">
             <hr style = "width:100%;text-align:left;background-color:red;">
+            <div id = "currentdate">Date: <strong>*INSERT DATE HERE*<strong></div><br><br>
             </hr>
             <br>
 
-            <div id="table" style = "font-size:12px;font-family:Sans-serif;">
-              
-
+            <div id="table3" style = "font-size:12px;font-family:Sans-serif;">
+        
+           
                 <table>
-
                     <thead>
-                        <tr class="tabletitle">
-
-                            <th class="student" align = "left" style = "width:150px text-align:center"><strong>Student's
-                                    Name</strong>
-                            </th>
-                            <th class="adviser" align = "left" style = "width:150px text-align:center;">
-                                <strong>Adviser</strong></th>
-                            <th class="degree" align = "left" style = "width:150px; text-align:center"><strong>Degree
-                                    Type</strong></th>
-
-                            <th class="amount" align = "left" style = "width:120px; text-align:center">
-                                <strong>Amount</strong></th>
-                            <th class="reference" align = "left" style = "width:120px; text-align:center">Reference
-                                Number</strong></th>
-
+                        <tr id="Studentheader">
+                            <td id="student"><strong>Student's Name</strong></td>
+                            <td id="adviser"><strong>Adviser</strong></td>
+                            <td id="degree"><strong>Degree</strong></td>
+                            <td id="amount"><strong>Amount</strong></td>
+                            <td id="reference"><strong>Reference Number</strong></td>
+                            <td id="date"><strong>Date Issued</strong></td>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($receipts as $data)
-                            <tr>
 
-                                <td class="student" align = "left" style = "width:150px text-align:center">
-                                    {{ $data->user->name }}</td>
-                                <td class="adviser" align = "left" style = "width:150px; text-align:center">
-                                    {{ $data->researchPaper->adviser->name }}</td>
-                                <td class="degree" align = "left" style = "width:150px; text-align:center">
-                                    {{ $data->user->degree_type }}
-                                </td>
-                                <td class="amount" align = "left" style = "width:120px; text-align:center">
-                                    {{ $data->amount }}</td>
-                                <td class="reference" align = "left" style = "width:120px; text-align:center">
-                                    {{ $data->reference_number }}</td>
-                            </tr>
+                        @foreach($receipts as $data)
+
+                        <tr id = "Studentdata">
+                            <td id = "stud">{{ $data->user->name }}</td>
+                            <td id = "adv">{{ $data->researchPaper->adviser->name }}</td>
+                            <td>{{ $data->user->degree_type }}</td>
+                            <td>{{ $data->amount }}.00</td>
+                            <td>{{ $data->reference_number }}</td>
+                        </tr>
                         @endforeach
-
                     </tbody>
+                    </table>
+</div>
+</div>
+</div>
+
+<style>
+#Studentheader {
+    background-color: #78c0c4;
+    border: white solid 1rem;
+    text-align: center;
+}
+#Studentdata {
+    text-align:center; 
+}
+#date {
+width:100px;
+}
+#degree {
+    width:75px;
+    text-align:center;
+}
+#blank1, #blank2 {
+    width: 12px;
+}
+#adviser, #student, #blank3{ 
+    width: 150px;
+}
+#payment {
+    width: 350px;
+}
+#amount, #paymentamount {
+    width:95px;
+    text-align:center;
+}
+#reference {
+    width: 110px;
+}
+#stud, #adv{
+    text-align:left; 
+}
+#currentdate{
+    float:left;
+    width:160px;
+    height:10px;
+    font-family:Sans-serif;
+    text-align:left;
+    font-size:12px;
+}
+
+</style>
+<br>
+<div id ="Total2" style = "border: 1px solid black;font-size:12px;font-family:Sans-serif;background-color:gray;
+    ">
+        <strong>
+            <table>
+                <tr id="Totalpayment">
+                    <td id = "payment">Total Payment Made by Students for <strong>{{$stage}}</strong></td>
+                    <td id = "blank1"></td>
+                    <td id = "blank2"></td>
+                    <td id = "paymentamount"><strong>{{ $totalAmount }}.00</strong></td>
+                    <td id = "blank3"></td>
+                    <!--amount should be displayed here-->
+                </tr>
                 </table>
-
-            </div>
-
-            <br>
+        </strong>
+    </div>
 
 
-            <div id ="table4" style = "border: 1px solid black;font-size:12px;font-family:Sans-serif;">
-
-                <table>
-                    <tr class="tabletitle">
-                        <td class="total" align = "left" style = "width:300px;">Total Payment Made by Students for <strong>{{$stage}}</strong> </td>
-                        <td class="adviser" align = "right" style = "width:185px; text-align:right">
-                            <strong>{{ $totalAmount }}</strong>
-                        </td><!--amount should be displayed here-->
-                    </tr>
-                </table>
-
-            </div>
 
             <p style = "font-size:10px;font-family:Sans-serif;"><i>*Please see attached receipts. Thank you*</i></p>
-
+<!--
             <div id="footer"
                 style = "clear:both;position:absolute;bottom:50px;width:1250px;font-family:Sans-serif;font-size:13px;text-align:left;">
 
@@ -122,7 +157,7 @@
                 </table>
 
             </div>
-
+-->
 </body>
 
 </html>

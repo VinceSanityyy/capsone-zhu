@@ -153,7 +153,7 @@
                                                     placeholder="">
                                                 <div v-if="form.errors.document" class="text-danger">{{
                                                     form.errors.document }}</div>
-                                                <small id="helpId" class="form-text text-muted">Pdf only</small>
+                                                <small id="helpId" class="form-text text-muted">Submit PDF</small>
                                             </div>
 
                                             <div class="mb-3"

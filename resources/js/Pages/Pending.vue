@@ -83,7 +83,7 @@
         <div class="pt-5">
           <div class="d-flex flex-column justify-content-center align-items-center pt-3">
             <h2 class="text-center">Account Locked</h2>
-            <p class="text-center">Your account is pending approval by our admin team. We've received your registration or login attempt. Once approved, you'll be able to access all the features.</p>
+            <p class="text-center">Your account is pending for approval by the Admin. Please check on your email for updates before logging in.</p>
   
             <Link href="/login" style="background: #af2532; color: #fff" class="btn">Back to login</Link>
           </div>
