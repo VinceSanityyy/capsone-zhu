@@ -215,24 +215,40 @@ import { useToast } from "vue-toastification";
 const generateDefenseReciepts = () => {
     console.log('clicked')
     alertify.confirm('Select Stage', '',
-    () => {
-        const stage = document.getElementById('stage').value;
-        console.log('Selected Stage:', stage);
-        window.open(`/admin/receipts/generate/${stage}`, '_blank');
-    },
-    () => {
-        console.log('cancel')
-        toast.error('Action Cancelled')
-    }).setContent(
-        `
+        () => {
+            const stage = document.getElementById('stage').value;
+            const from = document.getElementById('start_date').value;
+            const to = document.getElementById('end_date').value;
+
+            if(stage == '' || from == '' || to == ''){
+                toast.error('Please fill up all fields')
+                return;
+            }
+            window.open(`/admin/receipts/generate/${stage}/${from}/${to}`, '_blank');
+        },
+        () => {
+            console.log('cancel')
+            toast.error('Action Cancelled')
+        }).setContent(
+            `
         <select id="stage" class="form-select mb-3">
           <option selected="" disabled>Open this select menu</option>
           <option value="title_defense">Title Defense</option>
           <option value="outline_defense">Outline Defense</option>
           <option value="final_defense">Final Defense</option>
         </select>
+
+        <div class="row">
+            <div class="col">
+                <label for="start_date">Start Date</label>
+                <input type="date" id="start_date" class="form-control">
+            </div>
+            <div class="col">
+                <label for="end_date">End Date</label>
+                <input type="date" id="end_date" class="form-control">
+            </div>
         `
-    )
+        )
 }
 onUnmounted(() => {
     alertify.confirm().destroy()

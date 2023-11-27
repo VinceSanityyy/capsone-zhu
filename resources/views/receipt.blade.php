@@ -16,7 +16,7 @@
 <div id="mid">
     <div class="info">
         <hr style = "width:100%;background-color:red;"></hr>
-        <div id = "currentdate">Date: <strong>*INSERT DATE HERE*<strong></div>
+        <div id = "currentdate">Date: <strong>{{\Carbon\Carbon::now()->format('F d, Y')}}<strong></div>
 
        
 
@@ -109,6 +109,7 @@
                             <td>{{ $data->user->degree_type }}</td>
                             <td>{{ $data->amount }}.00</td>
                             <td>{{ $data->reference_number }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->date_submitted)->format('M d, Y') }}</td>
                         </tr>
                         @endforeach
                     </tbody>

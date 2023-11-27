@@ -167,6 +167,7 @@ class AdminController extends Controller
             $request->validate([
                 'reference_number' => 'required',
                 'amount' => 'required',
+                'date' => 'required',
             ]);
             $researchPaper->update([
                 'has_paid_final_adviser_fee' => true,
@@ -178,6 +179,7 @@ class AdminController extends Controller
                 'amount' => $request->amount,
                 'reference_number' => $request->reference_number,
                 'stage_submitted' => 'final_submission',
+                'date_submitted' => $request->date,
                 'is_approved' => true,
             ]);
             ActivityLogged::dispatch(auth()->user(), 'Admin added adviser final fee for the paper: '.$researchPaper->title.'  on ' . now()->format('M d, Y h:i A'));

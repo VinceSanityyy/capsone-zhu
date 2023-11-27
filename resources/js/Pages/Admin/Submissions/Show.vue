@@ -392,14 +392,16 @@ const handleFinalSubmissionProcess = (e) => {
                 // Callback for OK button
                 const referenceNumber = document.getElementById('reference_number').value;
                 const amount = document.getElementById('amount').value;
-
+                const date = document.getElementById('date').value;
                 console.log('Reference Number:', referenceNumber);
                 console.log('Amount:', amount);
+                console.log('Date:', document.getElementById('date').value);
                 axios.post(`/admin/research-paper/${researchPaper.id}/add-adviser-fee`, {
                     status: e.target.value,
                     checked: e.target.checked,
                     reference_number: referenceNumber,
-                    amount: amount
+                    amount: amount,
+                    date: date
                 })
                 .then(response => {
                     // Handle success
@@ -419,6 +421,7 @@ const handleFinalSubmissionProcess = (e) => {
         ).setContent(`
         <label>Enter Reference Number</label><input type="text" class="form-control" id="reference_number">
         <label>Enter Amount</label><input type="number" class="form-control" id="amount">
+        <label>Date Submitted: </label><input type="date" class="form-control" id="date">
         `);
     } else {
         router.put(`/admin/research-paper/${researchPaper.id}/update-final-paper-checklist`, {

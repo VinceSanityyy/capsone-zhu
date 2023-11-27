@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('amount', 8, 2);
             $table->string('reference_number');
             $table->string('stage_submitted')->nullable();
+            $table->dateTime('date_submitted')->nullable();
             $table->boolean('is_approved')->default(false);
             $table->timestamps();
         });

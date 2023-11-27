@@ -80,7 +80,7 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
 
     Route::put('/research-paper/{researchPaper}/update-final-paper-checklist', [AdminController::class, 'updateFinalPaperChecklist'])->name('research-paper.update-final-paper-checklist');
     Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
-    Route::get('/receipts/generate/{stage}', [PaymentReceiptController::class, 'generatePaymentReceipt'])->name('receipts.generate');
+    Route::get('/receipts/generate/{stage}/{from}/{to}', [PaymentReceiptController::class, 'generatePaymentReceipt'])->name('receipts.generate');
     Route::get('/receipts/final-adviser-fee/generate', [PaymentReceiptController::class, 'generateFinalAdviserFee'])->name('receipts.generate-faf');
 
     Route::get('/papers/archived', [AdminController::class, 'showArchivedPapers'])->name('papers.archived');

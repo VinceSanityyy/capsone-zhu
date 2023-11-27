@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\PaymentReceipt;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 class PaymentReceiptController extends Controller
 {
-    public function generatePaymentReceipt($stage)
+    public function generatePaymentReceipt($stage, $from, $to)
     {
+        $from = Carbon::createFromFormat('Y-m-d', $from)->startOfDay();
+        $to = Carbon::createFromFormat('Y-m-d', $to)->endOfDay();
+        // dd($from, $to);
         $receipts = PaymentReceipt::with('user','researchPaper.adviser')
         ->where('stage_submitted', $stage)
-        ->where('is_approved', true)->get();
-        
+        ->where('is_approved', true)
+        ->whereBetween('created_at', [$from, $to])
+        ->get();
         $totalAmount = $receipts->sum('amount');
         $pdf = App::make('dompdf.wrapper');
         $pdf->setPaper('A4');
