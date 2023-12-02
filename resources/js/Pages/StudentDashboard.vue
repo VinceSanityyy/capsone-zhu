@@ -1,5 +1,7 @@
 <template>
     <MainLayout>
+    <div class="row mb-2 mb-xl-3">
+      <div class="col-auto d-none d-sm-block">
         <h1 class="h3 mb-3" style = "color:white;"><strong></strong>Announcements</h1>
         <div class="row">
             <div class="col-12">
@@ -9,7 +11,7 @@
                     </div>
                     <div class="card-body h-100" v-for="announcement in sortedAnnouncements" :key="announcement.id">
                         <div class="d-flex align-items-start">
-                            <img src="https://edukasyon-production.s3.amazonaws.com/uploads/school/avatar/17455/red.jpg"
+                            <img src="Images/announcement.png"
                                 width="36" height="36" class="rounded-circle me-2" alt="Charles Hall">
                             <div class="flex-grow-1">
                                 <!-- <small class="float-end text-navy"></small> -->
@@ -28,6 +30,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    </div>
         <!-- {{ announcements }} -->
 
     </MainLayout>

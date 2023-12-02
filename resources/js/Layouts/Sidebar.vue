@@ -1,11 +1,12 @@
 
 <template>
+    <br><br>
     <nav id="sidebar" class="sidebar js-sidebar">
         <div class="sidebar-content js-simplebar">
-            <a class="sidebar-brand" href="index.html">
-                <img src="Images/Logo.png" alt="" width="215" height="200" align = "center">
+            <a class="sidebar-brand" href="index.html" >
+                <img src="Images/banner.png" alt="Logo" style = "height:250px;padding: 0px;">
                 <!-- <span class="align-middle">AdminPanel</span> -->
-            </a>
+            </a><br>
 
             <ul class="sidebar-nav">
                 <div v-if="$page.props.user.roles.includes('admin')">
@@ -26,12 +27,12 @@
                             style="">
                             <li class="sidebar-item">
                                 <Link class="sidebar-link" href="/dashboard">
-                                <i class="bi bi-bar-chart-steps"></i><span class="align-middle">Overview</span>
+                                <i class="bi bi-bar-chart-steps" style = "padding-left: 50px;"></i><span class="align-middle">Overview</span>
                                 </Link>
                             </li>
                             <li class="sidebar-item">
                                 <Link class="sidebar-link " href="/admin/schedules">
-                                <i class="bi bi-calendar-check"></i><span class="align-middle">Scheduling</span>
+                                <i class="bi bi-calendar-check" style = "padding-left: 50px;"></i><span class="align-middle">Scheduler</span>
                                 </Link>
                             </li>
                         </ul>
@@ -39,23 +40,23 @@
                     <li class="sidebar-item">
                         <a data-bs-target="#charts" data-bs-toggle="collapse" class="sidebar-link collapsed"
                             aria-expanded="false">
-                            <i class="bi bi-people"></i> <span class="align-middle">User Management <i
+                            <i class="bi bi-people"></i> <span class="align-middle">&nbsp;User Management <i
                                     class="bi bi-caret-down-fill" style="float: right;"></i></span>
                         </a>
                         <ul id="charts" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar" style="">
                             <li class="sidebar-item">
                                 <Link class="sidebar-link" href="/admin/users-pending">
-                                <i class="bi bi-person-dash-fill"></i><span class="align-middle">Pending Users</span>
+                                <i class="bi bi-person-dash-fill" style = "padding-left: 50px;"></i><span class="align-middle">Pending Users</span>
                                 </Link>
                             </li>
                             <li class="sidebar-item">
                                 <Link class="sidebar-link " href="/admin/users">
-                                <i class="bi bi-person-check-fill"></i><span class="align-middle">Approved Users</span>
+                                <i class="bi bi-person-check-fill" style = "padding-left: 50px;"></i><span class="align-middle">Approved Users</span>
                                 </Link>
                             </li>
                             <li class="sidebar-item">
                                 <Link class="sidebar-link " href="/admin/users/create">
-                                <i class="bi bi-person-plus-fill"></i><span class="align-middle">Add New User</span>
+                                <i class="bi bi-person-plus-fill" style = "padding-left: 50px;"></i><span class="align-middle">Add New User</span>
                                 </Link>
                             </li>
                         </ul>
@@ -68,17 +69,12 @@
                     </li> -->
                     <li class="sidebar-item ">
                         <Link class="sidebar-link" href="/admin/announcements">
-                        <i class="bi bi-exclamation-triangle"></i> <span class="align-middle">Announcements</span>
+                        <i class="bi bi-exclamation-triangle"></i> <span class="align-middle">&nbsp;Announcements</span>
                         </Link>
                     </li>
                     <li class="sidebar-item ">
                         <Link class="sidebar-link" href="/admin/reports">
-                        <i class="bi bi-graph-up"></i><span class="align-middle">Reports</span>
-                        </Link>
-                    </li>
-                    <li class="sidebar-item ">
-                        <Link class="sidebar-link" href="/admin/logs">
-                            <i class="bi bi-box-arrow-in-right"></i><span class="align-middle">Logs</span>
+                        <i class="bi bi-graph-up"></i><span class="align-middle">&nbsp; Reports</span>
                         </Link>
                     </li>
                     <li class="sidebar-item">
@@ -90,29 +86,35 @@
                                 <line x1="18" y1="20" x2="18" y2="10"></line>
                                 <line x1="12" y1="20" x2="12" y2="4"></line>
                                 <line x1="6" y1="20" x2="6" y2="14"></line>
-                            </svg> <span class="align-middle">Receipts <i class="bi bi-caret-down-fill"
+                            </svg> <span class="align-middle"> Generate Receipt <i class="bi bi-caret-down-fill"
                                     style="float: right;"></i></span>
                         </a>
                         <ul id="reports-menu" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar"
                             style="">
                             <li class="sidebar-item ">
                                 <a class="sidebar-link" target="_blank" href="/admin/receipts/final-adviser-fee/generate">
-                                    <i class="bi bi-file-earmark-medical-fill"></i>
+                                    <i class="bi bi-file-earmark-medical-fill" style = "padding-left: 50px;"></i>
                                     <span class="align-middle">Final Adviser's Fee</span>
                                 </a>
                             </li>
                             <li class="sidebar-item ">
                                 <a class="sidebar-link" href="#" @click="generateDefenseReciepts">
-                                    <i class="bi bi-file-earmark-medical-fill"></i>
+                                    <i class="bi bi-file-earmark-medical-fill" style = "padding-left: 50px;"></i>
                                     <span class="align-middle">Defense Receipts</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
+                    <li class="sidebar-item ">
+                        <Link class="sidebar-link" href="/admin/logs">
+                            <i class="bi bi-box-arrow-in-right"></i><span class="align-middle">&nbsp; Logs</span>
+                        </Link>
+                    </li>
+                    
 
                     <li class="sidebar-item ">
                         <a class="sidebar-link" href="/admin/papers/archived">
-                            <i class="bi bi-exclamation-triangle"></i><span class="align-middle">Archived Papers</span>
+                            <i class="bi bi-exclamation-triangle"></i><span class="align-middle">&nbsp; Archived Papers</span>
                         </a>
                     </li>
                 </div>
@@ -168,7 +170,7 @@
 
                 <div v-if="$page.props.user.roles.includes('panel')">
 
-                    <li class="sidebar-header">
+                    <li class="sidebar-header" style = "color:#090c29;">
                         Panel Menu
                     </li>
 
@@ -179,14 +181,14 @@
                     </li>
                     <li class="sidebar-item">
                         <Link class="sidebar-link" href="/panel/panelled-papers">
-                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Students Under Evaluation</span>
+                        <i class="bi bi-bar-chart-line"></i><span class="align-middle">Under Evaluation</span>
                         </Link>
                     </li>
                 </div>
 
                 <div v-if="$page.props.user.roles.includes('adviser')">
 
-                    <li class="sidebar-header">
+                    <li class="sidebar-header" style = "color:#090c29;">
                         Adviser Menu
                     </li>
                     <!-- <li class="sidebar-item">
@@ -202,9 +204,16 @@
                 </div>
 
             </ul>
+            <div class="navbot">
+                <a class="sidebar-brand" href="index.html" >
+                <img id = "pic" src="Images/bot.png" alt="" style = "height:190px;padding: 0px;">
+                <!-- <span class="align-middle">AdminPanel</span> --></a></div>
         </div>
+        
     </nav>
 </template>
+
+
 
 <script setup>
 import { Link } from '@inertiajs/vue3'
@@ -258,25 +267,28 @@ onUnmounted(() => {
 /* Sidebar and Sidebar Content */
 .sidebar,
 .sidebar-content {
-    background: #af2532;
+    background: white;
+
 }
 
-/* Sidebar Brand */
-.sidebar-brand {
-    color: black;
+.sidebar-brand{
+color: #f8f9fa;
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 600;
+    padding: 0rem 0rem;
 }
+.simplebar-tracksimplebar-vertical{
+ background-color: #af2532;
 
-.sidebar-brand:hover {
-    color: black;
-    /* Change the color to white on hover */
 }
-
 /* Sidebar Links and Anchor Links */
 .sidebar-link,
 a.sidebar-link {
-    background: #af2532;
-    color: white;
+    background: white;
+    color: #090c29;
     font-weight: bold;
+    font-family:sans-serif;
 }
 
 /* Sidebar Header */
@@ -290,7 +302,7 @@ a.sidebar-link {
 .sidebar-item.active>.sidebar-link {
     border-left-color: black;
     color: #fff;
-    background: #af2532;
+    background: white;
 }
 
 /* Sidebar Icons and SVGs */
@@ -298,9 +310,10 @@ a.sidebar-link {
 .sidebar-link svg,
 a.sidebar-link i,
 a.sidebar-link svg {
-    color: white;
-    margin-right: 0.75rem;
-    transition: color 0.3s;
+    color: #090c29;
+    margin-right: 0.90rem;
+    
+    transition: color 0.1s;
     /* Add a smooth color transition */
 }
 
@@ -309,21 +322,21 @@ a.sidebar-link svg {
 .sidebar-link:hover svg,
 a.sidebar-link:hover i,
 a.sidebar-link:hover svg {
-    color: #fff;
+    color: white;
     /* Change the color on hover */
 }
 
 /* Background color and border styles on hover */
 .sidebar-link:hover {
-    background: #e0ba1f;
-    color: #fff;
+    background: #090c29;
+    color: #CFCFC4;
     border-left-color: black;
 }
 
 .sidebar-item.active .sidebar-link:hover,
 .sidebar-item.active>.sidebar-link {
     border-left-color: black;
-    color: #af2532;
+    color: #090c29;
 }
 .span{
 

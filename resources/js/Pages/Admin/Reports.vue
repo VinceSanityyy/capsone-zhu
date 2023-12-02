@@ -1,30 +1,30 @@
 <template>
   <MainLayout>
-    <h1 class="h3 mb-3"><strong></strong>Reports</h1>
+    <h1 class="h3 mb-3" style = "color:white;"><strong></strong>Reports</h1>
     <form @submit.prevent="handleDateFilter">
       <div class="row">
 
         <div class="col-md-4">
           <div class="mb-3">
-            <label for="" class="form-label">From</label>
+            <label for="" class="form-label" style = "color:white;">From</label>
             <input v-model="form.from" type="date" name="" id="" class="form-control" placeholder=""
               aria-describedby="helpId">
           </div>
         </div>
         <div class="col-md-4">
           <div class="mb-3">
-            <label for="" class="form-label">To</label>
+            <label for="" class="form-label" style = "color:white;">To</label>
             <input v-model="form.to" type="date" name="" id="" class="form-control" placeholder=""
               aria-describedby="helpId">
           </div>
         </div>
         <div class="col-md-4">
           <div class="mb-3">
-            <button type="submit" class="btn um-button mt-4">Apply Dates</button>
+            <button type="submit" class="btn um-button mt-4" style = "background-color:#e0ba1f;">Apply Dates</button>
           </div>
         </div>
         <div class="mb-3">
-              <label for="" class="form-label">Select a Course to filter</label>
+              <label for="" class="form-label" style = "color:white;">Select a Course to filter</label>
               <select class="form-select" name="" id="" @change="handlePiechartData">
                 <option :value="course.id" v-for="course in courses" :key="course.id">{{ course.name }}</option>
               </select>
@@ -114,7 +114,7 @@ const handlePiechartData = async (e) => {
 const pieDatasource = computed(() => {
   return {
     chart: {
-      caption: 'Number of students that are done in the defense process per program type',
+      caption: 'Progress Monitoring per Program',
       subcaption: '',
       theme: 'fusion',
       showPercentValues: 0,

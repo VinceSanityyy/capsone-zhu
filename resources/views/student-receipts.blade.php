@@ -9,7 +9,7 @@
 
 <body>
 
-    <img src = "Images/Logo.jpg" alt = "logo" height = "75px" width = "230px" />
+    <img src = "Images/Logo.png" alt = "logo" height = "75px" width = "230px" />
 
     <span class="right_header"
         style = "float:right;height:70px;width:200px;text-align:right;font-family:Sans-serif;font-size:13px;">

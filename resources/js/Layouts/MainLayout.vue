@@ -3,7 +3,7 @@
         <Sidebar />
         <div class="main">
             <Navbar />
-            <main class="content" style = "background-image: url('Images/background.jpg'); background-attachment:fixed; background-size: cover;">
+            <main class="content" style = "background-color: #090c29;">
                 <div class="container-fluid p-0">
                     <slot />
                 </div>

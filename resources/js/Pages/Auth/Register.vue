@@ -1,7 +1,7 @@
 <template>
     <main class="d-flex w-100" style = "background-image: url('Images/background.jpg'); background-attachment:fixed; background-size: cover;">
         <div class="container d-flex flex-column">
-            <div class="row vh-100">
+            <div class="row vh-200">
                 <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
                     <div class="d-table-cell align-middle">
                         <div class="text-center mt-4">
@@ -16,80 +16,130 @@
                                     <form @submit.prevent="submit">
                                         <div class="mb-3">
                                             <label class="form-label">ID Number</label>
-                                            <input class="form-control form-control-lg" type="text" name="id_number"
-                                                placeholder="401589" v-model="form.id_number"
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/id.png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="text" name="id_number"
+                                                placeholder="401589" maxlength="6" v-model="form.id_number"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
+                                        </div>
                                             <div v-if="form.errors.id_number" class="text-danger">{{ form.errors.id_number
                                             }}</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input class="form-control form-control-lg" type="text" name="name"
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/name.png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="text" name="name"
                                                 placeholder="John Doe" v-model="form.name" />
+                                                </div>
                                             <div v-if="form.errors.name" class="text-danger">{{ form.errors.name }}</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Email</label>
-                                            <input class="form-control form-control-lg" type="email" name="email"
-                                                placeholder="Enter your email" v-model="form.email" />
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/email (2).png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="email" name="email"
+                                                placeholder="@umindanao.edu.ph" v-model="form.email" />
+                                            </div>
                                             <div v-if="form.errors.name" class="text-danger">{{ form.errors.name }}</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Phone</label>
-                                            <input class="form-control form-control-lg" type="text" name="phone_number"
-                                                placeholder="09123456789" v-model="form.phone_number" />
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/phone.png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="tel" name="phone_number" pattern = "[0-9]*" maxlength = "11"
+                                                placeholder="09123456789"  v-model="form.phone_number">
+                                            </div>
                                             <div v-if="form.errors.phone_number" class="text-danger">{{
                                                 form.errors.phone_number }}</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Degree Type</label>
-                                            <select class="form-select mb-3" v-model="form.degree_type" name="degree_type">
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/degree.png">
+                                             </i>
+                                            <select class="form-select mb-10" id = "input-field" v-model="form.degree_type" name="degree_type">
                                                 <option selected disabled>Select type</option>
                                                 <option value="masteral">Masters</option>
                                                 <option value="doctoral">Doctors</option>
 
                                             </select>
+                                            </div>
                                             <div v-if="form.errors.degree_type" class="text-danger">{{
                                                 form.errors.degree_type }}</div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Program</label>
-                                            <select class="form-select mb-3" v-model="form.course_id" name="course_id">
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/program.png">
+                                             </i>
+                                            <select class="form-select mb-10" id = "input-field" v-model="form.course_id" name="course_id">
                                                 <option value="" selected disabled>Select a program</option>
                                                 <option v-for="course in courses" :key="course.id" :value="course.id">{{
                                                     course.name }}</option>
                                             </select>
+                                            </div>
                                         </div>
                                        
                                         <div class="mb-3">
                                             <label class="form-label">School Year</label>
-                                            <input class="form-control form-control-lg" type="text" name="school_year"
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/year.png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="text" name="school_year"
                                                 placeholder="2023-2024" v-model="form.school_year" />
+                                            </div>
                                             <div v-if="form.errors.school_year" class="text-danger">{{
                                                 form.errors.school_year }}</div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Subject Code</label>
-                                            <input class="form-control form-control-lg" type="text" name="subject_code"
+                                            <label class="form-label">Enrolled Research Code</label>
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/subject.png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="text" name="subject_code"
                                                 placeholder="00000" v-model="form.subject_code" />
+                                            </div>
                                             <div v-if="form.errors.subject_code" class="text-danger">{{
                                                 form.errors.subject_code }}</div>
                                         </div>
                                        
                                         <div class="mb-3">
                                             <label class="form-label">Password</label>
-                                            <input class="form-control form-control-lg" type="password" name="password"
-                                                placeholder="Enter password" v-model="form.password" />
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/password (2).png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="password" name="password"
+                                                placeholder="********" v-model="form.password" />
+                                        </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Confirm Password</label>
-                                            <input class="form-control form-control-lg" type="password"
-                                                name="password_confirmation" placeholder="Enter password"
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/confirm.png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id = "input-field" type="password"
+                                                name="password_confirmation" placeholder="********"
                                                 v-model="form.password_confirmation" />
+                                            </div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Enrollment form</label>
-                                            <input class="form-control form-control-lg" type="file" name="enrollment_form"
+                                            <input class="form-control form-control-lg" id = "input-field" type="file" name="enrollment_form"
                                                 @input="form.enrollment_form = $event.target.files[0]" />
                                             <progress v-if="form.progress" :value="form.progress.percentage" max="100">
                                                 {{ form.progress.percentage }}%
@@ -110,11 +160,11 @@
                                             </div> -->
                                         </div>
                                         <small>
-                                            <Link style="color: #af2532" href="/login">Alrady have an account?</Link>
+                                            <Link style="color: #af2532" href="/login">Already have an account?</Link>
                                         </small>
                                         <div class="text-center mt-3 d-grid gap-2 mt-3">
                                             <button :disabled="form.processing" type="submit"
-                                                style="background: #af2532; color: #fff" class="btn btn-lg">
+                                                style="background: #090c29; color: #fff" class="btn btn-lg">
                                                 Sign up
                                             </button>
                                         </div>
@@ -128,7 +178,30 @@
         </div>
     </main>
 </template>
+<style>
 
+.input-field {
+  width: 100%;
+
+}
+  .input-container {
+  display: flex;
+  width: 100%;
+  height:100%;
+  margin-bottom: 15px;
+}
+
+/* Style the form icons */
+.icon {
+  padding: 5px;
+  background:#090c29;
+  color: white;
+  text-align: center;
+  height:40px;
+  width:10px;
+}
+  
+</style>
 <script setup>
 import { useForm } from '@inertiajs/vue3'
 import { Link, router } from '@inertiajs/vue3'

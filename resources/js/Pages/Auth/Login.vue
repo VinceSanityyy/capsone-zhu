@@ -19,10 +19,10 @@ export default {
         showTerms() {
             alertify
                 .confirm('Terms and Conditions')
-                .setHeader('Terms and Conditions')
+                .setHeader('Non-Disclosure Agreement')
                 .setContent(`
-                    <div>
-                        <h2>Confidentiality Pact and Non-Disclosure Agreement</h2>
+                    <div id = "Agreement">
+                        <h2>Confidentiality Pact and Non-Disclosure Agreement</h2><br>
                         <ol>
                             <li>
                                 Access and use of the Student Advising Program (SAP) is a sacred duty of Designated Student Advisers (DSAs) in the service of student development at the University of Mindanao.
@@ -35,15 +35,17 @@ export default {
                             </li>
                         </ol>
                     </div>
+
+                    
                 `)
                 .set('modal', true)
                 .set('resizable', true)
-                .resizeTo('45%', '35%')
+                .resizeTo('50%', '43%')
                 .set('labels', {ok:'Agree', cancel:'Disagree'})
                 .set('onok', function(closeEvent) { router.visit('/register') })
                 .set('oncancel', function(closeEvent) {
                     alertify.set('notifier','position', 'top-right');
-                    alertify.error('Accept the terms and conditions to continue');
+                    alertify.error('Must agree to continue the sign up process.');
                  });
         }
     },
@@ -52,10 +54,21 @@ export default {
         alertify.confirm().destroy()
     }
 };
+
+
 </script>
 
+<style>
+#Agreement{
+
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 12px;
+}
+
+</style>
+
 <template>
-    <main class="d-flex w-100" style = "background-image: url('Images/background.jpg'); background-attachment:fixed; background-size: cover;">
+    <main class="d-flex w-100" style = "background-image: url('Images/bg.png'); background-attachment:fixed; background-size: cover;">
         <div class="container d-flex flex-column">
             <div class="row vh-100">
                 <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
@@ -65,32 +78,44 @@ export default {
                             <p class="lead" style = "color:white;">Sign in to your account to continue</p>
                         </div>
 
-                        <div class="card">
+                        <div class="card" >
                             <div class="card-body">
-                                <div class="m-sm-4">
+                                <div class="m-sm-3" >
                                     <form @submit.prevent="form.post('/login')">
                                         <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input class="form-control form-control-lg" type="email" name="email"
-                                                placeholder="Enter your email" v-model="form.email" />
-                                            <div v-if="form.errors.email">
+                                            <label class="form-label" style = "font-family:Sans-serif;color:#090c29;">Email:</label>
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/email (2).png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id ="input-field" type="email" name="email"
+                                            placeholder = "@umindanao.edu.ph" v-model="form.email"/>
+                                        
+                                           
+                                        </div>
+                                        <div v-if="form.errors.email">
                                                 <p style="color:red">{{ form.errors.email }}</p>
                                             </div>
-
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Password</label>
-                                            <input class="form-control form-control-lg" type="password" name="password"
-                                                placeholder="Enter your password" v-model="form.password" />
+                                            <label class="form-label" style = "font-family:Sans-serif;color:#090c29;">Password:</label>
+                                            <div class = "input-container">
+                                             <i class="icon">
+                                                <img src = "Images/password (2).png">
+                                             </i>
+                                            <input class="form-control form-control-lg" id ="input-field"  type="password" name="password" 
+                                            placeholder = "********" v-model="form.password"/>
+                                            
+                                            </div>
                                             <div v-if="form.errors.password">
                                                 <p style="color:red">{{ form.errors.password }}</p>
                                             </div>
-                                            <br>
+                            
                                             <small>
-                                                <a @click="showTerms" style="color: #af2532" href="#">Don't have an account?</a>
+                                                <a @click="showTerms" style="color:#af2532;" href="#">Don't have an account yet?</a>
                                             </small>
                                             <small>
-                                                <Link style="color: #af2532; float: right;" href="/forgot-password">Forgot password?</Link>
+                                                <Link style="color:#af2532; float: right;" href="/forgot-password">Forgot password?</Link>
                                             </small>
                                         </div>
                                         <!-- <div>
@@ -102,11 +127,11 @@ export default {
                                                 </span>
                                             </label>
                                         </div> -->
-                                        <br>
+                                        
                                         <div class="text-center mt-3">
 
-                                            <button :disabled="form.processing" type="submit" style="background: #af2532; color: #fff" 
-                                                class="btn btn-lg">Sign in</button>
+                                            <button :disabled="form.processing" type="submit" style="background: #090c29; color: white;  padding: 10px; width: 30%;"
+                                                class="btn btn-lg"><img src = "Images/login.png" style = "padding-right: 5px;height: 17px;">Sign in</button>
                                         </div>
                                     </form>
                                 </div>
@@ -118,3 +143,31 @@ export default {
         </div>
     </main>
 </template>
+<style>
+.input-container {
+  display: flex;
+  width: 100%;
+  height:100%;
+  margin-bottom: 15px;
+}
+
+/* Style the form icons */
+.icon {
+  padding: 5px;
+  background:#090c29;
+  color: white;
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Style the input fields */
+.input-field {
+  width: 100%;
+ 
+  
+}
+
+
+
+
+</style>

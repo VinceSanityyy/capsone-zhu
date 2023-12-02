@@ -1,12 +1,12 @@
 <template>
     <MainLayout>
-        <h1 class="h3 mb-3">My Submissions</h1>
+        <h1 class="h3 mb-3" style = "color:white;">My Submissions</h1>
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Research Title details</h5>
-                        <h6 class="card-subtitle text-muted">You cannot update some of the fields when you already submitted
+                        <h6 class="card-subtitle text-muted">You cannot update some of the fields when you have already submitted
                             your title</h6>
                     </div>
                     <div class="card-body">

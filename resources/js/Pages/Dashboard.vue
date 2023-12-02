@@ -16,7 +16,7 @@
           <div class="card-body" style="hover:p">
             <div class="row">
               <div class="col mt-0">
-                <h5 class="card-title">{{ card.title }}</h5>
+                <h5 class="card-title" style = "color:white;">{{ card.title }}</h5>
               </div>
               <div class="col-auto">
                 <div class="stat text-primary">
@@ -26,11 +26,11 @@
             </div>
             <h1 class="mt-1 mb-3">{{ card.value }}</h1>
             <div class="mb-0">
-              <span
-                :class="{ 'badge badge-success-light': card.isPositiveChange, 'badge badge-danger-light': !card.isPositiveChange }">
-                <i class="mdi mdi-arrow-bottom-right"></i>
-                {{ card.change }}
-              </span>
+              <!--<span
+                :class="{ 'badge badge-success-light': card.isPositiveChange, 'badge badge-danger-light': !card.isPositiveChange } ">
+               
+                {{ card.change }} 
+              </span>-->
               <span class="text-muted">{{ card.changeDescription }}</span>
             </div>
           </div>
@@ -49,7 +49,7 @@
             <div class="col-md-3"></div>
             <div class="col-md-3 offset-md-6">
               <select class="form-control mb-3" v-model="selectedDegree" @change="handleFilterChange">
-                <option value="">Select Degree</option>
+                <option selected disabled>Select Degree</option>
                 <option value="masteral">Masters</option>
                 <option value="doctoral">Doctors</option>
               </select>
@@ -119,7 +119,7 @@ const columns = [
   {
     data: null,
     render: function (data, type, row) {
-      return `<a href="/admin/research-paper/${data.id}" class="btn btn-sm um-button">View</a>`;
+      return `<a href="/admin/research-paper/${data.id}" class="btn btn-sm um-button" style = "background-color:#090c29;">View</a>`;
     },
   },
 ];
@@ -241,7 +241,7 @@ const cards = ref([
     }
   },
   {
-    title: 'For Quality Checking',
+    title: 'For Technical Checking',
     value: countSubmissionsByStatus.value.quality_checking,
     change: '0.8%',
     isPositiveChange: false,
@@ -283,11 +283,17 @@ const cards = ref([
 
 .cards {
   transition: all 0.2s ease;
-  cursor: pointer;
+  cursor:auto;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #068CCF;
+  font-size: larger;
 }
 
 .cards:hover {
-  box-shadow: 5px 6px 6px 2px #f5c60a;
+  box-shadow: 5px 5px 5px 5px #CFCFC4;
   transform: scale(1.1);
 }
+
+
 </style>
+

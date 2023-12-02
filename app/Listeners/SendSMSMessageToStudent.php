@@ -21,7 +21,6 @@ class SendSMSMessageToStudent
      */
     public function handle(SchedulePlotted $event)
     {
-        return true; //remove this line to enable sms sending
         $apiUsername = config('app.sms.username');
         $apiPassword = config('app.sms.password');
         $userPhone = $event->user->phone_number;

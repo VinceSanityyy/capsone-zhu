@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <div id="header">
-    <img src = "Images/Logo.jpg" alt = "logo" height = "75px" width = "230px" />
+    <img src = "Images/Logo.png" alt = "logo" height = "75px" width = "230px" />
 
     <span class="right_header"
         style = "float:right;height:70px;width:200px;text-align:right;font-family:Sans-serif;font-size:13px;">
@@ -190,10 +190,10 @@
 }
 #currentdate{
     float:right;
-    width:160px;
+    width:145px;
     height:10px;
     font-family:Sans-serif;
-    text-align:left;
+    text-align:right;
     font-size:12px;
 }
 #footer{

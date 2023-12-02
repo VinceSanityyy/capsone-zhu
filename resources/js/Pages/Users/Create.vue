@@ -1,6 +1,6 @@
 <template>
     <MainLayout>
-        <h1 class="h3 mb-3">Create new User</h1>
+        <h1 class="h3 mb-3" style = "color:white;">Create new User</h1>
         <div class="row">
             <div class="col-md-3 col-xl-2">
 
@@ -57,7 +57,7 @@
                                         <div v-if="form.errors.role" class="text-danger">{{ form.errors.role
                                             }}</div>
                                     </div>
-                                    <button type="submit" class="btn um-button">
+                                    <button type="submit" class="btn um-button" style = "background-color: #e0ba1f;">
                                         Add User
                                     </button>
                                 </form>

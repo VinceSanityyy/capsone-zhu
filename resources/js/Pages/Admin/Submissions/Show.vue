@@ -421,7 +421,7 @@ const handleFinalSubmissionProcess = (e) => {
         ).setContent(`
         <label>Enter Reference Number</label><input type="text" class="form-control" id="reference_number">
         <label>Enter Amount</label><input type="number" class="form-control" id="amount">
-        <label>Date Submitted: </label><input type="date" class="form-control" id="date">
+        <label>Date Issued: </label><input type="date" class="form-control" id="date">
         `);
     } else {
         router.put(`/admin/research-paper/${researchPaper.id}/update-final-paper-checklist`, {
