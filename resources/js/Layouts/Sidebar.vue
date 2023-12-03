@@ -328,8 +328,8 @@ a.sidebar-link:hover svg {
 
 /* Background color and border styles on hover */
 .sidebar-link:hover {
-    background: #090c29;
-    color: #CFCFC4;
+    background: #00558D;
+    color: white;
     border-left-color: black;
 }
 

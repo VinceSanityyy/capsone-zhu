@@ -1,6 +1,6 @@
 <template>
     <MainLayout>
-        <h1 class="h3 mb-3"><strong></strong> Advised Paper</h1>
+        <h1 class="h3 mb-3" style = "color:white;"><strong></strong> Advisee</h1>
         <div class="row">
             <div class="col-12">
                 <div class="card">

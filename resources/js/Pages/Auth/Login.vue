@@ -110,9 +110,9 @@ export default {
                                             <div v-if="form.errors.password">
                                                 <p style="color:red">{{ form.errors.password }}</p>
                                             </div>
-                            
+                                       
                                             <small>
-                                                <a @click="showTerms" style="color:#af2532;" href="#">Don't have an account yet?</a>
+                                                <a @click="showTerms" style="color:#af2532;float:left;" href="#">Don't have an account yet?</a>
                                             </small>
                                             <small>
                                                 <Link style="color:#af2532; float: right;" href="/forgot-password">Forgot password?</Link>
@@ -127,11 +127,11 @@ export default {
                                                 </span>
                                             </label>
                                         </div> -->
-                                        
+                                        <br><br>
                                         <div class="text-center mt-3">
 
                                             <button :disabled="form.processing" type="submit" style="background: #090c29; color: white;  padding: 10px; width: 30%;"
-                                                class="btn btn-lg"><img src = "Images/login.png" style = "padding-right: 5px;height: 17px;">Sign in</button>
+                                                class="btn btn-lg">Sign in<img src = "Images/login.png" style = "padding-left: 5px;height: 17px;"></button>
                                         </div>
                                     </form>
                                 </div>
@@ -143,6 +143,7 @@ export default {
         </div>
     </main>
 </template>
+
 <style>
 .input-container {
   display: flex;
@@ -150,7 +151,6 @@ export default {
   height:100%;
   margin-bottom: 15px;
 }
-
 /* Style the form icons */
 .icon {
   padding: 5px;
@@ -159,15 +159,8 @@ export default {
   min-width: 50px;
   text-align: center;
 }
-
 /* Style the input fields */
 .input-field {
   width: 100%;
- 
-  
 }
-
-
-
-
 </style>

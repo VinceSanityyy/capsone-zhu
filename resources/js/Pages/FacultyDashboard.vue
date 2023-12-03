@@ -1,11 +1,11 @@
 <template>
     <MainLayout>
-        <h1 class="h3 mb-3"><strong>Faculty</strong> Dashboard</h1>
+        <h1 class="h3 mb-3" style = "color:white;"><strong>Faculty</strong> Dashboard</h1>
         <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title mb-0">Activities</h5>
+                        <h5 class="card-title mb-0" >Activities</h5>
                     </div>
                     <div class="card-body h-100" v-for="announcement in announcements" :key="announcement.id">
                         <div class="d-flex align-items-start">
