@@ -69,8 +69,8 @@
                                     <form @submit.prevent="submitResearch">
                                         <div class="mb-3">
                                             <label class="form-label" for="inputAddress">Research Title</label>
-                                            <input :disabled="alreadySubmitted" v-model="form.title" type="text"
-                                                class="form-control" id="inputAddress" placeholder="">
+                                            <input v-model="form.title" type="text"
+                                                class="form-control" id="inputAddress" placeholder="" @click="focusTitle()" @blur="saveTitle(this)">
                                             <div data-lastpass-icon-root="true"
                                                 style="position: relative !important; height: 0px !important; width: 0px !important; float: left !important;">
                                             </div>
@@ -244,7 +244,6 @@
                                         <!-- <small>If your paper's status is completed, you cannot motify or update it.</small> -->
                                     </form>
                                     <br>
-                                    {{ form }}
                                 </div>
 
                                 <div class="tab-pane" id="tab-2" role="tabpanel">
@@ -393,6 +392,28 @@ const props = defineProps({
     endorsement_forms: Object,
     attachedPanelEndorsements: Object
 })
+
+
+const focusTitle = () => {
+    console.log(1);
+    if (form.title === '') {
+        form.title = props.studentPaper.title;
+    }
+};
+
+const saveTitle = () => {
+    const { title } = form;
+    router.put(`/student/my-submissions/${props.studentPaper.id}/update-title`, {title}, {
+        onSuccess: () => {
+            toast.success('Title Updated!');
+        },
+        onError: (err) => {
+            form.errors = err
+            toast.error('Error Updating Title!');
+        },
+    })
+};
+
 
 const checkLists = ref([
     {

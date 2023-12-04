@@ -145,4 +145,12 @@ class StudentController extends Controller
     {
         return DefenseSchedule::with('researchPaper', 'researchPaper.author', 'researchPaper.adviser')->get();
     }
+
+    public function updateTitle(Request $request, ResearchPaper $researchPaper)
+    {
+        $researchPaper->update([
+            'title' => $request->title
+        ]);
+        return redirect()->back();
+    }
 }

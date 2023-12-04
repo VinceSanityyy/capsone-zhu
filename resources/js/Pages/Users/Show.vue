@@ -99,8 +99,6 @@
                 </div>
             </div>
         </div>
-        {{ userDetails.roles }}
-
     </MainLayout>
 </template>
 

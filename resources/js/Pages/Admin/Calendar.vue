@@ -98,33 +98,57 @@ const showEventDetails = (selectedinfo) => {
     console.log(selectedinfo);
     console.log(selectedinfo.event.extendedProps.object.pannels)
     const eventContent = showEventMarkup(selectedinfo);
-
+    console.log(selectedinfo.event.id)
     alertify.confirm()
         .setting({
             'onok': () => { router.visit(`/admin/research-paper/${selectedinfo.event.extendedProps.research_paper_id}`) },
-            'oncancel': () => { console.log('cancel') },
+            // 'oncancel': () => { console.log('cancel') }
         })
+        .set({'invokeOnCloseOff': true, 'oncancel': () => { 
+            router.delete(`/admin/schedules/${selectedinfo.event.id}/delete`, {
+                onSuccess: () => {
+                    toast.success('Schedule Deleted');
+                },
+                onError: () => {
+                    toast.error('Schedule not deleted');
+                }}
+            )
+         }})
         .setHeader('Schedule Details')
         .setContent(eventContent)
         .set('resizable', true)
-        .set('labels', {ok:'More Details', cancel:'Close'})
+        .set('labels', {ok:'More Details', cancel:'Delete'})
         .resizeTo('50%', 450)
         .show();
 };
 
+// const addEvent = () => {
+//     console.log(form)
+//     router.post(`/admin/research-papers/${form.researchPaperId}/plot-schedule`, form, {
+//         onSuccess: () => {
+//             toast.success("Schedule Plotted");
+//         },
+//         onError: (err) => {
+//             toast.error("Error Plotting Schedule");
+//         },
+//         onProgress: progress => {
+//             console.log(progress);
+//         }
+//     });
+// };
+
 const addEvent = () => {
-    console.log(form)
-    router.post(`/admin/research-papers/${form.researchPaperId}/plot-schedule`, form, {
-        onSuccess: () => {
+    console.log(form);
+
+    axios.post(`/admin/research-papers/${form.researchPaperId}/plot-schedule`, form)
+        .then(response => {
+            router.reload({only: ['schedules']})
             toast.success("Schedule Plotted");
-        },
-        onError: (err) => {
-            toast.error("Error Plotting Schedule");
-        },
-        onProgress: progress => {
-            console.log(progress);
-        }
-    });
+        })
+        .catch(error => {
+            // Handle error
+            toast.error(error.response.data.message);
+        })
 };
 
 const form = reactive({

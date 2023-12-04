@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Notifications\DefenseScheduleNotification;
 use DateTime;
+use Illuminate\Support\Facades\DB;
+
 class AdminController extends Controller
 {
     public function showCalendarAndSchedules()
@@ -31,24 +33,41 @@ class AdminController extends Controller
 
     public function plotResearchSchedule(Request $request, ResearchPaper $researchPaper)
     { 
-        $researchPaper->update([
-            'for_scheduling' => true
-        ]);
+        try {
+            if($researchPaper->author->degree_type == 'masteral' && $researchPaper->panelMembers->count() < 4){
+                return response()->json([
+                    'message' => 'Please add panel members first before plotting a schedule.'
+                ], 422);
 
-        $researchPaper->defenseSchedules()->create([
-            'start' => $request->startStr,
-            'end' => $request->endStr,
-        ]);
+            } else if($researchPaper->author->degree_type == 'doctoral' && $researchPaper->panelMembers->count() < 5){
+                return response()->json([
+                    'message' => 'Please add panel members first before plotting a schedule.'
+                ], 422);
+            }
 
-        $researchPaper->author->notify(new DefenseScheduleNotification($researchPaper->author, 'Admin has posted your defense schedule.'));
-        $researchPaper->adviser->notify(new DefenseScheduleNotification($researchPaper->adviser, 'Admin has posted a schedule for your advisee'));
-        $researchPaper->panelMembers->each(function($panelMember) use ($researchPaper){
-            $panelMember->notify(new DefenseScheduleNotification($panelMember, 'Admin has posted a schedule for your panelled paper'));
-        });
-        
-        $this->triggerSMSForStudent($researchPaper);
-        ActivityLogged::dispatch(auth()->user(), 'Defense schedule plotted for research title: ' . $researchPaper->title . ' by ' . auth()->user()->name . ' on ' . now()->format('M d, Y h:i A'));
-        return redirect()->back();
+            DB::beginTransaction();
+            $researchPaper->update([
+                'for_scheduling' => true
+            ]);
+    
+            $researchPaper->defenseSchedules()->create([
+                'start' => $request->startStr,
+                'end' => $request->endStr,
+            ]);
+    
+            $researchPaper->author->notify(new DefenseScheduleNotification($researchPaper->author, 'Admin has posted your defense schedule.'));
+            $researchPaper->adviser->notify(new DefenseScheduleNotification($researchPaper->adviser, 'Admin has posted a schedule for your advisee'));
+            $researchPaper->panelMembers->each(function($panelMember) use ($researchPaper){
+                $panelMember->notify(new DefenseScheduleNotification($panelMember, 'Admin has posted a schedule for your panelled paper'));
+            });
+            
+            // $this->triggerSMSForStudent($researchPaper);
+            ActivityLogged::dispatch(auth()->user(), 'Defense schedule plotted for research title: ' . $researchPaper->title . ' by ' . auth()->user()->name . ' on ' . now()->format('M d, Y h:i A'));
+            DB::commit();
+            // return redirect()->back();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     private function getSchedules()
@@ -59,6 +78,10 @@ class AdminController extends Controller
     public function deleteSchedule(DefenseSchedule $defenseSchedule)
     {
         $defenseSchedule->delete();
+        $defenseSchedule->researchPaper->author->notify(new DefenseScheduleNotification($defenseSchedule->researchPaper->author, 'Admin deleted your recent defense schedule.'));
+
+        ActivityLogged::dispatch(auth()->user(), 'Defense schedule deleted for research title: ' . $defenseSchedule->researchPaper->title . ' by ' . auth()->user()->name . ' on ' . now()->format('M d, Y h:i A'));
+
         return redirect()->back();
     }
 

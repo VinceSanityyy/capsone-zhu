@@ -77,6 +77,7 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
     //new filter
     Route::post('/chart/pie-chart-filter', [ReportController::class, 'filterPiechartData']);
     
+    Route::delete('/schedules/{defenseSchedule}/delete', [AdminController::class, 'deleteSchedule'])->name('schedules.delete');
 
     Route::put('/research-paper/{researchPaper}/update-final-paper-checklist', [AdminController::class, 'updateFinalPaperChecklist'])->name('research-paper.update-final-paper-checklist');
     Route::get('/logs', [LogController::class, 'index'])->name('logs.index');
@@ -98,6 +99,7 @@ Route::group(['middleware' => ['accepted', 'auth']], function () {
   Route::middleware('role:student')->prefix('student')->group(function () {
     Route::get('/my-submissions', [StudentController::class, 'showSubmissions'])->name('student.submissions');
     Route::post('/my-submissions/submit', [StudentController::class, 'submitResearchPaper'])->name('student.research.submit');
+    Route::put('/my-submissions/{researchPaper}/update-title', [StudentController::class, 'updateTitle'])->name('student.research-title.update');
     //static forms url only kay kapoy
     Route::get('/forms', function(){
       return Inertia::render('Student/Forms');
