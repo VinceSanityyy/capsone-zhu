@@ -4,7 +4,7 @@
     <nav id="sidebar" class="sidebar js-sidebar">
         <div class="sidebar-content js-simplebar">
             <a class="sidebar-brand" href="index.html" >
-                <img src="Images/banner.png" alt="Logo" style = "height:250px;padding: 0px;">
+                <img src="/Images/banner.png" alt="Logo" style = "height:250px;padding: 0px;">
                 <!-- <span class="align-middle">AdminPanel</span> -->
             </a><br>
 
