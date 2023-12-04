@@ -113,9 +113,9 @@
                     
 
                     <li class="sidebar-item ">
-                        <a class="sidebar-link" href="/admin/papers/archived">
+                        <Link class="sidebar-link" href="/admin/papers/archived">
                             <i class="bi bi-exclamation-triangle"></i><span class="align-middle">&nbsp; Archived Papers</span>
-                        </a>
+                        </Link>
                     </li>
                 </div>
                 <div v-if="$page.props.user.roles.includes('student')">
