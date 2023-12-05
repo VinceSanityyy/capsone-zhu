@@ -1,6 +1,6 @@
 <template>
     <MainLayout>
-        <h1 class="h3 mb-3">Announcements Panel</h1>
+        <h1 class="h3 mb-3" style = "color:white;">Announcements Panel</h1>
         <div class="row">
             <div class="col-12 text-end"> <!-- Use "text-end" class to align to the right -->
                 <Link href="/admin/announcements/create" class="btn um-button mb-3">Add Announcement</Link>
