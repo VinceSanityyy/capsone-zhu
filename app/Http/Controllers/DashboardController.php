@@ -14,58 +14,48 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        // dd($this->getOverallStudentsCompletedResearchPerProgramType());
-        $isAdmin = auth()->user()->hasRole('admin');
-        $isStudent = auth()->user()->hasRole('student');
-        $isPanel = auth()->user()->hasRole('panel');
-        $isFaculty = auth()->user()->hasRole('faculty');
-        
-        $submissions = ResearchPaper::with('author', 'author.course', 'author.form', 'adviser', 'panelMembers')
-        // ->when($request->status, function ($q, $search) {
-        //     $q->where('title', 'LIKE', "%{$search}%")
-        //         ->orWhere('status', 'LIKE', "%{$search}%");
-        // })
-        // ->when($request->degree_type, function ($q, $degreeType) {
-        //     $q->whereHas('author', function ($userQuery) use ($degreeType) {
-        //         $userQuery->where('degree_type', $degreeType);
-        //     });
-        // })
-        ->where('for_scheduling', true)->orWhere(function($q){
-            $q->whereIn('status',[ 'quality_checking', 'final_submission', 'completed', 'final_defense', 'title_defense', 'outline_defense'])
-            ->where('for_scheduling', false);
-        })
-        ->get();
-        
-        $total_submissions = ResearchPaper::with('author', 'author.course', 'author.form')->where('is_approved_by_adviser',true)->get();
-
-        $announcements = Announcement::where('is_active', true)->with('user')->get();
+        $user = auth()->user();
+        $isAdmin = $user->hasRole('admin');
+        $isStudent = $user->hasRole('student');
+        $isPanel = $user->hasRole('panel');
+        $isFaculty = $user->hasRole('faculty');
+    
         $data = [];
-
-        
+    
         if ($isAdmin) {
-            $data['users'] = $this->getUserStatistics()['total_users']; // Pass users only if admin
+            $data['users'] = $this->getUserStatistics()['total_users'];
             $data['pendingUsers'] = $this->getUserStatistics()['pending_users'];
             $data['userPerCourse'] = $this->getUserPerCourse();
-            $data['submissions'] = $submissions;
-            $data['total_submissions'] = $total_submissions;
-            $data['$announcements'] = $announcements;
-            // $data['barChartData'] = $this->getOverallStudentsCompletedResearch();
+            $data['submissions'] = ResearchPaper::with('author', 'author.course', 'author.form', 'adviser', 'panelMembers')
+                ->where('for_scheduling', true)
+                ->orWhere(function($q) {
+                    $q->whereIn('status', ['quality_checking', 'final_submission', 'completed', 'final_defense', 'title_defense', 'outline_defense'])
+                        ->where('for_scheduling', false);
+                })
+                ->get();
+    
+            $data['total_submissions'] = ResearchPaper::with('author', 'author.course', 'author.form')
+                ->where('is_approved_by_adviser', true)
+                ->get();
+    
+            $data['announcements'] = Announcement::where('is_active', true)->with('user')->get();
             $data['courses'] = Course::all();
             $data['test'] = [];
             $view = 'Dashboard';
         } elseif ($isStudent) {
-            $data['announcements'] = $announcements;
+            $data['announcements'] = Announcement::where('is_active', true)->with('user')->get();
             $view = 'StudentDashboard';
         } elseif ($isPanel) {
-            $data['announcements'] = $announcements;
+            $data['announcements'] = Announcement::where('is_active', true)->with('user')->get();
             $view = 'PanelDashboard';
-        }else {
-            $data['announcements'] = $announcements;
+        } else {
+            $data['announcements'] = Announcement::where('is_active', true)->with('user')->get();
             $view = 'FacultyDashboard';
         }
     
         return Inertia::render($view, $data);
     }
+    
 
     private function getUserStatistics()
     {
